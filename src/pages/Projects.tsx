@@ -1,35 +1,15 @@
 import { useState, useMemo } from 'react';
 import { projects } from '../data/projects';
-import VideoPlayer from '../components/VideoPlayer';
+
 import VideoPreview from '../components/VideoPreview';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [videoPlayer, setVideoPlayer] = useState<{
-    isOpen: boolean;
-    videoUrl: string;
-    title: string;
-  }>({
-    isOpen: false,
-    videoUrl: '',
-    title: '',
-  });
-
   const openVideoPlayer = (videoUrl: string, title: string) => {
-    setVideoPlayer({
-      isOpen: true,
-      videoUrl,
-      title,
-    });
-  };
-
-  const closeVideoPlayer = () => {
-    setVideoPlayer({
-      isOpen: false,
-      videoUrl: '',
-      title: '',
-    });
+    // For now, just log the demo URL - could open in new tab or show modal later
+    console.log('Demo URL:', videoUrl, 'Title:', title);
+    // window.open(videoUrl, '_blank');
   };
 
   // Filter projects based on search and filters
@@ -46,10 +26,10 @@ const Projects = () => {
 
   const categories = [
     { value: '', label: 'All Categories' },
-    { value: 'web', label: 'Web' },
-    { value: 'mobile', label: 'Mobile' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'fullstack', label: 'Full Stack' },
+    { value: 'AI/ML', label: 'AI/ML' },
+    { value: 'Full-Stack', label: 'Full-Stack' },
+    { value: 'Enterprise', label: 'Enterprise' },
+    { value: 'Backend', label: 'Backend' },
   ];
 
   return (
@@ -67,10 +47,11 @@ const Projects = () => {
             </div>
             <h1 className="text-6xl font-bold text-slate-900 text-shadow-sm">My Projects</h1>
             <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
-              A collection of projects showcasing my skills in{' '}
-              <span className="font-semibold text-slate-800">backend development</span>,{' '}
-              <span className="font-semibold text-slate-800">distributed systems</span>, and{' '}
-              <span className="font-semibold text-slate-800">full-stack applications</span>.
+              A collection of projects showcasing my expertise in{' '}
+              <span className="font-semibold text-purple-600">AI/ML systems</span>,{' '}
+              <span className="font-semibold text-blue-600">enterprise backend development</span>, and{' '}
+              <span className="font-semibold text-green-600">production-grade applications</span>. 
+              Featuring advanced <span className="font-semibold text-orange-600">WebLLM integration</span> and <span className="font-semibold text-red-600">RAG systems</span>.
             </p>
           </div>
         </div>
@@ -145,10 +126,10 @@ const Projects = () => {
                     </div>
 
                     {/* Project Image Placeholder */}
-                    {project.demoUrl ? (
+                    {project.demo ? (
                       <VideoPreview
                         title={`${project.title} Demo`}
-                        onClick={() => openVideoPlayer(project.demoUrl!, project.title)}
+                        onClick={() => openVideoPlayer(project.demo!, project.title)}
                         className="w-full h-40"
                       />
                     ) : (
@@ -185,9 +166,9 @@ const Projects = () => {
 
                     {/* Action Links */}
                     <div className="flex space-x-3 pt-4 border-t border-slate-100">
-                      {project.githubUrl && (
+                      {project.github && (
                         <a
-                          href={project.githubUrl}
+                          href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn-ghost text-sm group/link"
@@ -195,9 +176,9 @@ const Projects = () => {
                           <span>View Code</span>
                         </a>
                       )}
-                      {project.demoUrl && (
+                      {project.demo && (
                         <button
-                          onClick={() => openVideoPlayer(project.demoUrl!, project.title)}
+                          onClick={() => openVideoPlayer(project.demo!, project.title)}
                           className="btn-ghost text-sm group/link"
                         >
                           <span>Video Demo</span>
@@ -234,12 +215,7 @@ const Projects = () => {
       </section>
 
       {/* Video Player Modal */}
-      <VideoPlayer
-        videoUrl={videoPlayer.videoUrl}
-        title={videoPlayer.title}
-        isOpen={videoPlayer.isOpen}
-        onClose={closeVideoPlayer}
-      />
+
     </div>
   );
 };

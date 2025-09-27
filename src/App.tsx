@@ -6,8 +6,10 @@ import Projects from './pages/Projects';
 import About from './pages/About';
 
 function App() {
+  const basename = import.meta.env.PROD ? '/portfolio-website' : '';
+  
   return (
-    <Router basename="/portfolio-website">
+    <Router basename={basename}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

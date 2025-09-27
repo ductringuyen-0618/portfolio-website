@@ -1,112 +1,104 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Database, Cloud, Github } from 'lucide-react';
 import { getFeaturedProjects } from '../data/projects';
-import VideoPlayer from '../components/VideoPlayer';
+
 import VideoPreview from '../components/VideoPreview';
 
 const Home = () => {
   const featuredProjects = getFeaturedProjects();
-  const [videoPlayer, setVideoPlayer] = useState<{
-    isOpen: boolean;
-    videoUrl: string;
-    title: string;
-  }>({
-    isOpen: false,
-    videoUrl: '',
-    title: '',
-  });
-
   const openVideoPlayer = (videoUrl: string, title: string) => {
-    setVideoPlayer({
-      isOpen: true,
-      videoUrl,
-      title,
-    });
-  };
-
-  const closeVideoPlayer = () => {
-    setVideoPlayer({
-      isOpen: false,
-      videoUrl: '',
-      title: '',
-    });
+    // For now, just log the demo URL - could open in new tab or show modal later
+    console.log('Demo URL:', videoUrl, 'Title:', title);
+    // window.open(videoUrl, '_blank');
   };
 
   const skills = [
-    { name: 'Backend Development', icon: Code, description: 'Java, Kotlin, Go, Node.js, Python' },
-    { name: 'Cloud & DevOps', icon: Cloud, description: 'AWS, Kubernetes, Docker, OpenShift, ArgoCD' },
-    { name: 'Monitoring & Tools', icon: Database, description: 'MySQL, Grafana, Jenkins, GitHub Actions' },
+    { name: 'Backend & AI Systems', icon: Code, description: 'Spring Boot, Kotlin, AWS Bedrock, WebLLM, RAG Systems' },
+    { name: 'Cloud & DevOps', icon: Cloud, description: 'Kubernetes, OpenShift, AWS, Docker, CI/CD, 99.9% uptime' },
+    { name: 'Data & Performance', icon: Database, description: 'MySQL, Kafka, Grafana, 50k+ daily transactions' },
   ];
 
   return (
-    <div className="space-y-20">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
+    <div className="min-h-screen relative">
+      {/* Main Content Area - Full Width */}
+      <div className="min-h-screen">
+        <div className="space-y-20">
+            {/* Hero Section */}
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+              {/* Background Elements */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30"></div>
+              <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
+              <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
 
-        <div className="container-custom relative z-10">
-          <div className="text-center space-y-12 animate-fade-in-up">
-            <div className="space-y-8">
-              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full shadow-sm">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
-                <span className="text-sm font-medium text-slate-700">Software Engineer at Triton Digital</span>
-              </div>
+              <div className="container-custom relative z-10">
+                <div className="text-center space-y-12 animate-fade-in-up">
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full shadow-sm">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
+                      <span className="text-sm font-medium text-slate-700">Software Engineer at Triton Digital</span>
+                    </div>
 
-              <h1 className="text-6xl md:text-8xl font-bold text-slate-900 mb-8 text-shadow-sm">
-                Hi, I'm{' '}
-                <span className="text-gradient">
-                  Duc Nguyen
-                </span>
-              </h1>
+                    <h1 className="text-4xl md:text-6xl xl:text-8xl font-bold text-slate-900 mb-8 text-shadow-sm">
+                      Hi, I'm{' '}
+                      <span className="text-gradient">
+                        Duc Nguyen
+                      </span>
+                    </h1>
 
-              <p className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-light">
-                Software Engineer based in <span className="font-semibold text-slate-800">Seattle, WA</span>, specializing in <span className="font-semibold text-slate-800">backend systems</span>, <span className="font-semibold text-slate-800">cloud infrastructure</span>, and <span className="font-semibold text-slate-800">modern web applications</span>.<br className="hidden md:block" />
-                I deliver scalable, high-performance solutions for enterprise and consumer applications.
-              </p>
-            </div>
+                    <p className="text-lg md:text-xl xl:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
+                      Software Engineer based in <span className="font-semibold text-slate-800">Seattle, WA</span>, specializing in <span className="font-semibold text-slate-800">backend systems</span>, <span className="font-semibold text-slate-800">AI integration</span>, and <span className="font-semibold text-slate-800">cloud-native architectures</span>.<br className="hidden md:block" />
+                      Currently contributing to production systems at <span className="font-semibold text-blue-600">Triton Digital</span> and exploring <span className="font-semibold text-purple-600">AI/ML solutions</span> with AWS Bedrock and WebLLM.
+                    </p>
+                  </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link
-                to="/projects"
-                className="btn-primary text-lg px-8 py-4 group"
-              >
-                <span>View My Work</span>
-                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-              <Link
-                to="/about"
-                className="btn-secondary text-lg px-8 py-4"
-              >
-                <span>About Me</span>
-              </Link>
-            </div> 
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <Link
+                      to="/projects"
+                      className="btn-primary text-lg px-8 py-4 group"
+                    >
+                      <span>View My Work</span>
+                      <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
+                    <Link
+                      to="/about"
+                      className="btn-secondary text-lg px-8 py-4"
+                    >
+                      <span>About Me</span>
+                    </Link>
+                  </div> 
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto pt-16">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900">5+</div>
-                <div className="text-sm text-slate-600 font-medium">Years Experience</div>
+                  {/* AI Agent Highlight */}
+                  <div className="bg-white/50 backdrop-blur-sm border border-white/60 rounded-2xl p-8 max-w-4xl mx-auto mt-16 shadow-xl">
+                    <div className="text-center space-y-6">
+                      <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg">
+                        <span className="text-sm font-semibold mr-2">🤖 NEW: AI-Powered Assistant</span>
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      </div>
+                      <h3 className="text-2xl font-bold text-slate-900">Interactive AI Agent with Advanced RAG</h3>
+                      <p className="text-slate-600 leading-relaxed">
+                        Built with <span className="font-semibold text-blue-600">WebLLM</span>, <span className="font-semibold text-purple-600">session memory</span>, and <span className="font-semibold text-green-600">MCP integration</span>. 
+                        Features smart knowledge retrieval, action buttons, and persistent conversations.
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">WebLLM</span>
+                        <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">Session Memory</span>
+                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">MCP Tools</span>
+                        <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">Smart RAG</span>
+                        <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Action Buttons</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Call to Action for Chat */}
+                  <div className="xl:hidden pt-8">
+                    <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg">
+                      <span className="text-sm font-medium mr-2">💬 Try the AI Assistant below!</span>
+                      <ArrowRight size={16} className="animate-bounce" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900">20+</div>
-                <div className="text-sm text-slate-600 font-medium">Projects Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900">10+</div>
-                <div className="text-sm text-slate-600 font-medium">Technologies</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900">99%</div>
-                <div className="text-sm text-slate-600 font-medium">Client Satisfaction</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </section>
 
       {/* Skills Section */}
       <section className="section-padding bg-white">
@@ -172,10 +164,10 @@ const Home = () => {
                   </div>
 
                   {/* Project Image Placeholder */}
-                  {project.demoUrl ? (
+                  {project.demo ? (
                     <VideoPreview
                       title={`${project.title} Demo`}
-                      onClick={() => openVideoPlayer(project.demoUrl!, project.title)}
+                      onClick={() => openVideoPlayer(project.demo!, project.title)}
                       className="w-full h-48"
                     />
                   ) : (
@@ -213,7 +205,7 @@ const Home = () => {
                   {/* Action Links */}
                   <div className="flex space-x-4 pt-4 border-t border-slate-100">
                     <a
-                      href={project.githubUrl}
+                      href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-ghost group/link"
@@ -221,9 +213,9 @@ const Home = () => {
                       <Github size={18} className="group-hover/link:scale-110 transition-transform duration-300" />
                       <span>Code</span>
                     </a>
-                    {project.demoUrl && (
+                    {project.demo && (
                       <button
-                        onClick={() => openVideoPlayer(project.demoUrl!, project.title)}
+                        onClick={() => openVideoPlayer(project.demo!, project.title)}
                         className="btn-ghost group/link"
                       >
                         <span>Video Demo</span>
@@ -246,14 +238,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Video Player Modal */}
-      <VideoPlayer
-        videoUrl={videoPlayer.videoUrl}
-        title={videoPlayer.title}
-        isOpen={videoPlayer.isOpen}
-        onClose={closeVideoPlayer}
-      />
+      
+        </div>
+      </div>
     </div>
   );
 };

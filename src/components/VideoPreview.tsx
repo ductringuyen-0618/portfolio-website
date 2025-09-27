@@ -1,39 +1,25 @@
-import { Play } from 'lucide-react';
-
-interface VideoPreviewProps {
-  title: string;
-  onClick: () => void;
+﻿interface VideoPreviewProps {
+  title?: string;
+  onClick?: () => void;
   className?: string;
 }
 
-const VideoPreview = ({ title, onClick, className = '' }: VideoPreviewProps) => {
+export default function VideoPreview({ title, onClick, className }: VideoPreviewProps) {
   return (
-    <button
+    <div 
+      className={`cursor-pointer hover:opacity-80 transition-opacity ${className || ''}`}
       onClick={onClick}
-      className={`group relative overflow-hidden rounded-xl transition-all duration-300 transform hover:scale-105 ${className}`}
+      title={title}
     >
-      {/* Video Thumbnail Background */}
-      <div className="w-full h-32 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 flex items-center justify-center relative">
-        {/* Play Button */}
-        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-300 border-2 border-white/40">
-          <Play size={24} className="text-white ml-1 group-hover:scale-110 transition-transform duration-300" fill="white" />
+      <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+        <div className="text-gray-500 mb-2">
+          <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-7a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
-        
-        {/* Video Title Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-          <p className="text-white text-sm font-medium truncate">{title}</p>
-        </div>
-
-        {/* Hover Effect */}
-        <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <p className="text-sm text-gray-600">{title || 'Video Demo'}</p>
+        <p className="text-xs text-gray-400 mt-1">Click to play</p>
       </div>
-
-      {/* Demo Label */}
-      <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-        DEMO
-      </div>
-    </button>
+    </div>
   );
-};
-
-export default VideoPreview;
+}

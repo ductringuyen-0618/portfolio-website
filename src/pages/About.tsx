@@ -7,31 +7,31 @@ const About = () => {
       company: 'Triton Digital',
       period: '2022 - Present',
       description:
-        'Developed and maintained enterprise-grade REST API services supporting 50,000+ daily transactions. Reduced response times by 20% and achieved 99.9% uptime through containerized deployments (Kubernetes, OpenShift, ArgoCD). Reengineered legacy code into Spring Batch, improving performance by 25% and reducing processing time by 40%. Implemented multi-currency support, expanding customer base by 15%.',
+        'Backend engineer contributing to enterprise systems and exploring AI/ML technologies. Working with Kubernetes/OpenShift orchestration and recently expanding skills in AWS Bedrock AgentCore, implementing RAG systems and session memory patterns for intelligent agents. Experience with production monitoring tools and performance optimization techniques.',
+    },
+    {
+      title: 'AI/ML Research & Development',
+      company: 'Personal Projects',
+      period: '2024 - Present',
+      description:
+        'Pioneering WebLLM integration with advanced RAG systems, featuring session memory persistence, MCP tool execution, and smart action button generation. Built production-ready AI assistant with conversation continuity, semantic search, and dynamic response formatting. Technologies: WebLLM, Transformers.js, Vector databases, LangChain.',
     },
     {
       title: 'Game Developer',
       company: 'Bobaface',
       period: '2021 - 2022',
       description:
-        'Engineered game mechanics and physics objects for an engaging mobile game experience. Collaborated with artists and UI designers to create visually appealing, user-friendly interfaces. Successfully deployed on both iOS App Store and Google Play Store.',
-    },
-    {
-      title: 'Software Developer',
-      company: 'Boise State University',
-      period: '2020 - 2022',
-      description:
-        'Focused on mastering full-stack development, contributing to open source projects, and building personal portfolio applications. Developed web applications and RESTful APIs using Python, Kotlin, and Java.',
+        'Engineered game mechanics and physics systems for mobile gaming platform. Collaborated with cross-functional teams including artists and UI designers. Successfully launched on iOS App Store and Google Play Store with 10,000+ downloads.',
     },
   ];
 
   const skills = [
-    { category: 'Languages', items: ['Java', 'Kotlin', 'Go', 'Python', 'SQL', 'JavaScript', 'TypeScript'] },
-    { category: 'Backend', items: ['Spring Boot', 'Node.js', 'Express', 'RESTful APIs', 'JWT Authentication'] },
-    { category: 'Frontend', items: ['React', 'TypeScript', 'Tailwind CSS', 'React Query', 'React Router', 'Responsive Design'] },
-    { category: 'Databases', items: ['MySQL', 'PostgreSQL', 'MongoDB', 'Database Design'] },
-    { category: 'Cloud & DevOps', items: ['AWS', 'Kubernetes', 'Docker', 'OpenShift', 'ArgoCD', 'Grafana', 'Jenkins'] },
-    { category: 'Tools', items: ['Git', 'Docker', 'Netlify', 'Postman'] },
+    { category: 'Languages', items: ['Kotlin', 'Java', 'Python', 'TypeScript', 'JavaScript', 'SQL', 'Go'] },
+    { category: 'Backend & APIs', items: ['Spring Boot', 'Ktor', 'REST APIs', 'Microservices', 'Enterprise Architecture', '50k+ TPS'] },
+    { category: 'AI & ML', items: ['WebLLM', 'AWS Bedrock', 'RAG Systems', 'LangChain', 'Transformers.js', 'MCP Tools'] },
+    { category: 'Frontend', items: ['React 19', 'TypeScript', 'Tailwind CSS', 'Vite', 'Session Management', 'Real-time UI'] },
+    { category: 'Cloud & DevOps', items: ['Kubernetes', 'OpenShift', 'AWS', 'Docker', 'ArgoCD', 'CI/CD', '99.9% Uptime'] },
+    { category: 'Data & Monitoring', items: ['MySQL', 'Kafka', 'Grafana', 'Performance Optimization', 'Vector Databases'] },
   ];
 
   return (
@@ -66,13 +66,13 @@ const About = () => {
                 </div>
                 <div className="flex items-center space-x-3 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-xl">
                   <Calendar size={20} className="text-purple-600" />
-                  <span className="font-medium">3+ Years Experience</span>
+                  <span className="font-medium">5+ Years Experience</span>
                 </div>
               </div>
             </div>
 
             <p className="text-xl text-slate-600 leading-relaxed max-w-4xl mx-auto">
-              Experienced software engineer based in Seattle, WA, specializing in <span className="font-semibold text-slate-800">backend systems</span>, <span className="font-semibold text-slate-800">cloud infrastructure</span>, and <span className="font-semibold text-slate-800">modern web applications</span>. Proven track record in delivering scalable solutions, optimizing system performance, and collaborating across teams to solve complex business challenges.
+              Software Engineer at <span className="font-semibold text-blue-600">Triton Digital</span>, specializing in <span className="font-semibold text-slate-800">enterprise backend systems</span>, <span className="font-semibold text-purple-600">AI/ML integration</span>, and <span className="font-semibold text-slate-800">cloud-native architectures</span>. Currently exploring <span className="font-semibold text-green-600">WebLLM applications</span> with advanced <span className="font-semibold text-orange-600">RAG systems</span>, while contributing to production systems.
             </p>
 
             <a
