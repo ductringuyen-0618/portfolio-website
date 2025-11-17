@@ -1007,6 +1007,47 @@ if (!API_KEY) {
 
 ---
 
+## Documentation Practices
+
+### ⚠️ CRITICAL: Do NOT Create Summary Documents Every Chat Session
+
+**Important guideline:** Avoid creating new markdown documentation files to summarize work at the end of each chat session unless explicitly requested by the user.
+
+**Why:**
+- Creates unnecessary file clutter
+- Duplicates information already in git commits
+- Makes the repository harder to navigate
+- Summary docs become outdated quickly
+
+**Instead:**
+1. **Use commit messages** - Detailed commit messages already document what changed and why
+2. **Update README.md** - If there's critical information users need to know, update the README
+3. **Update existing docs** - Modify existing documentation files rather than creating new ones
+4. **Use code comments** - Document complex logic directly in code with JSDoc comments
+
+**When to create documentation:**
+- ✅ User explicitly requests a summary document
+- ✅ New feature requires usage documentation in README
+- ✅ Architecture decision requires ADR (Architecture Decision Record)
+- ✅ Breaking changes need migration guide
+- ❌ Don't create "session-summary.md", "changes-log.md", "work-done.md" automatically
+
+**If critical information must be documented:**
+1. First, check if README.md should be updated
+2. Check if existing documentation can be enhanced
+3. Only create new docs if absolutely necessary and with clear purpose
+
+**Example - Good Practice:**
+```markdown
+# After adding new feature
+✅ Update README.md with new feature description
+✅ Add usage example to README
+✅ Update package.json scripts if needed
+❌ Don't create "feature-summary.md" to document the session
+```
+
+---
+
 ## Summary
 
 This project adheres to enterprise-grade standards with a **test-first mentality**. Code without passing tests is considered incomplete. Always prioritize:
