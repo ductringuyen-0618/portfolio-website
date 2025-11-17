@@ -1009,7 +1009,14 @@ RESPONSE STYLE:
     }
   }
 
-  // Force re-setup of event listeners (useful after DOM recreation)
+  /**
+   * Force re-setup of event listeners (useful after DOM recreation)
+   * 
+   * NOTE: This method manipulates global state (globalListenersSetup).
+   * The current design assumes a single AgentWidget instance per page.
+   * If multiple instances are needed, consider refactoring to avoid global state
+   * or implement a singleton pattern.
+   */
   public forceResetEventListeners(): void {
     console.log('🔄 Forcing event listener reset');
     this.listenersSetup = false;

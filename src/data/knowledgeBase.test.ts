@@ -344,7 +344,7 @@ describe('Knowledge Base RAG System', () => {
       const allRecords = knowledgeBase.getAll();
       
       allRecords.forEach(record => {
-        expect(record.url).toMatch(/^https?:\/\/|^mailto:/);
+        expect(record.url).toMatch(/^(https?:\/\/|mailto:|\/)/);  // Support absolute and relative URLs
       });
     });
 

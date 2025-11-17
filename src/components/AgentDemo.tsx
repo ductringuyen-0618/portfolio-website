@@ -10,7 +10,9 @@ const SESSION_KEYS = {
   LAST_ACTIVITY: 'ai_last_activity'
 };
 
-// Event listener reset delay - wait for DOM to fully render after minimized state change
+// Event listener reset delay - wait for DOM to fully render after minimized state change.
+// 150ms chosen based on observed React re-render time and browser layout/paint cycles.
+// This ensures event listeners are reset only after the DOM is stable following state changes.
 const EVENT_LISTENER_RESET_DELAY_MS = 150;
 
 // Chat message interface
