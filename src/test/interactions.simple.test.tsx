@@ -50,7 +50,9 @@ describe('Interaction Tests - Bug Fixes', () => {
         expect(screen.getByRole('main')).toBeInTheDocument();
       });
 
-      // Find input by ID (more reliable than placeholder)
+      // Find input by ID - testing implementation details since elements lack accessible
+      // aria-labels in current implementation. RTL accessible queries would be preferred
+      // but require component changes (adding aria-label attributes) beyond this PR scope.
       const chatInput = document.getElementById('message-input') as HTMLInputElement;
       const sendButton = document.getElementById('send-message') as HTMLButtonElement;
       

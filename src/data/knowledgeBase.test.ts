@@ -13,21 +13,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { knowledgeBase } from './knowledgeBase';
 
-// Helper function for relevance calculation
-function calculateRelevance(text: string, query: string): number {
-  const textLower = text.toLowerCase();
-  const queryWords = query.toLowerCase().split(/\s+/);
-  
-  let score = 0;
-  queryWords.forEach(word => {
-    if (textLower.includes(word)) {
-      score++;
-    }
-  });
-  
-  return score / queryWords.length;
-}
-
 describe('Knowledge Base RAG System', () => {
   describe('Basic Search Functionality', () => {
     it('should return relevant results for keyword search', () => {
@@ -421,9 +406,10 @@ describe('Knowledge Base RAG System', () => {
       const time2 = performance.now() - start2; // Measure time
       
       expect(result1).toEqual(result2);
-      // Second search may be faster due to caching/optimization
+      // Second search should be faster or not significantly slower due to caching/optimization
       expect(time1).toBeGreaterThanOrEqual(0);
       expect(time2).toBeGreaterThanOrEqual(0);
+      expect(time2).toBeLessThanOrEqual(time1 * 1.5); // Validate caching/optimization
     });
   });
 
@@ -451,6 +437,21 @@ describe('Knowledge Base RAG System', () => {
     });
 
     it('should rank results by relevance', () => {
+      // Helper function to calculate relevance score for this test
+      const calculateRelevance = (text: string, query: string): number => {
+        const textLower = text.toLowerCase();
+        const queryWords = query.toLowerCase().split(/\s+/);
+        
+        let score = 0;
+        queryWords.forEach(word => {
+          if (textLower.includes(word)) {
+            score++;
+          }
+        });
+        
+        return score / queryWords.length;
+      };
+
       const results = knowledgeBase.search('software engineer experience triton');
       
       if (results.length >= 2) {

@@ -11,7 +11,13 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Test file needs to access private widget members for comprehensive testing
+/**
+ * ESLint disable note: This test file requires `any` type to access private members
+ * of AgentWidget class for comprehensive internal state testing (engine, isInitialized,
+ * conversationHistory, toolTraces, etc.). Using `any` here is intentional and scoped
+ * to testing needs. Alternative would be to make all members public, which would
+ * compromise encapsulation in production code.
+ */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AgentWidget } from './AgentWidget';

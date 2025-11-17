@@ -10,6 +10,9 @@ const SESSION_KEYS = {
   LAST_ACTIVITY: 'ai_last_activity'
 };
 
+// Event listener reset delay - wait for DOM to fully render after minimized state change
+const EVENT_LISTENER_RESET_DELAY_MS = 150;
+
 // Chat message interface
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -55,7 +58,7 @@ function AgentSidebar() {
         const restored = conversationManager.restoreConversation();
         if (restored) {
           conversationManager.updateLastActivity();
-          console.log('✅ Manual restoration successful');
+          console.log('✅ Conversation messages restored to UI successfully');
         }
       } else {
         console.log('⚠️ No stored history found');
@@ -850,7 +853,7 @@ function AgentSidebar() {
   // Handle chat reopening from minimized state
   useEffect(() => {
     if (!isMinimized && widgetRef.current) {
-      console.log('🔄 Chat reopened from minimized state');
+      console.log('🔄 Chat widget reopened - preparing event listeners');
       
       // Force reset event listeners to ensure they're properly attached
       setTimeout(() => {
@@ -858,7 +861,7 @@ function AgentSidebar() {
           widgetRef.current.forceResetEventListeners();
           console.log('✅ Event listeners reset after reopening chat');
         }
-      }, 150);
+      }, EVENT_LISTENER_RESET_DELAY_MS);
       
       // Only restore if we have stored history and the UI is empty or showing initialization
       const chatContainer = document.getElementById('chat-messages');

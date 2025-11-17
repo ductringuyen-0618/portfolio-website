@@ -917,10 +917,10 @@ RESPONSE STYLE:
     }
     
     // Allow re-setup if elements were recreated (e.g., after minimize/maximize)
-    // Check if listeners are already attached by testing for existing handlers
-    const hasExistingListeners = this.listenersSetup && button.onclick !== null;
+    // Rely on flags to determine if listeners are already attached
+    const hasExistingListeners = this.listenersSetup && globalListenersSetup;
     
-    if (hasExistingListeners && globalListenersSetup) {
+    if (hasExistingListeners) {
       console.log('⚠️ Event listeners already setup and active, skipping');
       return;
     }
