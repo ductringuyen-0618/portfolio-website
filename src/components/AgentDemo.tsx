@@ -850,6 +850,16 @@ function AgentSidebar() {
   // Handle chat reopening from minimized state
   useEffect(() => {
     if (!isMinimized && widgetRef.current) {
+      console.log('🔄 Chat reopened from minimized state');
+      
+      // Force reset event listeners to ensure they're properly attached
+      setTimeout(() => {
+        if (widgetRef.current) {
+          widgetRef.current.forceResetEventListeners();
+          console.log('✅ Event listeners reset after reopening chat');
+        }
+      }, 150);
+      
       // Only restore if we have stored history and the UI is empty or showing initialization
       const chatContainer = document.getElementById('chat-messages');
       if (chatContainer) {
@@ -861,7 +871,7 @@ function AgentSidebar() {
         const storedHistory = conversationManager.getChatHistory();
         
         if (!hasMessages && storedHistory.length > 0) {
-          console.log(`🔄 Chat reopened from minimized - restoring ${storedHistory.length} messages to UI`);
+          console.log(`🔄 Restoring ${storedHistory.length} messages to UI`);
           
           // Small delay to ensure DOM is ready
           setTimeout(() => {

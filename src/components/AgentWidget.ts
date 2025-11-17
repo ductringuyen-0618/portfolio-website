@@ -907,16 +907,27 @@ RESPONSE STYLE:
 
 
   setupEventListeners() {
-    // Prevent setting up listeners multiple times globally
-    if (globalListenersSetup || this.listenersSetup) {
-      console.log('⚠️ Event listeners already setup, skipping');
-      return;
-    }
-    this.listenersSetup = true;
-    globalListenersSetup = true;
-
+    // Check if DOM elements exist before setting up
     const button = document.getElementById('send-message');
     const input = document.getElementById('message-input') as HTMLInputElement;
+    
+    if (!button || !input) {
+      console.log('⚠️ Send button or input not found, skipping event listener setup');
+      return;
+    }
+    
+    // Allow re-setup if elements were recreated (e.g., after minimize/maximize)
+    // Check if listeners are already attached by testing for existing handlers
+    const hasExistingListeners = this.listenersSetup && button.onclick !== null;
+    
+    if (hasExistingListeners && globalListenersSetup) {
+      console.log('⚠️ Event listeners already setup and active, skipping');
+      return;
+    }
+    
+    console.log('🔧 Setting up event listeners (fresh or after DOM recreation)');
+    this.listenersSetup = true;
+    globalListenersSetup = true;
     
     // Don't interfere with React-managed suggestion buttons - they have their own onClick handlers
     console.log('✅ Setting up only send/input event listeners (suggestion buttons managed by React)');
@@ -988,7 +999,7 @@ RESPONSE STYLE:
         sendButtonEnabled: !sendButton.disabled,
         inputEnabled: !messageInput.disabled,
         inputReadOnly: messageInput.readOnly,
-        hasClickHandler: hasClickListener,
+        hasClickListener: hasClickListener,
         inputValue: messageInput.value
       });
       
@@ -996,5 +1007,14 @@ RESPONSE STYLE:
     } else {
       console.error('❌ Could not find send button or input element');
     }
+  }
+
+  // Force re-setup of event listeners (useful after DOM recreation)
+  public forceResetEventListeners(): void {
+    console.log('🔄 Forcing event listener reset');
+    this.listenersSetup = false;
+    globalListenersSetup = false;
+    this.setupEventListeners();
+    this.verifyAndEnableInputs();
   }
 }
