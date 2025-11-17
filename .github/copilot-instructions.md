@@ -147,24 +147,96 @@ gh pr create --draft
 
 ---
 
+## 🚨 CRITICAL: Commit Workflow
+
+### Before EVERY Commit - Run This Checklist
+
+**NEVER commit code without running these checks first:**
+
+```bash
+# 1. Run all tests
+npm test
+
+# 2. Check TypeScript compilation
+npm run type-check
+
+# 3. Check linting
+npm run lint
+
+# 4. Only if ALL pass, then commit
+git add .
+git commit -m "type(scope): message"
+git push
+```
+
+### The Golden Rule
+
+```
+❌ WRONG WORKFLOW:
+   Write code → Commit → Discover tests fail → Fix → Commit again
+
+✅ CORRECT WORKFLOW:
+   Write code → Test → Fix until tests pass → Commit once
+```
+
+**Why this matters:**
+- Broken commits pollute git history
+- Makes bisecting bugs difficult
+- Wastes CI/CD resources
+- Unprofessional development practice
+- Violates Definition of Done
+
+### Test-Driven Development (TDD) Flow
+
+**Recommended approach:**
+
+1. **Write/update tests first** (optional but recommended)
+2. **Write implementation code**
+3. **Run tests continuously** (`npm run test:watch`)
+4. **Fix until all tests pass**
+5. **Run full validation suite**:
+   ```bash
+   npm test && npm run type-check && npm run lint
+   ```
+6. **Only then commit**
+
+### Pre-Commit Checklist Script
+
+Add this to your workflow:
+
+```bash
+# pre-commit-check.sh (or .ps1 for PowerShell)
+npm test || exit 1
+npm run type-check || exit 1
+npm run lint || exit 1
+echo "✅ All checks passed! Safe to commit."
+```
+
+---
+
 ## Definition of Done (DoD)
 
 **A task is ONLY considered complete when:**
 
 1. ✅ **Work on feature branch** - Never commit directly to main
-2. ✅ **All tests pass** - No failing unit, integration, or E2E tests
+2. ✅ **All tests pass BEFORE commit** - Run tests, fix issues, then commit
 3. ✅ **Code coverage meets threshold** - Minimum 80% coverage for new code
-4. ✅ **TypeScript compilation succeeds** - Zero TypeScript errors
-5. ✅ **ESLint passes** - No linting errors (warnings acceptable with justification)
+4. ✅ **TypeScript compilation succeeds** - Zero TypeScript errors BEFORE commit
+5. ✅ **ESLint passes** - No linting errors BEFORE commit
 6. ✅ **Code reviewed via PR** - Pull request reviewed and approved
 7. ✅ **Documentation updated** - JSDoc comments, README updates as needed
 8. ✅ **Performance validated** - No performance regressions introduced
 
 **Critical Rules:**
 - ❌ Never work directly on `main` branch
+- ❌ Never commit without running tests first
+- ❌ Never commit code with failing tests
+- ❌ Never commit code with TypeScript errors
 - ❌ Code without passing tests is NOT production-ready
 - ✅ Always create feature branch before making changes
+- ✅ Always run full test suite before committing
 - ✅ Always use Pull Requests for merging
+- ✅ Test → Fix → Pass → Then Commit (in that order!)
 
 ---
 
