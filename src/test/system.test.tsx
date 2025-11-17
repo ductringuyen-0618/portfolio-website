@@ -284,4 +284,473 @@ describe('System Integration Tests', () => {
       expect(metaDescription).toBeDefined();
     });
   });
+
+  describe('Advanced Knowledge Base Queries', () => {
+    it('should return results for technical skills queries', () => {
+      const queries = [
+        'Java programming',
+        'Kotlin development',
+        'Spring Boot framework',
+        'RESTful API',
+        'database design',
+        'microservices architecture'
+      ];
+
+      queries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(results).toBeDefined();
+        expect(Array.isArray(results)).toBe(true);
+        expect(results.length).toBeGreaterThan(0);
+        
+        // Results should have proper structure
+        results.forEach(result => {
+          expect(result).toHaveProperty('id');
+          expect(result).toHaveProperty('title');
+          expect(result).toHaveProperty('text');
+          expect(result).toHaveProperty('url');
+        });
+      });
+    });
+
+    it('should return results for professional experience queries', () => {
+      const queries = [
+        'work experience',
+        'software engineer',
+        'professional',
+        'Triton Digital',
+        'backend'
+      ];
+
+      queries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        // Verify relevance by checking if results contain keywords
+        const resultContent = results.map(r => 
+          `${r.title} ${r.text}`.toLowerCase()
+        ).join(' ');
+        
+        expect(
+          resultContent.includes('experience') ||
+          resultContent.includes('work') ||
+          resultContent.includes('engineer') ||
+          resultContent.includes('developer') ||
+          resultContent.includes('professional')
+        ).toBe(true);
+      });
+    });
+
+    it('should return results for project-related queries', () => {
+      const queries = [
+        'projects',
+        'portfolio',
+        'github repositories',
+        'open source contributions',
+        'side projects'
+      ];
+
+      queries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        results.forEach(result => {
+          expect(typeof result.title).toBe('string');
+          expect(typeof result.text).toBe('string');
+          expect(typeof result.url).toBe('string');
+        });
+      });
+    });
+
+    it('should handle complex multi-word technical queries', () => {
+      const complexQueries = [
+        'backend development with Java and Spring Boot',
+        'RESTful API design and implementation',
+        'microservices architecture best practices',
+        'database schema design and optimization',
+        'continuous integration and deployment'
+      ];
+
+      complexQueries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(Array.isArray(results)).toBe(true);
+        expect(results.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should return relevant results for contact information queries', () => {
+      const contactQueries = [
+        'contact',
+        'email',
+        'duc nguyen',
+        'seattle',
+        'linkedin',
+        'github'
+      ];
+
+      contactQueries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        // Check for contact-related information
+        const hasContactInfo = results.some(result => {
+          const content = `${result.title} ${result.text}`.toLowerCase();
+          return content.includes('contact') ||
+                 content.includes('email') ||
+                 content.includes('linkedin') ||
+                 content.includes('github') ||
+                 content.includes('@');
+        });
+        
+        expect(hasContactInfo).toBe(true);
+      });
+    });
+
+    it('should handle partial word matches', () => {
+      const partialQueries = [
+        'prog', // should match "programming"
+        'dev', // should match "development" or "developer"
+        'eng', // should match "engineer" or "engineering"
+        'tech' // should match "technology" or "technical"
+      ];
+
+      partialQueries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        // Should return something, even if partial match
+        expect(Array.isArray(results)).toBe(true);
+      });
+    });
+
+    it('should perform case-insensitive searches', () => {
+      const queries = [
+        'JAVA',
+        'java',
+        'Java',
+        'JaVa'
+      ];
+
+      const allResults = queries.map(query => knowledgeBase.search(query));
+      
+      // All variations should return same number of results
+      const resultLengths = allResults.map(results => results.length);
+      const uniqueLengths = new Set(resultLengths);
+      
+      expect(uniqueLengths.size).toBe(1); // All should be same length
+    });
+
+    it('should handle queries with special characters', () => {
+      const specialCharQueries = [
+        'Java/Kotlin',
+        'Spring (Boot)',
+        'REST-API',
+        'C++/C#',
+        '.NET'
+      ];
+
+      specialCharQueries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(Array.isArray(results)).toBe(true);
+        // Should not crash and should return results
+      });
+    });
+  });
+
+  describe('Agent-Knowledge Base Integration', () => {
+    it('should support smart search with JSON enhancement', async () => {
+      const query = 'Tell me about your experience';
+      
+      // Call smartSearchWithJson if available
+      if (typeof knowledgeBase.smartSearchWithJson === 'function') {
+        const result = await knowledgeBase.smartSearchWithJson(query);
+        
+        expect(result).toBeDefined();
+        expect(result).toHaveProperty('records');
+        expect(result).toHaveProperty('intent');
+        expect(result).toHaveProperty('confidence');
+        expect(result).toHaveProperty('searchStrategy');
+        expect(Array.isArray(result.records)).toBe(true);
+        expect(result.records.length).toBeGreaterThan(0);
+        
+        // Verify record structure
+        result.records.forEach(record => {
+          expect(record).toHaveProperty('id');
+          expect(record).toHaveProperty('title');
+          expect(record).toHaveProperty('text');
+          expect(record).toHaveProperty('url');
+        });
+      } else {
+        // Fallback to regular search
+        const results = knowledgeBase.search(query);
+        expect(Array.isArray(results)).toBe(true);
+      }
+    });
+
+    it('should detect intent from queries', () => {
+      const intentTestCases = [
+        { query: 'contact me', expectedKeywords: ['contact', 'email'] },
+        { query: 'show projects', expectedKeywords: ['project', 'github'] },
+        { query: 'work experience', expectedKeywords: ['experience', 'work', 'professional'] },
+        { query: 'technical skills', expectedKeywords: ['skill', 'technology', 'programming'] }
+      ];
+
+      intentTestCases.forEach(({ query, expectedKeywords }) => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        const resultContent = results.map(r => 
+          `${r.title} ${r.text}`.toLowerCase()
+        ).join(' ');
+        
+        // At least one expected keyword should be present
+        const hasExpectedKeyword = expectedKeywords.some(keyword => 
+          resultContent.includes(keyword)
+        );
+        
+        expect(hasExpectedKeyword).toBe(true);
+      });
+    });
+
+    it('should retrieve multiple relevant results for broad queries', () => {
+      const broadQueries = [
+        'software engineer',
+        'developer',
+        'duc nguyen',
+        'backend'
+      ];
+
+      broadQueries.forEach(query => {
+        const results = knowledgeBase.search(query);
+        
+        // Broad queries should return multiple results
+        expect(results.length).toBeGreaterThanOrEqual(2);
+        
+        // Results should cover different aspects
+        const titles = results.map(r => r.title.toLowerCase());
+        const uniqueTitles = new Set(titles);
+        
+        expect(uniqueTitles.size).toBeGreaterThan(1);
+      });
+    });
+
+    it('should handle follow-up queries correctly', () => {
+      // Simulate a conversation flow
+      const conversationFlow = [
+        'What technologies do you use?',
+        'Tell me more about Java',
+        'What about Spring Boot?',
+        'Any microservices experience?'
+      ];
+
+      conversationFlow.forEach(query => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        // Each query should return relevant results
+        results.forEach(result => {
+          expect(result.text.length).toBeGreaterThan(0);
+        });
+      });
+    });
+
+    it('should provide consistent results for similar queries', () => {
+      const similarQueries = [
+        'What is your email?',
+        'How can I contact you?',
+        'What is your email address?',
+        'How do I reach you?'
+      ];
+
+      const allResults = similarQueries.map(query => knowledgeBase.search(query));
+      
+      // All should return results
+      allResults.forEach(results => {
+        expect(results.length).toBeGreaterThan(0);
+      });
+      
+      // Check if they return similar content (contact information)
+      const allContainContact = allResults.every(results => 
+        results.some(result => {
+          const content = `${result.title} ${result.text}`.toLowerCase();
+          return content.includes('contact') || 
+                 content.includes('email') ||
+                 content.includes('@');
+        })
+      );
+      
+      expect(allContainContact).toBe(true);
+    });
+
+    it('should support semantic search after initialization', async () => {
+      await waitFor(() => {
+        expect(knowledgeBase.isSemanticReady()).toBe(true);
+      }, { timeout: 5000 });
+
+      const semanticQuery = 'backend engineer with cloud experience';
+      const results = knowledgeBase.search(semanticQuery);
+      
+      expect(results.length).toBeGreaterThan(0);
+      
+      // Semantic search should find relevant results even without exact keywords
+      const resultContent = results.map(r => 
+        `${r.title} ${r.text}`.toLowerCase()
+      ).join(' ');
+      
+      expect(
+        resultContent.includes('backend') ||
+        resultContent.includes('engineer') ||
+        resultContent.includes('developer') ||
+        resultContent.includes('cloud') ||
+        resultContent.includes('experience')
+      ).toBe(true);
+    });
+
+    it('should handle rapid successive queries', () => {
+      const rapidQueries = [
+        'Java', 'Kotlin', 'Spring', 'API', 'Database',
+        'Projects', 'Experience', 'Skills', 'Contact', 'GitHub'
+      ];
+
+      rapidQueries.forEach(query => {
+        const startTime = performance.now();
+        const results = knowledgeBase.search(query);
+        const endTime = performance.now();
+        
+        expect(results).toBeDefined();
+        expect(Array.isArray(results)).toBe(true);
+        
+        // Search should be fast (< 100ms)
+        const searchTime = endTime - startTime;
+        expect(searchTime).toBeLessThan(100);
+      });
+    });
+
+    it('should prioritize exact matches over partial matches', () => {
+      const query = 'Java';
+      const results = knowledgeBase.search(query);
+      
+      expect(results.length).toBeGreaterThan(0);
+      
+      // First result should likely contain "Java" prominently
+      const firstResult = results[0];
+      const firstResultContent = `${firstResult.title} ${firstResult.text}`.toLowerCase();
+      
+      expect(firstResultContent.includes('java')).toBe(true);
+    });
+
+    it('should provide actionable results for intent-based queries', () => {
+      const actionableQueries = [
+        { query: 'contact', expectUrl: true },
+        { query: 'github', expectUrl: true },
+        { query: 'linkedin', expectUrl: true },
+        { query: 'projects', expectUrl: true }
+      ];
+
+      actionableQueries.forEach(({ query, expectUrl }) => {
+        const results = knowledgeBase.search(query);
+        expect(results.length).toBeGreaterThan(0);
+        
+        if (expectUrl) {
+          // Should have at least one result with a valid URL
+          const hasValidUrl = results.some(result => 
+            result.url && 
+            result.url.length > 0 && 
+            (result.url.startsWith('http') || result.url.startsWith('mailto') || result.url.startsWith('/'))
+          );
+          
+          expect(hasValidUrl).toBe(true);
+        }
+      });
+    });
+  });
+
+  describe('Knowledge Base Result Quality', () => {
+    it('should return results with complete metadata', () => {
+      const query = 'software engineer';
+      const results = knowledgeBase.search(query);
+      
+      expect(results.length).toBeGreaterThan(0);
+      
+      results.forEach(result => {
+        // Each result should have all required fields
+        expect(result).toHaveProperty('id');
+        expect(result).toHaveProperty('title');
+        expect(result).toHaveProperty('text');
+        expect(result).toHaveProperty('url');
+        
+        // Fields should have valid values
+        expect(typeof result.id).toBe('string');
+        expect(result.id.length).toBeGreaterThan(0);
+        expect(typeof result.title).toBe('string');
+        expect(result.title.length).toBeGreaterThan(0);
+        expect(typeof result.text).toBe('string');
+        expect(result.text.length).toBeGreaterThan(0);
+        expect(typeof result.url).toBe('string');
+      });
+    });
+
+    it('should return unique results (no duplicates)', () => {
+      const query = 'developer';
+      const results = knowledgeBase.search(query);
+      
+      expect(results.length).toBeGreaterThan(0);
+      
+      // Check for duplicate IDs
+      const ids = results.map(r => r.id);
+      const uniqueIds = new Set(ids);
+      
+      expect(uniqueIds.size).toBe(ids.length);
+    });
+
+    it('should return results in relevance order', () => {
+      const query = 'Java programming';
+      const results = knowledgeBase.search(query);
+      
+      expect(results.length).toBeGreaterThan(1);
+      
+      // First result should be more relevant than last
+      const firstResultContent = `${results[0].title} ${results[0].text}`.toLowerCase();
+      const lastResultContent = `${results[results.length - 1].title} ${results[results.length - 1].text}`.toLowerCase();
+      
+      // Count keyword occurrences
+      const countKeywords = (text: string) => {
+        const keywords = ['java', 'programming'];
+        return keywords.reduce((count, keyword) => {
+          const matches = text.match(new RegExp(keyword, 'gi'));
+          return count + (matches ? matches.length : 0);
+        }, 0);
+      };
+      
+      const firstCount = countKeywords(firstResultContent);
+      const lastCount = countKeywords(lastResultContent);
+      
+      // First result should have equal or more keyword matches
+      expect(firstCount).toBeGreaterThanOrEqual(lastCount);
+    });
+
+    it('should limit result count to reasonable number', () => {
+      const query = 'software';
+      const results = knowledgeBase.search(query);
+      
+      // Should not return excessive results
+      expect(results.length).toBeLessThanOrEqual(50);
+      
+      // But should return enough for context
+      expect(results.length).toBeGreaterThan(0);
+    });
+
+    it('should provide text excerpts suitable for display', () => {
+      const query = 'experience';
+      const results = knowledgeBase.search(query);
+      
+      expect(results.length).toBeGreaterThan(0);
+      
+      results.forEach(result => {
+        // Text should be meaningful length
+        expect(result.text.length).toBeGreaterThan(10);
+        expect(result.text.length).toBeLessThan(5000);
+        
+        // Should not be just whitespace
+        expect(result.text.trim().length).toBeGreaterThan(0);
+      });
+    });
+  });
 });
