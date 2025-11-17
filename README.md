@@ -68,6 +68,60 @@ npm run dev
 
 4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
+### 🌿 Git Workflow (IMPORTANT)
+
+**⚠️ NEVER work directly on `main` branch!**
+
+This project follows a **feature branch workflow**. All changes must be made on feature branches.
+
+#### Quick Start with Helper Script (PowerShell)
+
+```powershell
+# Load git workflow helpers
+. .\scripts\git-workflow.ps1
+
+# Create a new feature branch (checks GH CLI auth automatically)
+New-FeatureBranch "add-new-feature"
+
+# Or use short alias
+nfb "fix-bug" -Prefix "fix"
+
+# Check your status
+Get-GitStatus  # or: gst
+```
+
+#### Manual Branch Creation
+
+```bash
+# 1. Authenticate GitHub CLI (first time only)
+gh auth login
+
+# 2. Create feature branch
+git checkout main
+git pull origin main
+git checkout -b feature/your-feature-name
+git push -u origin feature/your-feature-name
+
+# 3. Make changes and commit
+git add .
+git commit -m "feat: add new feature"
+git push
+
+# 4. Create Pull Request
+gh pr create
+```
+
+**Branch naming conventions:**
+- `feature/` - New features
+- `fix/` - Bug fixes  
+- `refactor/` - Code refactoring
+- `test/` - Test updates
+- `docs/` - Documentation
+- `chore/` - Maintenance
+- `perf/` - Performance improvements
+
+See [Copilot Instructions](.github/copilot-instructions.md) for complete workflow details.
+
 ### 🤖 AI Assistant Setup
 
 The AI assistant works out of the box with:
@@ -75,15 +129,50 @@ The AI assistant works out of the box with:
 - **Session Persistence**: Conversations saved in browser storage
 - **Smart Caching**: Optimized model loading and inference
 
-### Development Tips
+### Development Commands
 
 ```bash
 # Development with AI features
 npm run dev          # Hot reload with AI assistant active
+npm run build        # Production build
+npm run preview      # Test production build locally
+
+# Code Quality & Testing
+npm test             # Run all tests
+npm run test:watch   # Run tests in watch mode
+npm run test:coverage # Generate coverage report
+npm run test:ui      # Open Vitest UI dashboard
+
+# Type Checking & Linting
+npm run type-check   # Validates TypeScript
+npm run lint         # Run ESLint
+```
+
+### Testing
+
+This project follows **enterprise-grade testing standards** with strict quality gates:
+
+**Definition of Done:**
+- ✅ All tests pass (80%+ coverage required)
+- ✅ Zero TypeScript errors
+- ✅ ESLint passes with no errors
+- ✅ Proper documentation (JSDoc comments)
+
+**Testing Framework:**
+- **Vitest** - Fast unit testing framework
+- **React Testing Library** - Component testing
+- **Coverage Reporting** - Detailed coverage metrics
+
+For complete testing documentation, see [TESTING.md](./TESTING.md)
+
+### Development Tips
+
+```bash
+# Watch mode for TDD workflow
+npm run test:watch   # Auto-run tests on file changes
 
 # Performance monitoring
 npm run build        # Check bundle size with WebLLM
-npm run preview      # Test production AI performance
 
 # Type checking with AI types
 npm run type-check   # Validates WebLLM and transformer types

@@ -37,30 +37,9 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [sessionState, setSessionState] = useState<ChatSessionState | null>(null);
 
-  // Debug function to show stored vs displayed state
-  const debugSessionState = () => {
-    const stored = conversationManager.getChatHistory();
-    const session = conversationManager.getSessionState();
-    console.log('🔍 Debug Session State:');
-    console.log('  📦 Stored messages:', stored.length);
-    console.log('  💭 React state messages:', chatHistory.length);
-    console.log('  🔑 Session ID:', session?.sessionId);
-    console.log('  ⏰ Last activity:', session?.lastActivity);
-    console.log('  📋 Stored content:', stored);
-    console.log('  💬 React content:', chatHistory);
-  };
 
-  // Test function to add a sample message for testing session memory
-  const addTestMessage = () => {
-    const testMessage: ChatMessage = {
-      role: 'user',
-      content: `Test message - ${new Date().toLocaleTimeString()}`,
-      timestamp: Date.now(),
-      id: `test_${Date.now()}`
-    };
-    conversationManager.saveChatMessage(testMessage);
-    console.log('🧪 Added test message for session memory testing');
-  };
+
+
 
   // Manual session restoration function
   const restoreSessionManually = () => {
@@ -268,24 +247,30 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       const container = document.getElementById('chat-messages');
       if (!container) return;
 
+      // Check fullscreen state from React component
+      const chatSidebar = document.querySelector('.chat-sidebar');
+      const currentIsFullscreen = chatSidebar && (chatSidebar.classList.contains('inset-2') || chatSidebar.classList.contains('inset-4'));
+
       const messageWrapper = document.createElement('div');
-      messageWrapper.className = `flex mb-3 ${role === 'user' ? 'justify-end' : 'justify-start'} chat-message restored-message`;
+      messageWrapper.className = `flex mb-4 ${role === 'user' ? 'justify-end' : 'justify-start'} chat-message restored-message animate-fade-in`;
       messageWrapper.setAttribute('data-restored', 'true');
       
       if (role === 'user') {
         messageWrapper.innerHTML = `
-          <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 rounded-2xl rounded-br-md max-w-xs shadow-sm">
-            <div class="text-sm font-medium">${conversationManager.escapeHtml(content)}</div>
+          <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-4 rounded-2xl rounded-br-md ${currentIsFullscreen ? 'max-w-2xl text-base' : 'max-w-xs text-sm'} shadow-lg transform hover:scale-105 transition-all duration-200">
+            <div class="font-medium leading-relaxed">${conversationManager.formatMessageContent(content)}</div>
           </div>
         `;
       } else {
         messageWrapper.innerHTML = `
-          <div class="bg-white text-gray-800 px-4 py-3 rounded-2xl rounded-bl-md max-w-sm shadow-sm border border-gray-200">
-            <div class="flex items-start space-x-2">
-              <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
+          <div class="bg-white text-gray-800 px-5 py-4 rounded-2xl rounded-bl-md ${currentIsFullscreen ? 'max-w-3xl' : 'max-w-sm'} shadow-lg border border-gray-200 transform hover:scale-105 transition-all duration-200">
+            <div class="flex items-start space-x-3">
+              <div class="${currentIsFullscreen ? 'w-8 h-8 text-sm' : 'w-6 h-6 text-xs'} bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 mt-1">
                 AI
               </div>
-              <div class="text-sm leading-relaxed">${conversationManager.escapeHtml(content)}</div>
+              <div class="flex-1">
+                <div class="${currentIsFullscreen ? 'text-base' : 'text-sm'} leading-relaxed">${conversationManager.formatMessageContent(content)}</div>
+              </div>
             </div>
           </div>
         `;
@@ -300,6 +285,86 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
+    },
+
+    // Enhanced text formatting with URL detection and better readability
+    formatMessageContent: (text: string): string => {
+      // First escape HTML to prevent XSS
+      let formattedText = conversationManager.escapeHtml(text);
+      
+      // URL detection regex patterns
+      const urlPattern = /(https?:\/\/[^\s<>"']+)/gi;
+      const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+      
+      // Convert URLs to clickable buttons
+      formattedText = formattedText.replace(urlPattern, (url) => {
+        const cleanUrl = url.replace(/[.,;:!?]$/, ''); // Remove trailing punctuation
+        const displayText = conversationManager.shortenUrl(cleanUrl);
+        return `<button class="url-btn inline-flex items-center px-2 py-1 mx-1 text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-100 transition-all duration-200 cursor-pointer" data-url="${cleanUrl}" onclick="window.open('${cleanUrl}', '_blank', 'noopener,noreferrer')" title="Open ${cleanUrl} in new tab">
+          🔗 ${displayText}
+        </button>`;
+      });
+      
+      // Convert email addresses to clickable buttons
+      formattedText = formattedText.replace(emailPattern, (email) => {
+        return `<button class="email-btn inline-flex items-center px-2 py-1 mx-1 text-xs font-medium bg-green-50 text-green-700 border border-green-200 rounded-full hover:bg-green-100 transition-all duration-200 cursor-pointer" data-email="${email}" onclick="window.open('mailto:${email}', '_self')" title="Send email to ${email}">
+          📧 ${email}
+        </button>`;
+      });
+      
+      // Improve text formatting for readability
+      formattedText = conversationManager.enhanceTextReadability(formattedText);
+      
+      return formattedText;
+    },
+
+    // Shorten long URLs for display
+    shortenUrl: (url: string): string => {
+      try {
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname.replace('www.', '');
+        
+        if (domain.length > 20) {
+          return domain.substring(0, 17) + '...';
+        }
+        
+        return domain;
+      } catch {
+        // Fallback for invalid URLs
+        return url.length > 25 ? url.substring(0, 22) + '...' : url;
+      }
+    },
+
+    // Enhance text readability with better formatting
+    enhanceTextReadability: (text: string): string => {
+      // Add proper spacing around punctuation
+      text = text.replace(/([.!?])([A-Z])/g, '$1 $2');
+      
+      // Format bullet points and lists
+      text = text.replace(/^[-•*]\s+/gm, '<span class="list-marker text-blue-600 font-semibold">• </span>');
+      text = text.replace(/\n[-•*]\s+/g, '<br><span class="list-marker text-blue-600 font-semibold">• </span>');
+      
+      // Format numbered lists
+      text = text.replace(/^(\d+)\.\s+/gm, '<span class="number-marker text-blue-600 font-semibold">$1. </span>');
+      text = text.replace(/\n(\d+)\.\s+/g, '<br><span class="number-marker text-blue-600 font-semibold">$1. </span>');
+      
+      // Convert line breaks to proper HTML breaks
+      text = text.replace(/\n\n/g, '</p><p class="mt-2">');
+      text = text.replace(/\n/g, '<br>');
+      
+      // Wrap in paragraph if it contains breaks
+      if (text.includes('<br>') || text.includes('</p>')) {
+        text = '<p>' + text + '</p>';
+      }
+      
+      // Bold important keywords (case-insensitive)
+      const keywords = ['Triton Digital', 'LinkedIn', 'GitHub', 'React', 'TypeScript', 'Node.js', 'Python', 'JavaScript', 'AI', 'Machine Learning', 'Software Engineer', 'Senior Developer'];
+      keywords.forEach(keyword => {
+        const regex = new RegExp(`\\b(${keyword})\\b`, 'gi');
+        text = text.replace(regex, '<strong class="font-semibold text-gray-900">$1</strong>');
+      });
+      
+      return text;
     },
 
     // Remove duplicate messages based on content and timestamp proximity
@@ -364,11 +429,8 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       if (messageInput) {
         messageInput.value = message;
         messageInput.focus();
-        // Optionally auto-send the message
-        const sendButton = document.getElementById('send-message') as HTMLButtonElement;
-        if (sendButton) {
-          sendButton.click();
-        }
+        // Don't auto-send - let user review and manually send
+        console.log('💡 Suggestion filled:', message.substring(0, 30) + '...');
       }
     } catch (error) {
       console.error('Error handling suggestion click:', error);
@@ -524,54 +586,44 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
   // Load session data on component mount
   useEffect(() => {
     try {
-      // Clean up any duplicates first
+      console.log('🚀 Component Mount - Balanced initialization');
+      
+      // Only clear conflicting localStorage, preserve sessionStorage for normal operation
+      localStorage.removeItem('agentConversationHistory');
+      
+      // Set flag briefly to prevent auto-triggers during initialization
+      sessionStorage.setItem('initialization-in-progress', 'true');
+      
+      // Load existing session data normally
       const loadedHistory = conversationManager.deduplicateMessages();
       const loadedState = conversationManager.getSessionState();
       
-      console.log('🚀 Component Mount - Session Check:');
-      console.log('  📝 Clean history length:', loadedHistory.length);
+      console.log('  📝 History length:', loadedHistory.length);
       console.log('  📊 Session state exists:', !!loadedState);
       console.log('  ⏰ Is recent session:', conversationManager.isRecentSession());
-      console.log('  💾 Clean messages:', loadedHistory);
-      console.log('  🔑 Session state:', loadedState);
       
-      // Force update React state with clean data
+      // Update React state with loaded data
       setChatHistory(loadedHistory);
       setSessionState(loadedState);
       
-      // Log detailed session info
-      const stats = conversationManager.getSessionStats();
-      console.log('📊 Session Stats on Mount:', {
-        ...stats,
-        historyLength: loadedHistory.length,
-        hasState: !!loadedState,
-        isRecentSession: conversationManager.isRecentSession()
-      });
-      
-      // If we have history, try immediate restoration
-      if (loadedHistory.length > 0) {
-        console.log('🎯 Attempting immediate chat restoration...');
-        setTimeout(() => {
-          const restored = conversationManager.restoreConversation();
-          if (restored) {
-            console.log('🔄 Pre-initialization restoration successful');
-            // Verify messages are actually in the DOM
-            setTimeout(() => {
-              const chatContainer = document.getElementById('chat-messages');
-              const messageElements = chatContainer?.querySelectorAll('.chat-message');
-              console.log('✅ DOM Verification:', {
-                storedMessages: loadedHistory.length,
-                domMessages: messageElements?.length || 0,
-                containerExists: !!chatContainer
-              });
-            }, 200);
-          } else {
-            console.log('❌ Pre-initialization restoration failed');
-          }
-        }, 500);
-      }
+      // Clear initialization flag quickly to allow normal operation
+      setTimeout(() => {
+        sessionStorage.removeItem('initialization-in-progress');
+        console.log('✅ Initialization complete - normal operation enabled');
+        
+        // Enable inputs for user interaction
+        const sendButton = document.getElementById('send-message') as HTMLButtonElement;
+        const messageInput = document.getElementById('message-input') as HTMLInputElement;
+        
+        if (sendButton && messageInput) {
+          sendButton.disabled = false;
+          messageInput.disabled = false;
+          console.log('✅ Inputs enabled and ready for user interaction');
+        }
+      }, 1000); // Shorter delay for better UX
     } catch (error) {
-      console.error('Failed to load session data:', error);
+      console.error('Failed to initialize session:', error);
+      sessionStorage.removeItem('initialization-in-progress');
     }
   }, []);
 
@@ -592,31 +644,12 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
         
         console.log('🔍 Session Check:', { hasRecentSession, hasHistory, needsInit });
         
+        // Skip session restoration to prevent auto-triggers
+        console.log('� Session restoration skipped to prevent auto-message triggers');
+        
         if (hasRecentSession && hasHistory && !needsInit) {
-          // Try to restore existing session without full LLM initialization
-          console.log('🔄 Restoring existing chat session with history...');
-          
-          try {
-            // Create widget but don't initialize LLM yet
-            const widget = new AgentWidget();
-            widgetRef.current = widget;
-            
-            // Restore conversation immediately
-            const restored = conversationManager.restoreConversation();
-            if (restored) {
-              // Setup event listeners for interaction
-              widget.quickSetup();
-              // Ensure UI shows the restored messages
-              setTimeout(() => widget.restoreChatUI(), 100);
-              conversationManager.updateLastActivity();
-              
-              console.log('✅ Chat session restored successfully without re-initialization!');
-              return;
-            }
-          } catch (restoreError) {
-            console.warn('Quick session restoration failed:', restoreError);
-            // Continue to full initialization
-          }
+          console.log('⚠️ Skipping session restoration - preventing auto-triggers');
+          // Don't restore - start fresh to avoid auto-sending stored messages
         }
         
         // Full initialization needed
@@ -627,15 +660,50 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
         await widget.initialize();
         widget.setupEventListeners();
         
+        // Verify event listeners are working after initialization
+        setTimeout(() => {
+          const sendButton = document.getElementById('send-message') as HTMLButtonElement;
+          const messageInput = document.getElementById('message-input') as HTMLInputElement;
+          
+          if (sendButton && messageInput) {
+            console.log('🔧 Verifying input elements after initialization:', {
+              sendButtonExists: !!sendButton,
+              inputExists: !!messageInput,
+              sendButtonDisabled: sendButton.disabled,
+              inputDisabled: messageInput.disabled
+            });
+            
+            // Ensure elements are enabled
+            sendButton.disabled = false;
+            messageInput.disabled = false;
+            messageInput.placeholder = "Ask about Duc's experience, skills, or contact info...";
+            
+            // Use widget's verification method
+            if (widgetRef.current) {
+              widgetRef.current.verifyAndEnableInputs();
+            }
+            
+            console.log('✅ Input elements verified and enabled');
+          } else {
+            console.error('❌ Send button or input not found after initialization');
+          }
+        }, 500);
+        
+        console.log('✅ AgentWidget fully initialized with verified event listeners');
+        
         // Mark as initialized in session
         conversationManager.markInitialized();
         
-        // Restore conversation if available
+        // Restore conversation if available after a delay
         setTimeout(() => {
-          conversationManager.restoreConversation();
-          // Ensure UI shows the restored messages
-          if (widgetRef.current) {
-            widgetRef.current.restoreChatUI();
+          const storedHistory = conversationManager.getChatHistory();
+          if (storedHistory.length > 0) {
+            console.log('🔄 Restoring conversation after full initialization');
+            conversationManager.restoreConversation();
+            // Ensure UI shows the restored messages
+            if (widgetRef.current) {
+              widgetRef.current.restoreChatUI();
+            }
           }
         }, 1000);
         
@@ -676,6 +744,106 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [isFullscreen]);
+
+  // Handle tab changes - ensure conversation and tool traces are preserved
+  useEffect(() => {
+    console.log('🔄 Tab changed to:', activeTab);
+    
+    if (activeTab === 'chat') {
+      console.log('📑 Chat tab activated - ensuring conversation is visible');
+      // Small delay to ensure DOM is updated after tab switch
+      setTimeout(() => {
+        const chatContainer = document.getElementById('chat-messages');
+        if (chatContainer) {
+          const existingMessages = chatContainer.querySelectorAll('.chat-message[data-processed="true"]');
+          const storedHistory = conversationManager.getChatHistory();
+          
+          console.log('🔍 Chat tab check:', {
+            domMessages: existingMessages.length,
+            storedMessages: storedHistory.length,
+            containerContent: chatContainer.innerHTML.includes('AI Agent')
+          });
+          
+          // If DOM doesn't show messages but we have stored history, restore it
+          if (existingMessages.length === 0 && storedHistory.length > 0) {
+            console.log('🔄 Restoring conversation after tab switch');
+            conversationManager.restoreConversation();
+          } else if (existingMessages.length < storedHistory.length) {
+            console.log('📋 Partial restoration needed after tab switch');
+            conversationManager.restoreConversation();
+          }
+          
+          // Ensure input functionality is working after tab switch
+          const messageInput = document.getElementById('message-input') as HTMLInputElement;
+          const sendButton = document.getElementById('send-message') as HTMLButtonElement;
+          
+          if (messageInput && sendButton) {
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            console.log('✅ Chat input re-enabled after tab switch');
+            
+            // Re-focus input to ensure it's ready
+            messageInput.focus();
+            
+            // Ensure the widget's event listeners are still active
+            if (widgetRef.current) {
+              // Force re-check of widget functionality
+              setTimeout(() => {
+                console.log('🔄 Verifying widget functionality after tab switch');
+                if (widgetRef.current && typeof widgetRef.current.initialized !== 'undefined') {
+                  console.log('Widget status:', { initialized: widgetRef.current.initialized });
+                  // Use widget's verification method
+                  widgetRef.current.verifyAndEnableInputs();
+                }
+              }, 100);
+            }
+          }
+        }
+      }, 150);
+    } else if (activeTab === 'trace') {
+      console.log('🛠️ Tools tab activated - checking tool traces');
+      setTimeout(() => {
+        const traceContainer = document.getElementById('tool-trace');
+        if (traceContainer) {
+          // Check if AgentWidget has traces in memory first
+          if (widgetRef.current && typeof widgetRef.current.restoreToolTracesToUI !== 'undefined') {
+            // Use AgentWidget's restoration method for better consistency
+            console.log('🔄 Using AgentWidget to restore tool traces');
+            widgetRef.current.restoreToolTracesToUI();
+          } else {
+            // Fallback to session storage (legacy)
+            const storedTraces = sessionStorage.getItem('ai_tool_traces');
+            if (storedTraces && (traceContainer.innerHTML.includes('Knowledge base searches appear here') || 
+                traceContainer.innerHTML.includes('Tool calls appear here'))) {
+              try {
+                const traces = JSON.parse(storedTraces);
+                if (traces.length > 0) {
+                  traceContainer.innerHTML = '';
+                  traces.forEach((trace: any) => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = trace.html;
+                    const traceElement = tempDiv.firstElementChild;
+                    if (traceElement) {
+                      traceContainer.appendChild(traceElement);
+                    }
+                  });
+                  console.log('🔄 Restored tool traces from legacy storage');
+                }
+              } catch (error) {
+                console.warn('Failed to restore tool traces:', error);
+              }
+            }
+          }
+          
+          console.log('🔍 Tools tab state:', {
+            hasTraces: !traceContainer.innerHTML.includes('Knowledge base searches appear here') && 
+                      !traceContainer.innerHTML.includes('Tool calls appear here'),
+            traceCount: traceContainer.children.length
+          });
+        }
+      }, 150);
+    }
+  }, [activeTab]);
 
   // Handle chat reopening from minimized state
   useEffect(() => {
@@ -767,11 +935,35 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       </div>
 
           {/* Tab Navigation */}
-          {/* Tab Navigation */}
           <div className="border-b border-gray-200 bg-gray-50">
             <nav className="flex">
               <button
-                onClick={() => setActiveTab('chat')}
+                onClick={() => {
+                  console.log('🔄 Switching to chat tab - preserving session');
+                  conversationManager.updateLastActivity();
+                  
+                  // Save current state before switching
+                  if (activeTab === 'trace') {
+                    const traceContainer = document.getElementById('tool-trace');
+                    if (traceContainer && !traceContainer.innerHTML.includes('Knowledge base searches appear here') &&
+                        !traceContainer.innerHTML.includes('Tool calls appear here')) {
+                      // Let AgentWidget handle saving traces instead of manual storage
+                      if (widgetRef.current && typeof widgetRef.current.saveToolTracesToStorage !== 'undefined') {
+                        console.log('💾 AgentWidget handling tool trace save before tab switch');
+                      } else {
+                        // Fallback to manual save (legacy)
+                        const traces = Array.from(traceContainer.children).map(child => ({
+                          html: child.outerHTML,
+                          timestamp: Date.now()
+                        }));
+                        sessionStorage.setItem('tool-traces', JSON.stringify(traces));
+                        console.log('💾 Saved tool traces before tab switch (legacy method)');
+                      }
+                    }
+                  }
+                  
+                  setActiveTab('chat');
+                }}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                   activeTab === 'chat'
                     ? 'text-blue-600 bg-white border-b-2 border-blue-600'
@@ -784,7 +976,11 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
                 </div>
               </button>
               <button
-                onClick={() => setActiveTab('trace')}
+                onClick={() => {
+                  console.log('🔄 Switching to tools tab - preserving session');
+                  conversationManager.updateLastActivity();
+                  setActiveTab('trace');
+                }}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                   activeTab === 'trace'
                     ? 'text-blue-600 bg-white border-b-2 border-blue-600'
@@ -794,6 +990,9 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
                 <div className="flex items-center justify-center space-x-2">
                   <Cpu size={16} />
                   <span>Tools</span>
+                  {sessionStorage.getItem('tool-traces') && (
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  )}
                 </div>
               </button>
             </nav>
@@ -805,44 +1004,28 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
               ? 'h-[calc(100vh-10rem)] sm:h-[calc(100vh-12rem)]' 
               : 'h-[calc(100vh-12rem)] sm:h-[600px]'
           }`}>
-            {activeTab === 'chat' ? (
-              <>
-                {/* Session Info Bar */}
-                {sessionState && (
-                  <div className="mb-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100 text-xs text-blue-700 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <span>Session Active • {chatHistory.length} messages</span>
-                      <span className="text-blue-500">• {sessionState.sessionId.split('_')[2]}</span>
-                    </div>
-                    <div className="flex space-x-1">
-                      <button
-                        onClick={addTestMessage}
-                        className="text-orange-600 hover:text-orange-800 font-medium px-2 py-1 rounded hover:bg-orange-100 transition-colors duration-200 text-xs"
-                        title="Add test message"
-                      >
-                        Test
-                      </button>
-                      <button
-                        onClick={debugSessionState}
-                        className="text-purple-600 hover:text-purple-800 font-medium px-2 py-1 rounded hover:bg-purple-100 transition-colors duration-200 text-xs"
-                        title="Debug session state (check console)"
-                      >
-                        Debug
-                      </button>
-                      <button
-                        onClick={restoreSessionManually}
-                        className="text-green-600 hover:text-green-800 font-medium px-2 py-1 rounded hover:bg-green-100 transition-colors duration-200"
-                        title="Restore previous conversation"
-                      >
-                        Restore
-                      </button>
-                      <button
-                        onClick={() => {
-                          conversationManager.clearSession();
+            {/* Chat Tab Content */}
+            <div className={activeTab === 'chat' ? 'flex flex-col flex-1' : 'hidden'}>
+              {/* Session Info Bar */}
+              {sessionState && (
+                <div className="mb-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100 text-xs text-blue-700 flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>Session Active • {chatHistory.length} messages</span>
+                    <span className="text-blue-500">• {sessionState.sessionId.split('_')[2]}</span>
+                  </div>
+                  <div className="flex space-x-1">
+                    <button
+                      onClick={() => {
+                        conversationManager.clearSession();
+                          // Also clear any tool traces and stored triggers
+                          sessionStorage.removeItem('tool-traces');
+                          sessionStorage.removeItem('agentConversationHistory');
+                          sessionStorage.removeItem('auto-trigger-disabled');
+                          console.log('🗑️ All session data cleared');
                           window.location.reload();
                         }}
-                        className="text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-100 transition-colors duration-200"
+                        className="text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-100 transition-colors duration-200 text-xs"
                         title="Clear chat history and restart session"
                       >
                         Reset
@@ -854,10 +1037,15 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
                 {/* Chat Messages */}
                 <div 
                   id="chat-messages" 
-                  className={`flex-1 border border-gray-200 rounded-xl p-4 mb-4 overflow-y-auto bg-gradient-to-b from-gray-50 to-white ${
-                    isFullscreen ? 'text-base' : 'text-sm'
+                  className={`flex-1 border border-gray-200 rounded-xl overflow-y-auto bg-gradient-to-b from-gray-50 to-white transition-all duration-300 ${
+                    isFullscreen 
+                      ? 'text-base p-6 mb-6 shadow-inner' 
+                      : 'text-sm p-4 mb-4'
                   }`}
-                  style={{ minHeight: isFullscreen ? '400px' : '320px' }}
+                  style={{ 
+                    minHeight: isFullscreen ? '500px' : '320px',
+                    scrollBehavior: 'smooth'
+                  }}
                 >
                   <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
                     <MessageCircle size={32} className="mb-3 text-gray-400" />
@@ -907,22 +1095,21 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
                     ))}
                   </div>
                 </div>
-              </>
-            ) : (
-              /* Tool Trace Tab */
-              <div 
-                id="tool-trace"
-                className={`flex-1 border border-gray-200 rounded-xl p-4 overflow-y-auto bg-gradient-to-b from-gray-50 to-white ${
-                  isFullscreen ? 'text-base' : 'text-sm'
-                }`}
-              >
-                <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
-                  <Cpu size={32} className="mb-3 text-gray-400" />
-                  <p className="font-medium">Tool Calls</p>
-                  <p className="text-sm">Knowledge base searches appear here</p>
-                </div>
+            </div>
+            
+            {/* Tool Trace Tab Content - Always in DOM but hidden when not active */}
+            <div 
+              id="tool-trace"
+              className={`${activeTab === 'trace' ? 'flex-1' : 'hidden'} border border-gray-200 rounded-xl p-4 overflow-y-auto bg-gradient-to-b from-gray-50 to-white ${
+                isFullscreen ? 'text-base' : 'text-sm'
+              }`}
+            >
+              <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
+                <Cpu size={32} className="mb-3 text-gray-400" />
+                <p className="font-medium">Tool Calls</p>
+                <p className="text-sm">Knowledge base searches appear here</p>
               </div>
-            )}
+            </div>
           </div>
         </>
       )}
