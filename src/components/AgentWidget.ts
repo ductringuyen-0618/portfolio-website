@@ -2,6 +2,28 @@
 import { knowledgeBase } from '../data/knowledgeBase';
 import { performanceMonitor } from '../utils/performanceMonitor';
 
+// Type definitions
+interface ActionButton {
+  type: 'link' | 'email';
+  url: string;
+  label: string;
+}
+
+interface SearchResult {
+  results: unknown[];
+  intent?: {
+    suggestedActions?: ActionButton[];
+  };
+}
+
+interface ToolTrace {
+  toolName: string;
+  args: Record<string, unknown>;
+  result: unknown;
+  timestamp: number;
+  html: string;
+}
+
 // Global flag to prevent multiple instances
 let globalListenersSetup = false;
 
@@ -11,7 +33,14 @@ export class AgentWidget {
   private listenersSetup = false;
   private processingMessage = false;
   private initializationPromise: Promise<void> | null = null;
-  private conversationHistory: Array<{role: 'user' | 'assistant', content: string}> = [];
+  // Align conversation history structure with AgentDemo ChatMessage interface
+  private conversationHistory: Array<{role: 'user' | 'assistant', content: string, timestamp: number, id: string}> = [];
+  private toolTraces: ToolTrace[] = [];
+  // Handler storage for proper cleanup
+  private _sendHandler?: () => void;
+  private _keyHandler?: (e: KeyboardEvent) => void;
+  private _previousSendHandler?: () => void;
+  private _previousKeyHandler?: (e: KeyboardEvent) => void;
 
   // Check if the widget is already initialized
   public get initialized(): boolean {
@@ -23,7 +52,8 @@ export class AgentWidget {
     if (!this.isInitialized) {
       console.log('⚡ Quick setup for session restoration');
       this.setupEventListeners();
-      // Load and display previous conversation history
+      // Load history for session restoration (but don't auto-send)
+      console.log('💾 Loading history for session restoration');
       this.loadHistoryFromStorage();
       this.restoreChatUI();
     }
@@ -68,27 +98,98 @@ export class AgentWidget {
     console.log('🧹 Conversation history cleared');
   }
 
-  // Save conversation history to localStorage
+  // Save conversation history to sessionStorage (aligned with AgentDemo)
   private saveHistoryToStorage(): void {
     try {
-      localStorage.setItem('agentConversationHistory', JSON.stringify(this.conversationHistory));
+      sessionStorage.setItem('ai_chat_history', JSON.stringify(this.conversationHistory));
+      console.log('💾 Saved conversation to sessionStorage:', this.conversationHistory.length, 'messages');
     } catch (error) {
-      console.warn('Failed to save conversation history to storage:', error);
+      console.warn('Failed to save conversation history to sessionStorage:', error);
     }
   }
 
-  // Load conversation history from localStorage
+  // Load conversation history from sessionStorage (aligned with AgentDemo)
   private loadHistoryFromStorage(): void {
     try {
-      const saved = localStorage.getItem('agentConversationHistory');
+      const saved = sessionStorage.getItem('ai_chat_history');
       if (saved) {
         this.conversationHistory = JSON.parse(saved);
-        console.log(`💾 Restored ${this.conversationHistory.length} messages from storage`);
+        console.log(`💾 Restored ${this.conversationHistory.length} messages from sessionStorage`);
       }
     } catch (error) {
-      console.warn('Failed to load conversation history from storage:', error);
+      console.warn('Failed to load conversation history from sessionStorage:', error);
       this.conversationHistory = [];
     }
+  }
+
+  // Save tool traces to sessionStorage
+  public saveToolTracesToStorage(): void {
+    try {
+      sessionStorage.setItem('ai_tool_traces', JSON.stringify(this.toolTraces));
+      console.log('💾 Saved tool traces to sessionStorage:', this.toolTraces.length, 'traces');
+    } catch (error) {
+      console.warn('Failed to save tool traces to sessionStorage:', error);
+    }
+  }
+
+  // Load tool traces from sessionStorage
+  private loadToolTracesFromStorage(): void {
+    try {
+      const saved = sessionStorage.getItem('ai_tool_traces');
+      if (saved) {
+        this.toolTraces = JSON.parse(saved);
+        console.log(`💾 Restored ${this.toolTraces.length} tool traces from sessionStorage`);
+        // Restore to UI with a delay to ensure DOM is ready
+        setTimeout(() => this.restoreToolTracesToUI(), 500);
+      }
+    } catch (error) {
+      console.warn('Failed to load tool traces from sessionStorage:', error);
+      this.toolTraces = [];
+    }
+  }
+
+  // Restore tool traces to UI
+  public restoreToolTracesToUI(): void {
+    const traceContainer = document.getElementById('tool-trace');
+    if (!traceContainer) {
+      console.log('🔍 Tool trace container not found during restoration');
+      return;
+    }
+    
+    if (this.toolTraces.length === 0) {
+      console.log('🔍 No tool traces to restore');
+      return;
+    }
+
+    // Clear placeholder content
+    if (traceContainer.innerHTML.includes('Tool calls appear here') || 
+        traceContainer.innerHTML.includes('Knowledge base searches appear here')) {
+      traceContainer.innerHTML = '';
+      console.log('🧹 Cleared placeholder content for tool trace restoration');
+    }
+
+    // Restore each trace
+    this.toolTraces.forEach((trace, index) => {
+      try {
+        // Generate HTML if it doesn't exist
+        if (!trace.html) {
+          trace.html = this.generateTraceHTML(trace);
+        }
+        
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = trace.html;
+        const traceElement = tempDiv.firstElementChild;
+        if (traceElement) {
+          traceContainer.appendChild(traceElement);
+          console.log(`✅ Restored tool trace ${index + 1}/${this.toolTraces.length}: ${trace.toolName}`);
+        }
+      } catch (error) {
+        console.warn(`❌ Failed to restore tool trace ${index + 1}:`, error);
+      }
+    });
+
+    traceContainer.scrollTop = traceContainer.scrollHeight;
+    console.log(`🎉 Successfully restored ${this.toolTraces.length} tool traces to UI`);
   }
 
   async initialize() {
@@ -183,8 +284,14 @@ export class AgentWidget {
       // Initialize chat state safely with error handling
       try {
         await this.engine.resetChat();
-        // Load conversation history from storage for session persistence
+        // Load conversation history for session persistence (but don't auto-send)
+        console.log('💾 Loading conversation history for session persistence');
         this.loadHistoryFromStorage();
+        
+        // Load tool traces for session persistence
+        console.log('💾 Loading tool traces for session persistence');
+        this.loadToolTracesFromStorage();
+        
         console.log('✅ WebLLM AI engine ready');
       } catch (resetError) {
         console.log('⚠️ Chat reset failed, continuing anyway:', resetError);
@@ -268,6 +375,12 @@ export class AgentWidget {
     
     this.processingMessage = true;
     
+    // Add timeout to prevent permanent lock
+    const processingTimeout = setTimeout(() => {
+      console.warn('⚠️ Processing timeout reached, resetting flag');
+      this.processingMessage = false;
+    }, 30000); // 30 second timeout
+    
     try {
       // Ensure engine is initialized
       if (!this.isInitialized) {
@@ -288,13 +401,13 @@ export class AgentWidget {
       
       // Enhanced RAG search with smart intent detection
       const startTime = performance.now();
-      let searchResult: any;
-      let actionButtons: Array<{type: 'link' | 'email', url: string, label: string}> | undefined;
+      let searchResult: SearchResult;
+      let actionButtons: ActionButton[] | undefined;
       
       try {
         // Use JSON-enhanced smart search for better results
-        searchResult = await knowledgeBase.smartSearchWithJson(message);
-        actionButtons = searchResult.intent.suggestedActions;
+        searchResult = await knowledgeBase.smartSearchWithJson(message) as SearchResult;
+        actionButtons = searchResult.intent?.suggestedActions;
         
         console.log(`🎯 JSON-Enhanced Search Results:`, {
           intent: searchResult.intent.type,
@@ -349,7 +462,7 @@ export class AgentWidget {
         semanticReady: knowledgeBase.isSemanticReady() 
       }, searchResult.records);
       
-      const context = searchResult.records.map((r: any) => `${r.title}: ${r.text}`).join('\n\n');
+      const context = searchResult.records.map((r: { title: string; text: string }) => `${r.title}: ${r.text}`).join('\n\n');
       
       // Generate intent-specific system prompt for better, consistent responses
       const systemPrompt = this.generateSystemPrompt(searchResult.intent, context);
@@ -359,23 +472,25 @@ export class AgentWidget {
         // Build messages array with conversation history for session memory
         const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
           { role: 'system', content: systemPrompt },
-          ...this.conversationHistory,
+          ...this.conversationHistory.map(msg => ({ role: msg.role, content: msg.content })),
           { role: 'user', content: message }
         ];
         
-        // Limit conversation history to prevent token overflow (keep last 10 exchanges)
-        if (messages.length > 21) { // system + 10 pairs + current message
-          messages.splice(1, messages.length - 21); // Remove old messages but keep system prompt
+        // Limit conversation history to prevent token overflow (keep last 8 exchanges)
+        if (messages.length > 17) { // system + 8 pairs + current message
+          messages.splice(1, messages.length - 17); // Remove old messages but keep system prompt
         }
         
         // Also trim the stored conversation history to prevent unlimited growth
-        if (this.conversationHistory.length > 20) { // Keep last 10 exchanges (20 messages)
-          this.conversationHistory = this.conversationHistory.slice(-20);
+        if (this.conversationHistory.length > 16) { // Keep last 8 exchanges (16 messages)
+          this.conversationHistory = this.conversationHistory.slice(-16);
         }
+
+        console.log('🤖 Sending chat completion request with', messages.length, 'messages');
         
         const response = await this.engine.chat.completions.create({
           messages,
-          max_tokens: 800,
+          max_tokens: 600, // Reduced to prevent tokenizer issues
           temperature: 0.3,
           top_p: 0.9,
           stream: false // Disable streaming to prevent binding issues
@@ -386,9 +501,20 @@ export class AgentWidget {
         const assistantMessage = response.choices[0]?.message?.content || 
           "I'm here to help you learn about Duc Nguyen's background and experience. Please feel free to ask any questions!";
         
-        // Add both user and assistant messages to conversation history
-        this.conversationHistory.push({ role: 'user', content: message });
-        this.conversationHistory.push({ role: 'assistant', content: assistantMessage });
+        // Add both user and assistant messages to conversation history with proper structure (aligned with AgentDemo)
+        const timestamp = Date.now();
+        this.conversationHistory.push({ 
+          role: 'user', 
+          content: message, 
+          timestamp, 
+          id: `user_${timestamp}_${Math.random().toString(36).substr(2, 9)}` 
+        });
+        this.conversationHistory.push({ 
+          role: 'assistant', 
+          content: assistantMessage, 
+          timestamp: timestamp + 1, 
+          id: `assistant_${timestamp + 1}_${Math.random().toString(36).substr(2, 9)}` 
+        });
         
         // Save updated history to storage for session persistence
         this.saveHistoryToStorage();
@@ -404,11 +530,17 @@ export class AgentWidget {
         this.hideTypingIndicator();
         
         let errorMessage = "I apologize for the technical difficulty. ";
+        let shouldResetEngine = false;
+        
         if (error instanceof Error) {
           if (error.message.includes('initialization')) {
             errorMessage += "The AI system is still starting up. Please wait a moment and try again.";
-          } else if (error.message.includes('binding') || error.message.includes('tokenizer')) {
-            errorMessage += "There was a processing error. Please try rephrasing your question.";
+          } else if (error.message.includes('binding') || error.message.includes('tokenizer') || error.message.includes('VectorInt')) {
+            errorMessage += "There was a processing error. Let me reset and try again.";
+            shouldResetEngine = true;
+          } else if (error.message.includes('memory') || error.message.includes('allocation')) {
+            errorMessage += "Memory issue detected. Clearing conversation history to free up resources.";
+            shouldResetEngine = true;
           } else {
             errorMessage += "Please try again, or contact Duc directly at duc.tri.nguyen0186@gmail.com for immediate assistance.";
           }
@@ -417,10 +549,28 @@ export class AgentWidget {
         }
         
         this.displayMessage('assistant', errorMessage);
+        
+        // Reset engine if needed for binding/tokenizer errors
+        if (shouldResetEngine) {
+          console.log('🔄 Resetting engine due to tokenizer/binding error');
+          try {
+            await this.engine.resetChat();
+            // Clear some conversation history to prevent repeat errors
+            if (this.conversationHistory.length > 10) {
+              this.conversationHistory = this.conversationHistory.slice(-6); // Keep only last 3 exchanges
+              this.saveHistoryToStorage();
+              console.log('🧹 Trimmed conversation history after reset');
+            }
+          } catch (resetError) {
+            console.warn('⚠️ Engine reset failed:', resetError);
+          }
+        }
       }
     } finally {
-      // Always reset processing flag
+      // Clear timeout and always reset processing flag
+      clearTimeout(processingTimeout);
       this.processingMessage = false;
+      console.log('✅ Processing completed, flag reset');
     }
   }
 
@@ -518,7 +668,7 @@ export class AgentWidget {
     });
   }
 
-  private generateSystemPrompt(intent: any, context: string): string {
+  private generateSystemPrompt(intent: { type: string; confidence?: number }, context: string): string {
     const basePrompt = `You are Duc Nguyen's professional AI assistant. You help recruiters and tech professionals quickly understand Duc's career highlights, technical skills, and professional impact.
 
 CORE PRINCIPLES:
@@ -627,18 +777,46 @@ RESPONSE STYLE:
     }
   }
 
-  private updateToolTrace(toolName: string, args: any, result: any) {
-    const traceContainer = document.getElementById('tool-trace');
-    if (!traceContainer) return;
-
-    // Clear placeholder messages
-    if (traceContainer.innerHTML.includes('Tool calls appear here') || 
-        traceContainer.innerHTML.includes('Knowledge base searches appear here')) {
-      traceContainer.innerHTML = '';
-    }
-
-    const traceDiv = document.createElement('div');
-    traceDiv.className = 'mb-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200';
+  private updateToolTrace(toolName: string, args: Record<string, unknown>, result: unknown) {
+    console.log('🔧 updateToolTrace called:', { toolName, args, result });
+    
+    // Store trace data in memory first (always works)
+    const traceData: ToolTrace = {
+      toolName,
+      args,
+      result,
+      timestamp: Date.now(),
+      html: '' // Will be populated when DOM is available
+    };
+    
+    // Try to find container with retries
+    const findContainer = (retries = 3) => {
+      const traceContainer = document.getElementById('tool-trace');
+      if (traceContainer) {
+        console.log('✅ Tool trace container found, updating...');
+        this.renderTraceToContainer(traceContainer, traceData);
+      } else if (retries > 0) {
+        console.log(`⚠️ Tool trace container not found, retrying in 100ms (${retries} retries left)`);
+        setTimeout(() => findContainer(retries - 1), 100);
+      } else {
+        console.warn('❌ Tool trace container not found after retries - storing data for later');
+        // Store without HTML for now, will render when container becomes available
+        traceData.html = this.generateTraceHTML(traceData);
+      }
+    };
+    
+    // Store in memory and session storage immediately
+    this.toolTraces.push(traceData);
+    this.saveToolTracesToStorage();
+    
+    // Try to render to DOM
+    findContainer();
+    
+    console.log('✅ Tool trace data saved to memory and storage');
+  }
+  // Generate HTML for a trace (can be used when DOM is not available)
+  private generateTraceHTML(traceData: ToolTrace): string {
+    const { toolName, args, result, timestamp } = traceData;
     
     const resultText = Array.isArray(result) 
       ? `Found ${result.length} results` 
@@ -660,42 +838,70 @@ RESPONSE STYLE:
         ${args.semanticReady ? 'Semantic' : 'Keyword'}
       </div>` : '';
     
-    traceDiv.innerHTML = `
-      <div class="flex items-center justify-between mb-2">
-        <div class="flex items-center space-x-2">
-          <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span class="font-semibold text-blue-700 text-sm">${toolName.replace('_', ' ')}</span>
+    const timeStr = new Date(timestamp).toLocaleTimeString();
+    
+    return `
+      <div class="mb-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            <span class="font-semibold text-blue-700 text-sm">${toolName.replace('_', ' ')}</span>
+          </div>
+          <span class="text-xs text-gray-500 font-mono">${timeStr}</span>
         </div>
-        <span class="text-xs text-gray-500 font-mono">${new Date().toLocaleTimeString()}</span>
-      </div>
-      
-      <div class="text-xs text-gray-700 mb-2 font-medium">
-        "${this.escapeHtml(typeof args === 'object' ? args.query || JSON.stringify(args) : args)}"
-      </div>
-      
-      <div class="flex items-center justify-between">
-        <div class="text-xs text-gray-600">${this.escapeHtml(resultText)}</div>
-        <div class="flex space-x-1">
-          ${strategyBadge}
-          ${semanticBadge}
+        
+        <div class="text-xs text-gray-700 mb-2 font-medium">
+          "${this.escapeHtml(typeof args === 'object' ? args.query || JSON.stringify(args) : args)}"
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-600">${this.escapeHtml(resultText)}</div>
+          <div class="flex space-x-1">
+            ${strategyBadge}
+            ${semanticBadge}
+          </div>
         </div>
       </div>
     `;
+  }
+
+  // Render trace to container (handles DOM manipulation)
+  private renderTraceToContainer(traceContainer: HTMLElement, traceData: ToolTrace) {
+    // Clear placeholder messages
+    if (traceContainer.innerHTML.includes('Tool calls appear here') || 
+        traceContainer.innerHTML.includes('Knowledge base searches appear here')) {
+      traceContainer.innerHTML = '';
+      console.log('🧹 Cleared placeholder content');
+    }
+
+    // Generate HTML if not already generated
+    if (!traceData.html) {
+      traceData.html = this.generateTraceHTML(traceData);
+    }
+
+    // Create and append element
+    const traceDiv = document.createElement('div');
+    traceDiv.innerHTML = traceData.html;
+    const traceElement = traceDiv.firstElementChild as HTMLElement;
     
-    traceContainer.appendChild(traceDiv);
-    traceContainer.scrollTop = traceContainer.scrollHeight;
-    
-    // Add smooth entrance animation
-    requestAnimationFrame(() => {
-      traceDiv.style.opacity = '0';
-      traceDiv.style.transform = 'translateY(10px)';
-      traceDiv.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    if (traceElement) {
+      traceContainer.appendChild(traceElement);
+      traceContainer.scrollTop = traceContainer.scrollHeight;
       
+      // Add smooth entrance animation
       requestAnimationFrame(() => {
-        traceDiv.style.opacity = '1';
-        traceDiv.style.transform = 'translateY(0)';
+        traceElement.style.opacity = '0';
+        traceElement.style.transform = 'translateY(10px)';
+        traceElement.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        
+        requestAnimationFrame(() => {
+          traceElement.style.opacity = '1';
+          traceElement.style.transform = 'translateY(0)';
+        });
       });
-    });
+      
+      console.log('✅ Tool trace rendered to container successfully');
+    }
   }
 
 
@@ -703,6 +909,7 @@ RESPONSE STYLE:
   setupEventListeners() {
     // Prevent setting up listeners multiple times globally
     if (globalListenersSetup || this.listenersSetup) {
+      console.log('⚠️ Event listeners already setup, skipping');
       return;
     }
     this.listenersSetup = true;
@@ -710,52 +917,84 @@ RESPONSE STYLE:
 
     const button = document.getElementById('send-message');
     const input = document.getElementById('message-input') as HTMLInputElement;
-    const suggestedQuestions = document.querySelectorAll('.suggested-question');
     
-    // Create bound methods to avoid duplicate listeners
+    // Don't interfere with React-managed suggestion buttons - they have their own onClick handlers
+    console.log('✅ Setting up only send/input event listeners (suggestion buttons managed by React)');
+    
+    // Create bound methods that can be properly removed
     const sendHandler = () => {
+      console.log('🔘 Send button clicked');
       if (input?.value.trim()) {
+        console.log('📤 Sending message:', input.value.trim());
         this.sendMessage(input.value.trim());
         input.value = '';
+      } else {
+        console.log('⚠️ No message to send');
       }
     };
 
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && input?.value.trim()) {
+        console.log('⌨️ Enter key pressed, sending message');
+        e.preventDefault(); // Prevent form submission or page refresh
         this.sendMessage(input.value.trim());
         input.value = '';
       }
     };
 
-    // Remove existing listeners first to prevent duplicates
-    button?.removeEventListener('click', sendHandler);
-    input?.removeEventListener('keypress', keyHandler);
-    
-    // Add listeners
-    button?.addEventListener('click', sendHandler);
-    input?.addEventListener('keypress', keyHandler);
+    // Store handlers for proper cleanup
+    this._sendHandler = sendHandler;
+    this._keyHandler = keyHandler;
 
-    // Handle suggested questions with proper cleanup
-    suggestedQuestions.forEach(questionButton => {
-      // Remove any existing data attribute that marks it as having a listener
-      if (questionButton.hasAttribute('data-listener-attached')) {
-        return; // Skip if already has listener
-      }
+    // Remove any existing listeners
+    if (this._previousSendHandler) {
+      button?.removeEventListener('click', this._previousSendHandler);
+    }
+    if (this._previousKeyHandler) {
+      input?.removeEventListener('keypress', this._previousKeyHandler);
+    }
+    
+    // Add listeners with proper cleanup tracking
+    if (button) {
+      button.addEventListener('click', sendHandler);
+      console.log('📤 Send button listener attached');
+      this._previousSendHandler = sendHandler;
+    }
+    
+    if (input) {
+      input.addEventListener('keypress', keyHandler);
+      console.log('⌨️ Input keypress listener attached');
+      this._previousKeyHandler = keyHandler;
+    }
+
+    // Skip suggestion button handling - React manages those with onClick props
+    console.log('✅ Event listeners setup complete - suggestion buttons handled by React');
+  }
+
+  // Force re-enable inputs and verify they're working
+  public verifyAndEnableInputs(): void {
+    const sendButton = document.getElementById('send-message') as HTMLButtonElement;
+    const messageInput = document.getElementById('message-input') as HTMLInputElement;
+    
+    if (sendButton && messageInput) {
+      sendButton.disabled = false;
+      messageInput.disabled = false;
+      messageInput.readOnly = false;
       
-      const clickHandler = (e: Event) => {
-        const question = (e.target as HTMLElement).textContent;
-        if (question && input) {
-          // Clear input first to avoid any conflicts
-          input.value = '';
-          // Send the question directly
-          this.sendMessage(question.trim());
-        }
-      };
+      // Test if click handler is working
+      const hasClickListener = sendButton.onclick !== null || sendButton.addEventListener !== undefined;
       
-      // Mark this button as having a listener attached
-      questionButton.setAttribute('data-listener-attached', 'true');
-      // Add new listener
-      questionButton.addEventListener('click', clickHandler);
-    });
+      console.log('🔧 Input verification:', {
+        sendButtonEnabled: !sendButton.disabled,
+        inputEnabled: !messageInput.disabled,
+        inputReadOnly: messageInput.readOnly,
+        hasClickHandler: hasClickListener,
+        inputValue: messageInput.value
+      });
+      
+      console.log('✅ Inputs verified and enabled');
+    } else {
+      console.error('❌ Could not find send button or input element');
+    }
   }
 }

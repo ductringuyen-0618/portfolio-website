@@ -11,7 +11,8 @@ interface PDFDocument {
 class PDFProcessor {
   private cache: Map<string, PDFDocument> = new Map();
   
-  async processPDFFromURL(_url: string, _id: string): Promise<PDFDocument | null> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async processPDFFromURL(url: string, id: string): Promise<PDFDocument | null> {
     // PDF processing disabled to prevent CDN worker errors
     console.log('📄 PDF processing disabled (prevents CDN worker errors)');
     return null;

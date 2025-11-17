@@ -56,7 +56,13 @@ export class JsonKnowledgeLoader {
   }
 
   // Convert JSON records to the existing KnowledgeRecord format
-  convertToKnowledgeRecords(): any[] {
+  convertToKnowledgeRecords(): Array<{
+    id: string;
+    title: string;
+    url: string;
+    text: string;
+    _metadata?: JsonKnowledgeRecord['metadata'];
+  }> {
     if (!this.jsonData) return [];
 
     return this.jsonData.documents.map(doc => ({
@@ -71,8 +77,8 @@ export class JsonKnowledgeLoader {
 
   // Smart search with JSON metadata integration
   smartSearchJson(query: string, limit: number = 5): {
-    records: any[];
-    metadata: any;
+    records: JsonKnowledgeRecord[];
+    metadata: Record<string, unknown>;
     actionButtons?: Array<{type: 'link' | 'email', url: string, label: string}>;
   } {
     if (!this.jsonData) {

@@ -89,7 +89,11 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // Performance measurement wrapper
-export function measureSearchTime(fn: Function, query: string, ...args: any[]): any {
+export function measureSearchTime<T>(
+  fn: (...args: unknown[]) => T,
+  query: string,
+  ...args: unknown[]
+): T {
   const startTime = performance.now();
   const result = fn(...args);
   const endTime = performance.now();

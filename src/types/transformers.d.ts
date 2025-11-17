@@ -23,13 +23,18 @@ declare module '@xenova/transformers' {
 
   export const env: Environment;
 
-  export function pipeline(
-    task: 'feature-extraction' | 'text-classification' | 'question-answering' | 'fill-mask',
-    model?: string,
-    options?: PipelineOptions
-  ): Promise<any>;
-
   export interface FeatureExtractionPipeline {
     (text: string | string[]): Promise<number[] | number[][]>;
   }
+
+  export function pipeline(
+    task: 'feature-extraction',
+    model?: string,
+    options?: PipelineOptions
+  ): Promise<FeatureExtractionPipeline>;
+  export function pipeline(
+    task: 'text-classification' | 'question-answering' | 'fill-mask',
+    model?: string,
+    options?: PipelineOptions
+  ): Promise<unknown>;
 }

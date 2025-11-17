@@ -430,11 +430,20 @@ class OptimizedKnowledgeBase {
 import { simpleSemanticSearch } from '../utils/simpleSemanticSearch';
 import { jsonKnowledgeLoader } from '../utils/jsonKnowledgeLoader';
 
+// Type for Transformer.js progress callback data
+interface TransformerProgressData {
+  status: string;
+  name?: string;
+  progress?: number;
+  loaded?: number;
+  total?: number;
+}
+
 // Enhanced Hybrid Knowledge Base with Semantic Search
 class HybridKnowledgeBase extends OptimizedKnowledgeBase {
   private embeddings: Map<string, number[]> = new Map();
   private isSemanticReady = false;
-  private embeddingWorker?: any;
+  private embeddingWorker?: Worker;
   private useSimpleSemantics = false;
   
   constructor() {
@@ -482,7 +491,7 @@ class HybridKnowledgeBase extends OptimizedKnowledgeBase {
         'feature-extraction', 
         'Xenova/all-MiniLM-L6-v2',
         { 
-          progress_callback: (data: any) => {
+          progress_callback: (data: TransformerProgressData) => {
             if (data.status === 'ready') {
               console.log('✅ Semantic search model loaded successfully');
               this.generateEmbeddings();
