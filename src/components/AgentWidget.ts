@@ -2,6 +2,28 @@
 import { knowledgeBase } from '../data/knowledgeBase';
 import { performanceMonitor } from '../utils/performanceMonitor';
 
+// Type definitions
+interface ActionButton {
+  type: 'link' | 'email';
+  url: string;
+  label: string;
+}
+
+interface SearchResult {
+  results: unknown[];
+  intent?: {
+    suggestedActions?: ActionButton[];
+  };
+}
+
+interface ToolTrace {
+  toolName: string;
+  args: Record<string, unknown>;
+  result: unknown;
+  timestamp: number;
+  html: string;
+}
+
 // Global flag to prevent multiple instances
 let globalListenersSetup = false;
 
@@ -13,7 +35,12 @@ export class AgentWidget {
   private initializationPromise: Promise<void> | null = null;
   // Align conversation history structure with AgentDemo ChatMessage interface
   private conversationHistory: Array<{role: 'user' | 'assistant', content: string, timestamp: number, id: string}> = [];
-  private toolTraces: Array<{ toolName: string; args: any; result: any; timestamp: number; html: string }> = [];
+  private toolTraces: ToolTrace[] = [];
+  // Handler storage for proper cleanup
+  private _sendHandler?: () => void;
+  private _keyHandler?: (e: KeyboardEvent) => void;
+  private _previousSendHandler?: () => void;
+  private _previousKeyHandler?: (e: KeyboardEvent) => void;
 
   // Check if the widget is already initialized
   public get initialized(): boolean {
@@ -374,13 +401,13 @@ export class AgentWidget {
       
       // Enhanced RAG search with smart intent detection
       const startTime = performance.now();
-      let searchResult: any;
-      let actionButtons: Array<{type: 'link' | 'email', url: string, label: string}> | undefined;
+      let searchResult: SearchResult;
+      let actionButtons: ActionButton[] | undefined;
       
       try {
         // Use JSON-enhanced smart search for better results
-        searchResult = await knowledgeBase.smartSearchWithJson(message);
-        actionButtons = searchResult.intent.suggestedActions;
+        searchResult = await knowledgeBase.smartSearchWithJson(message) as SearchResult;
+        actionButtons = searchResult.intent?.suggestedActions;
         
         console.log(`🎯 JSON-Enhanced Search Results:`, {
           intent: searchResult.intent.type,
@@ -435,7 +462,7 @@ export class AgentWidget {
         semanticReady: knowledgeBase.isSemanticReady() 
       }, searchResult.records);
       
-      const context = searchResult.records.map((r: any) => `${r.title}: ${r.text}`).join('\n\n');
+      const context = searchResult.records.map((r: { title: string; text: string }) => `${r.title}: ${r.text}`).join('\n\n');
       
       // Generate intent-specific system prompt for better, consistent responses
       const systemPrompt = this.generateSystemPrompt(searchResult.intent, context);
@@ -641,7 +668,7 @@ export class AgentWidget {
     });
   }
 
-  private generateSystemPrompt(intent: any, context: string): string {
+  private generateSystemPrompt(intent: { type: string; confidence?: number }, context: string): string {
     const basePrompt = `You are Duc Nguyen's professional AI assistant. You help recruiters and tech professionals quickly understand Duc's career highlights, technical skills, and professional impact.
 
 CORE PRINCIPLES:
@@ -750,11 +777,11 @@ RESPONSE STYLE:
     }
   }
 
-  private updateToolTrace(toolName: string, args: any, result: any) {
+  private updateToolTrace(toolName: string, args: Record<string, unknown>, result: unknown) {
     console.log('🔧 updateToolTrace called:', { toolName, args, result });
     
     // Store trace data in memory first (always works)
-    const traceData = {
+    const traceData: ToolTrace = {
       toolName,
       args,
       result,
@@ -788,7 +815,7 @@ RESPONSE STYLE:
     console.log('✅ Tool trace data saved to memory and storage');
   }
   // Generate HTML for a trace (can be used when DOM is not available)
-  private generateTraceHTML(traceData: any): string {
+  private generateTraceHTML(traceData: ToolTrace): string {
     const { toolName, args, result, timestamp } = traceData;
     
     const resultText = Array.isArray(result) 
@@ -839,7 +866,7 @@ RESPONSE STYLE:
   }
 
   // Render trace to container (handles DOM manipulation)
-  private renderTraceToContainer(traceContainer: HTMLElement, traceData: any) {
+  private renderTraceToContainer(traceContainer: HTMLElement, traceData: ToolTrace) {
     // Clear placeholder messages
     if (traceContainer.innerHTML.includes('Tool calls appear here') || 
         traceContainer.innerHTML.includes('Knowledge base searches appear here')) {
@@ -916,28 +943,28 @@ RESPONSE STYLE:
     };
 
     // Store handlers for proper cleanup
-    (this as any)._sendHandler = sendHandler;
-    (this as any)._keyHandler = keyHandler;
+    this._sendHandler = sendHandler;
+    this._keyHandler = keyHandler;
 
     // Remove any existing listeners
-    if ((this as any)._previousSendHandler) {
-      button?.removeEventListener('click', (this as any)._previousSendHandler);
+    if (this._previousSendHandler) {
+      button?.removeEventListener('click', this._previousSendHandler);
     }
-    if ((this as any)._previousKeyHandler) {
-      input?.removeEventListener('keypress', (this as any)._previousKeyHandler);
+    if (this._previousKeyHandler) {
+      input?.removeEventListener('keypress', this._previousKeyHandler);
     }
     
     // Add listeners with proper cleanup tracking
     if (button) {
       button.addEventListener('click', sendHandler);
       console.log('📤 Send button listener attached');
-      (this as any)._previousSendHandler = sendHandler;
+      this._previousSendHandler = sendHandler;
     }
     
     if (input) {
       input.addEventListener('keypress', keyHandler);
       console.log('⌨️ Input keypress listener attached');
-      (this as any)._previousKeyHandler = keyHandler;
+      this._previousKeyHandler = keyHandler;
     }
 
     // Skip suggestion button handling - React manages those with onClick props

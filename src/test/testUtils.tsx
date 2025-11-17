@@ -32,6 +32,18 @@ export function renderWithRouter(
 }
 
 /**
+ * Mock user type for testing
+ */
+interface MockUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+/**
  * Creates a mock user object for testing
  * 
  * @param overrides - Optional properties to override defaults
@@ -42,7 +54,7 @@ export function renderWithRouter(
  * const user = createMockUser({ name: 'John Doe' });
  * ```
  */
-export function createMockUser(overrides?: Partial<any>) {
+export function createMockUser(overrides?: Partial<MockUser>) {
   return {
     id: '1',
     name: 'Test User',
@@ -233,7 +245,7 @@ export const testHelpers = {
   /**
    * Asserts that an array contains specific item
    */
-  expectToContainItem: <T>(array: T[], item: T) => {
+  expectToContainItem: (array: unknown[], item: unknown) => {
     return array.includes(item);
   },
 };

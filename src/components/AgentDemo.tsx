@@ -26,9 +26,7 @@ interface ChatSessionState {
   sessionId: string;
 }
 
-interface AgentSidebarProps {}
-
-function AgentSidebar(_props: AgentSidebarProps = {}) {
+function AgentSidebar() {
   const widgetRef = useRef<AgentWidget | null>(null);
   const initializedRef = useRef(false);
   const [activeTab, setActiveTab] = useState<'chat' | 'trace'>('chat');
@@ -565,6 +563,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
   }, []);
 
   // Update activity on user interactions
+  // Note: conversationManager is a stable singleton and doesn't need to be in dependencies
   useEffect(() => {
     const handleActivity = () => {
       conversationManager.updateLastActivity();
@@ -584,6 +583,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
   }, []);
 
   // Load session data on component mount
+  // Note: conversationManager is a stable singleton and doesn't need to be in dependencies
   useEffect(() => {
     try {
       console.log('🚀 Component Mount - Balanced initialization');
@@ -625,6 +625,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       console.error('Failed to initialize session:', error);
       sessionStorage.removeItem('initialization-in-progress');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -725,7 +726,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
       initializedRef.current = false;
       console.log('🔄 Component cleanup - session preserved');
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle keyboard shortcuts for fullscreen
   useEffect(() => {
@@ -816,10 +817,10 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
             if (storedTraces && (traceContainer.innerHTML.includes('Knowledge base searches appear here') || 
                 traceContainer.innerHTML.includes('Tool calls appear here'))) {
               try {
-                const traces = JSON.parse(storedTraces);
+                const traces = JSON.parse(storedTraces) as Array<{html: string; timestamp: number}>;
                 if (traces.length > 0) {
                   traceContainer.innerHTML = '';
-                  traces.forEach((trace: any) => {
+                  traces.forEach((trace) => {
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = trace.html;
                     const traceElement = tempDiv.firstElementChild;
@@ -843,6 +844,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
         }
       }, 150);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   // Handle chat reopening from minimized state
@@ -874,6 +876,7 @@ function AgentSidebar(_props: AgentSidebarProps = {}) {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMinimized]);
 
   return (
