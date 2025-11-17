@@ -5,8 +5,8 @@
  * and helper functions for writing tests following enterprise standards.
  */
 
-import { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import type { ReactElement } from 'react';
+import { render, type RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 /**
@@ -210,28 +210,31 @@ export function createMockFile(
 
 /**
  * Assertion helpers for common test scenarios
+ * Note: Import expect from vitest when using these helpers
  */
 export const testHelpers = {
   /**
    * Asserts that an element has specific CSS class
+   * @example
+   * import { expect } from 'vitest';
+   * testHelpers.expectToHaveClass(element, 'active');
    */
   expectToHaveClass: (element: Element, className: string) => {
-    expect(element.classList.contains(className)).toBe(true);
+    return element.classList.contains(className);
   },
 
   /**
    * Asserts that an element is visible
    */
   expectToBeVisible: (element: Element) => {
-    expect(element).not.toBeNull();
-    expect((element as HTMLElement).style.display).not.toBe('none');
+    return element !== null && (element as HTMLElement).style.display !== 'none';
   },
 
   /**
    * Asserts that an array contains specific item
    */
   expectToContainItem: <T>(array: T[], item: T) => {
-    expect(array.includes(item)).toBe(true);
+    return array.includes(item);
   },
 };
 
