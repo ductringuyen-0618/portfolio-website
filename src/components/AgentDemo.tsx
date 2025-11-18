@@ -15,6 +15,10 @@ const SESSION_KEYS = {
 // This ensures event listeners are reset only after the DOM is stable following state changes.
 const EVENT_LISTENER_RESET_DELAY_MS = 150;
 
+// DOM ready delay - wait for DOM to fully render before restoring UI elements.
+// 100ms provides sufficient time for React to complete rendering and DOM to stabilize.
+const DOM_READY_DELAY_MS = 100;
+
 // Chat message interface
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -536,7 +540,7 @@ function AgentSidebar() {
                         element.setAttribute('data-processed', 'true');
                         console.warn('Message content extraction failed:', innerError);
                       }
-                    }, 100);
+                    }, DOM_READY_DELAY_MS);
                   }
                 }
               });
@@ -801,7 +805,7 @@ function AgentSidebar() {
                   // Use widget's verification method
                   widgetRef.current.verifyAndEnableInputs();
                 }
-              }, 100);
+              }, DOM_READY_DELAY_MS);
             }
           }
         }
@@ -887,7 +891,7 @@ function AgentSidebar() {
               console.log('📋 Widget not ready, manually restoring messages');
               restoreSessionManually();
             }
-          }, 100);
+          }, DOM_READY_DELAY_MS);
         }
       }
     }

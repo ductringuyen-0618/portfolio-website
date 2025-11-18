@@ -13,6 +13,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { knowledgeBase } from './knowledgeBase';
 
+// Test Constants
+const MAX_SEARCH_RESULTS = 10; // Expected maximum number of search results
+const MIN_KNOWLEDGE_BASE_SIZE = 10; // Minimum expected KB records for substantial dataset
+const MIN_TEXT_LENGTH = 20; // Minimum meaningful content length threshold
+const SEMANTIC_INIT_WAIT_MS = 100; // Wait time for semantic search initialization
+const MAX_SEARCH_TIME_MS = 100; // Performance threshold for single search operation
+const MAX_CONCURRENT_SEARCHES_TIME_MS = 500; // Performance threshold for concurrent searches
+const CACHE_PERFORMANCE_THRESHOLD = 1.5; // Caching performance multiplier (cached should be ≤ 1.5x original)
+
 describe('Knowledge Base RAG System', () => {
   describe('Basic Search Functionality', () => {
     it('should return relevant results for keyword search', () => {
@@ -206,7 +215,7 @@ describe('Knowledge Base RAG System', () => {
       const result = knowledgeBase.smartSearch('software development experience');
       
       expect(result.records.length).toBeGreaterThan(0);
-      expect(result.records.length).toBeLessThanOrEqual(10); // Reasonable limit
+      expect(result.records.length).toBeLessThanOrEqual(MAX_SEARCH_RESULTS);
     });
   });
 
@@ -264,7 +273,7 @@ describe('Knowledge Base RAG System', () => {
   describe('Semantic Search Integration', () => {
     it('should initialize semantic search', async () => {
       // Wait for initialization
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, SEMANTIC_INIT_WAIT_MS));
       
       const isReady = knowledgeBase.isSemanticReady();
       
@@ -331,7 +340,7 @@ describe('Knowledge Base RAG System', () => {
       const allRecords = knowledgeBase.getAll();
       
       expect(allRecords).toBeInstanceOf(Array);
-      expect(allRecords.length).toBeGreaterThan(10); // Should have substantial content
+      expect(allRecords.length).toBeGreaterThan(MIN_KNOWLEDGE_BASE_SIZE);
       
       // Verify key records exist
       const recordIds = allRecords.map(r => r.id);
@@ -352,7 +361,7 @@ describe('Knowledge Base RAG System', () => {
       const allRecords = knowledgeBase.getAll();
       
       allRecords.forEach(record => {
-        expect(record.text.length).toBeGreaterThan(20); // Minimum meaningful content
+        expect(record.text.length).toBeGreaterThan(MIN_TEXT_LENGTH);
       });
     });
   });
@@ -364,7 +373,7 @@ describe('Knowledge Base RAG System', () => {
       const endTime = performance.now();
       
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(100); // Should be very fast (< 100ms)
+      expect(duration).toBeLessThan(MAX_SEARCH_TIME_MS);
     });
 
     it('should handle multiple concurrent searches', async () => {
@@ -389,7 +398,7 @@ describe('Knowledge Base RAG System', () => {
       });
       
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(500); // All searches < 500ms total
+      expect(duration).toBeLessThan(MAX_CONCURRENT_SEARCHES_TIME_MS);
     });
 
     it('should cache/optimize repeated searches', () => {
@@ -409,7 +418,7 @@ describe('Knowledge Base RAG System', () => {
       // Second search should be faster or not significantly slower due to caching/optimization
       expect(time1).toBeGreaterThanOrEqual(0);
       expect(time2).toBeGreaterThanOrEqual(0);
-      expect(time2).toBeLessThanOrEqual(time1 * 1.5); // Validate caching/optimization
+      expect(time2).toBeLessThanOrEqual(time1 * CACHE_PERFORMANCE_THRESHOLD);
     });
   });
 

@@ -11,6 +11,10 @@ import '@testing-library/jest-dom/vitest';
 import App from '../App';
 import { knowledgeBase } from '../data/knowledgeBase';
 
+// Test Constants
+const SEMANTIC_SEARCH_TIMEOUT_MS = 5000; // Timeout for semantic search initialization
+const MAX_RAPID_SEARCH_TIME_MS = 200; // Performance threshold for rapid search operations
+
 // Mock WebLLM to avoid actual model loading in tests
 vi.mock('@mlc-ai/web-llm', () => ({
   MLCEngine: vi.fn(),
@@ -44,7 +48,7 @@ describe('System Integration Tests', () => {
 
       await waitFor(() => {
         expect(knowledgeBase.isSemanticReady()).toBe(true);
-      }, { timeout: 5000 });
+      }, { timeout: SEMANTIC_SEARCH_TIMEOUT_MS });
     });
 
     it('should have accessible main structure', () => {
@@ -120,7 +124,7 @@ describe('System Integration Tests', () => {
     it('should perform semantic search when available', async () => {
       await waitFor(() => {
         expect(knowledgeBase.isSemanticReady()).toBe(true);
-      }, { timeout: 5000 });
+      }, { timeout: SEMANTIC_SEARCH_TIMEOUT_MS });
 
       const results = knowledgeBase.search('backend developer with java experience');
       
@@ -582,7 +586,7 @@ describe('System Integration Tests', () => {
     it('should support semantic search after initialization', async () => {
       await waitFor(() => {
         expect(knowledgeBase.isSemanticReady()).toBe(true);
-      }, { timeout: 5000 });
+      }, { timeout: SEMANTIC_SEARCH_TIMEOUT_MS });
 
       const semanticQuery = 'backend engineer with cloud experience';
       const results = knowledgeBase.search(semanticQuery);
@@ -617,9 +621,9 @@ describe('System Integration Tests', () => {
         expect(results).toBeDefined();
         expect(Array.isArray(results)).toBe(true);
         
-        // Search should be fast (< 200ms) - increased threshold to avoid flaky tests on slower CI
+        // Search should be fast - increased threshold to avoid flaky tests on slower CI
         const searchTime = endTime - startTime;
-        expect(searchTime).toBeLessThan(200);
+        expect(searchTime).toBeLessThan(MAX_RAPID_SEARCH_TIME_MS);
       });
     });
 
