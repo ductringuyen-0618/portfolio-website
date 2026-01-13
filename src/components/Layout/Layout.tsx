@@ -1,8 +1,11 @@
 ﻿import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import AgentSidebar from '../AgentDemo';
-import ErrorBoundary from '../ErrorBoundary';
+// import AgentSidebar from '../AgentDemo';
+// import ErrorBoundary from '../ErrorBoundary';
+
+// Feature flag - set to true to enable AI agent (requires WebGPU)
+const AI_AGENT_ENABLED = false;
 
 export default function Layout() {
   return (
@@ -13,10 +16,10 @@ export default function Layout() {
       </main>
       <Footer />
       
-      {/* Global AI Agent Chat - Available on all pages */}
-      <ErrorBoundary>
-        <AgentSidebar />
-      </ErrorBoundary>
+      {/* Global AI Agent Chat - Disabled for now (requires WebGPU) */}
+      {AI_AGENT_ENABLED && (
+        <div>{/* <AgentSidebar /> */}</div>
+      )}
     </div>
   );
 }

@@ -44,6 +44,18 @@ global.ResizeObserver = class ResizeObserver {
   unobserve() {}
 } as unknown as typeof ResizeObserver;
 
+// Mock WebGPU navigator.gpu for testing environment
+Object.defineProperty(navigator, 'gpu', {
+  value: {
+    requestAdapter: vi.fn().mockResolvedValue({
+      requestDevice: vi.fn().mockResolvedValue({}),
+      features: new Set(),
+      limits: {},
+    }),
+  },
+  writable: true,
+});
+
 // Suppress console errors in tests (optional)
 const originalError = console.error;
 beforeAll(() => {

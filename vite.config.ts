@@ -9,6 +9,10 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
   },
+  // Prevent pre-bundling of WebLLM to avoid WASM issues
+  optimizeDeps: {
+    exclude: ['@mlc-ai/web-llm']
+  },
   server: {
     port: 5173,
     host: true,
@@ -18,9 +22,14 @@ export default defineConfig({
     watch: {
       usePolling: true,
     }
+    // Note: COOP/COEP headers removed - they break external resources (fonts, CDN)
+    // WebLLM will work in browsers that support WebGPU without these headers
   },
   preview: {
     port: 4173,
     host: true
+  },
+  worker: {
+    format: 'es' // ES module workers for WebLLM
   }
 })

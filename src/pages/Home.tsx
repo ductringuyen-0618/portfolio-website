@@ -26,28 +26,28 @@ const Home = () => {
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
               {/* Background Elements */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30"></div>
-              <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
-              <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-earth-50 via-earth-100/30 to-earth-200/30"></div>
+              <div className="absolute top-20 left-10 w-72 h-72 bg-earth-300/20 rounded-full blur-3xl animate-float"></div>
+              <div className="absolute bottom-20 right-10 w-96 h-96 bg-earth-400/20 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
 
               <div className="container-custom relative z-10">
                 <div className="text-center space-y-12 animate-fade-in-up">
                   <div className="space-y-8">
-                    <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full shadow-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
-                      <span className="text-sm font-medium text-slate-700">Software Engineer at Triton Digital</span>
+                    <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-earth-200 rounded-full shadow-sm">
+                      <div className="w-2 h-2 bg-earth-500 rounded-full mr-3 animate-pulse"></div>
+                      <span className="text-sm font-medium text-earth-700">Software Engineer at Triton Digital</span>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl xl:text-8xl font-bold text-slate-900 mb-8 text-shadow-sm">
+                    <h1 className="text-4xl md:text-6xl xl:text-8xl font-bold text-earth-800 mb-8 text-shadow-sm">
                       Hi, I'm{' '}
                       <span className="text-gradient">
                         Duc Nguyen
                       </span>
                     </h1>
 
-                    <p className="text-lg md:text-xl xl:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
-                      Software Engineer based in <span className="font-semibold text-slate-800">Seattle, WA</span>, specializing in <span className="font-semibold text-slate-800">backend systems</span>, <span className="font-semibold text-slate-800">AI integration</span>, and <span className="font-semibold text-slate-800">cloud-native architectures</span>.<br className="hidden md:block" />
-                      Currently contributing to production systems at <span className="font-semibold text-blue-600">Triton Digital</span> and exploring <span className="font-semibold text-purple-600">AI/ML solutions</span> with AWS Bedrock and WebLLM.
+                    <p className="text-lg md:text-xl xl:text-2xl text-earth-600 max-w-3xl mx-auto leading-relaxed font-light">
+                      Software Engineer based in <span className="font-semibold text-earth-800">Seattle, WA</span>, specializing in <span className="font-semibold text-earth-800">backend systems</span>, <span className="font-semibold text-earth-800">AI integration</span>, and <span className="font-semibold text-earth-800">cloud-native architectures</span>.<br className="hidden md:block" />
+                      Currently contributing to production systems at <span className="font-semibold text-earth-600">Triton Digital</span> and exploring <span className="font-semibold text-earth-500">AI/ML solutions</span> with AWS Bedrock and WebLLM.
                     </p>
                   </div>
 
@@ -67,7 +67,7 @@ const Home = () => {
                     </Link>
                   </div> 
 
-                  {/* AI Agent Highlight */}
+                  {/* AI Agent Highlight - Hidden while feature is disabled
                   <div className="bg-white/50 backdrop-blur-sm border border-white/60 rounded-2xl p-8 max-w-4xl mx-auto mt-16 shadow-xl">
                     <div className="text-center space-y-6">
                       <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg">
@@ -88,14 +88,16 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
+                  */}
 
-                  {/* Call to Action for Chat */}
+                  {/* Call to Action - Hidden while AI feature is disabled
                   <div className="xl:hidden pt-8">
                     <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg">
                       <span className="text-sm font-medium mr-2">💬 Try the AI Assistant below!</span>
                       <ArrowRight size={16} className="animate-bounce" />
                     </div>
                   </div>
+                  */}
                 </div>
               </div>
             </section>
@@ -104,11 +106,11 @@ const Home = () => {
       <section className="section-padding bg-white">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-6">
-              <span className="text-sm font-semibold text-blue-700">Core Expertise</span>
+            <div className="inline-flex items-center px-4 py-2 bg-earth-100 border border-earth-200 rounded-full mb-6">
+              <span className="text-sm font-semibold text-earth-700">Core Expertise</span>
             </div>
-            <h2 className="text-5xl font-bold text-slate-900 mb-6 text-shadow-sm">What I Do</h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-5xl font-bold text-earth-800 mb-6 text-shadow-sm">What I Do</h2>
+            <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
               I specialize in building robust backend systems and distributed architectures
               that scale with your business needs
             </p>
@@ -122,11 +124,11 @@ const Home = () => {
                   key={skill.name}
                   className="card-elevated p-10 text-center group hover:scale-105"
                 >
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-blue-500/25 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-500">
+                  <div className="w-20 h-20 bg-gradient-to-br from-earth-400 to-earth-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-earth-500/25 group-hover:shadow-xl group-hover:shadow-earth-500/30 transition-all duration-500">
                     <Icon size={36} className="text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">{skill.name}</h3>
-                  <p className="text-slate-600 leading-relaxed font-medium">{skill.description}</p>
+                  <h3 className="text-2xl font-bold text-earth-800 mb-4 group-hover:text-earth-600 transition-colors duration-300">{skill.name}</h3>
+                  <p className="text-earth-600 leading-relaxed font-medium">{skill.description}</p>
                 </div>
               );
             })}
@@ -135,14 +137,14 @@ const Home = () => {
       </section>
 
       {/* Featured Projects Section */}
-      <section className="section-padding bg-gradient-to-br from-slate-50 to-blue-50/30">
+      <section className="section-padding bg-gradient-to-br from-earth-50 to-earth-100/30">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-purple-50 border border-purple-200 rounded-full mb-6">
-              <span className="text-sm font-semibold text-purple-700">Portfolio Highlights</span>
+            <div className="inline-flex items-center px-4 py-2 bg-earth-100 border border-earth-200 rounded-full mb-6">
+              <span className="text-sm font-semibold text-earth-700">Portfolio Highlights</span>
             </div>
-            <h2 className="text-5xl font-bold text-slate-900 mb-6 text-shadow-sm">Featured Projects</h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-5xl font-bold text-earth-800 mb-6 text-shadow-sm">Featured Projects</h2>
+            <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
               Here are some of my recent projects that showcase my skills and experience
               in building scalable, production-ready applications
             </p>
@@ -157,7 +159,7 @@ const Home = () => {
                 <div className="space-y-6">
                   {/* Project Header */}
                   <div className="flex items-start justify-between">
-                    <h3 className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">{project.title}</h3>
+                    <h3 className="text-2xl font-bold text-earth-800 group-hover:text-earth-600 transition-colors duration-300">{project.title}</h3>
                     <span className="tag tag-blue">
                       {project.category}
                     </span>
@@ -171,10 +173,10 @@ const Home = () => {
                       className="w-full h-48"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl flex items-center justify-center group-hover:from-blue-50 group-hover:to-purple-50 transition-all duration-500">
-                      <div className="text-slate-400 text-center">
-                        <div className="w-16 h-16 bg-slate-300 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-500">
-                          <span className="text-2xl font-bold text-slate-500 group-hover:text-blue-600">
+                    <div className="w-full h-48 bg-gradient-to-br from-earth-100 to-earth-200 rounded-xl flex items-center justify-center group-hover:from-earth-200 group-hover:to-earth-300 transition-all duration-500">
+                      <div className="text-earth-500 text-center">
+                        <div className="w-16 h-16 bg-earth-300 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-earth-400 transition-colors duration-500">
+                          <span className="text-2xl font-bold text-earth-600 group-hover:text-earth-700">
                             {project.title.charAt(0)}
                           </span>
                         </div>
@@ -183,7 +185,7 @@ const Home = () => {
                     </div>
                   )}
 
-                  <p className="text-slate-600 leading-relaxed">{project.description}</p>
+                  <p className="text-earth-600 leading-relaxed">{project.description}</p>
 
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-2">
@@ -203,7 +205,7 @@ const Home = () => {
                   </div>
 
                   {/* Action Links */}
-                  <div className="flex space-x-4 pt-4 border-t border-slate-100">
+                  <div className="flex space-x-4 pt-4 border-t border-earth-100">
                     <a
                       href={project.github}
                       target="_blank"

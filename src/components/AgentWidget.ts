@@ -2,6 +2,10 @@
 import { knowledgeBase } from '../data/knowledgeBase';
 import { performanceMonitor } from '../utils/performanceMonitor';
 
+// Model configuration - TinyLlama for faster loading (~600MB vs ~2.4GB)
+const MODEL_ID = 'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC';
+const MODEL_DISPLAY_NAME = 'TinyLlama 1.1B';
+
 // Type definitions
 interface ActionButton {
   type: 'link' | 'email';
@@ -24,6 +28,13 @@ interface ToolTrace {
   html: string;
 }
 
+// Progress callback type for UI updates
+export type ProgressCallback = (info: { 
+  progress: number; 
+  text: string; 
+  stage: 'checking' | 'downloading' | 'loading' | 'ready' | 'error';
+}) => void;
+
 // Global flag to prevent multiple instances
 let globalListenersSetup = false;
 
@@ -33,6 +44,8 @@ export class AgentWidget {
   private listenersSetup = false;
   private processingMessage = false;
   private initializationPromise: Promise<void> | null = null;
+  // Fallback mode when WebGPU is not available
+  private fallbackMode = false;
   // Align conversation history structure with AgentDemo ChatMessage interface
   private conversationHistory: Array<{role: 'user' | 'assistant', content: string, timestamp: number, id: string}> = [];
   private toolTraces: ToolTrace[] = [];
@@ -41,10 +54,17 @@ export class AgentWidget {
   private _keyHandler?: (e: KeyboardEvent) => void;
   private _previousSendHandler?: () => void;
   private _previousKeyHandler?: (e: KeyboardEvent) => void;
+  // Progress callback for external UI updates
+  private progressCallback?: ProgressCallback;
 
   // Check if the widget is already initialized
   public get initialized(): boolean {
     return this.isInitialized;
+  }
+
+  // Set progress callback for UI updates
+  public setProgressCallback(callback: ProgressCallback): void {
+    this.progressCallback = callback;
   }
 
   // Quick setup for session restoration (without full engine initialization)
@@ -256,20 +276,65 @@ export class AgentWidget {
       let retryCount = 0;
       const maxRetries = 3;
       
+      // Check WebGPU availability first
+      if (!navigator.gpu) {
+        console.warn('⚠️ WebGPU not available - running in fallback mode (KB search only)');
+        this.fallbackMode = true;
+        this.isInitialized = true;
+        this.progressCallback?.({ 
+          progress: 100, 
+          text: 'Running in fallback mode (knowledge base only)', 
+          stage: 'ready' 
+        });
+        this.updateChatUI('ready');
+        this.setupEventListeners();
+        console.log('✅ AI Agent ready in fallback mode (no LLM, KB search only)');
+        return; // Skip WebLLM initialization
+      }
+      
+      console.log(`📦 Loading ${MODEL_DISPLAY_NAME} model...`);
+      this.progressCallback?.({ progress: 0, text: 'Checking WebGPU support...', stage: 'checking' });
+      
       while (retryCount < maxRetries) {
         try {
-          this.engine = await webllm.CreateMLCEngine('Phi-3.5-mini-instruct-q4f16_1-MLC', {
+          this.engine = await webllm.CreateMLCEngine(MODEL_ID, {
             initProgressCallback: (progress) => {
-              // Suppress verbose progress logs but keep important ones
-              if (progress.text && !progress.text.includes('Loading') && !progress.text.includes('Downloading')) {
-                console.log(`🤖 ${progress.text}`);
+              // Parse progress for UI updates
+              const progressText = progress.text || '';
+              let stage: 'checking' | 'downloading' | 'loading' | 'ready' = 'loading';
+              let progressPercent = 0;
+              
+              // Extract percentage from text like "Loading model from cache[1/5]: 20%"
+              const percentMatch = progressText.match(/(\d+(?:\.\d+)?)\s*%/);
+              if (percentMatch) {
+                progressPercent = parseFloat(percentMatch[1]);
               }
+              
+              // Determine stage from text
+              if (progressText.toLowerCase().includes('download')) {
+                stage = 'downloading';
+              } else if (progressText.toLowerCase().includes('loading') || progressText.toLowerCase().includes('cache')) {
+                stage = 'loading';
+              }
+              
+              // Always log and report progress (show download progress!)
+              console.log(`🤖 ${progressText}`);
+              this.progressCallback?.({ 
+                progress: progressPercent, 
+                text: progressText, 
+                stage 
+              });
             }
           });
           break; // Success, exit retry loop
         } catch (error) {
           retryCount++;
           console.log(`🔄 Engine creation attempt ${retryCount}/${maxRetries} failed, retrying...`);
+          this.progressCallback?.({ 
+            progress: 0, 
+            text: `Initialization failed, retrying (${retryCount}/${maxRetries})...`, 
+            stage: 'loading' 
+          });
           if (retryCount >= maxRetries) {
             throw error;
           }
@@ -292,7 +357,8 @@ export class AgentWidget {
         console.log('💾 Loading tool traces for session persistence');
         this.loadToolTracesFromStorage();
         
-        console.log('✅ WebLLM AI engine ready');
+        console.log(`✅ ${MODEL_DISPLAY_NAME} AI engine ready`);
+        this.progressCallback?.({ progress: 100, text: 'AI Agent ready!', stage: 'ready' });
       } catch (resetError) {
         console.log('⚠️ Chat reset failed, continuing anyway:', resetError);
         // Still load history even if reset fails
@@ -317,6 +383,11 @@ export class AgentWidget {
       console.log('🎉 AI Agent initialization completed successfully');
     } catch (error) {
       console.error('❌ AI Agent initialization failed:', error);
+      this.progressCallback?.({ 
+        progress: 0, 
+        text: error instanceof Error ? error.message : 'Initialization failed', 
+        stage: 'error' 
+      });
       this.updateChatUI('error');
       throw error; // Re-throw to handle in caller
     }
@@ -388,7 +459,59 @@ export class AgentWidget {
         await this.initialize();
       }
       
-      // Double-check engine is available
+      // Handle fallback mode (no WebGPU/LLM - use KB search only)
+      if (this.fallbackMode) {
+        this.displayMessage('user', message);
+        this.showTypingIndicator();
+        
+        // Perform KB search
+        let searchResult: SearchResult;
+        let actionButtons: ActionButton[] | undefined;
+        
+        try {
+          searchResult = await knowledgeBase.smartSearchWithJson(message) as SearchResult;
+          actionButtons = searchResult.intent?.suggestedActions;
+        } catch {
+          const fallbackResults = knowledgeBase.search(message);
+          searchResult = {
+            records: fallbackResults,
+            intent: { type: 'general', confidence: 0.5, actionable: false },
+            searchStrategy: 'fallback',
+            confidence: 0.3
+          };
+        }
+        
+        if (searchResult.records.length === 0) {
+          searchResult.records = knowledgeBase.getAll().slice(0, 3);
+        }
+        
+        this.updateToolTrace('smart_kb_search', { 
+          query: message, 
+          intent: searchResult.intent?.type || 'general',
+          strategy: 'fallback-mode',
+          confidence: searchResult.confidence || 0.5,
+          actionable: searchResult.intent?.actionable || false,
+          semanticReady: false
+        }, searchResult.records);
+        
+        this.hideTypingIndicator();
+        
+        // Generate response from KB results directly
+        const response = this.generateFallbackResponse(message, searchResult);
+        
+        // Save to history
+        const timestamp = Date.now();
+        this.conversationHistory.push({ role: 'user', content: message, timestamp, id: `user_${timestamp}` });
+        this.conversationHistory.push({ role: 'assistant', content: response, timestamp: timestamp + 1, id: `assistant_${timestamp + 1}` });
+        this.saveHistoryToStorage();
+        
+        this.displayMessage('assistant', response, actionButtons);
+        clearTimeout(processingTimeout);
+        this.processingMessage = false;
+        return;
+      }
+      
+      // Double-check engine is available (WebGPU mode)
       if (!this.engine) {
         throw new Error('AI engine not available after initialization');
       }
@@ -738,6 +861,43 @@ RESPONSE STYLE:
 - Use professional but approachable tone
 - Include quantifiable achievements when available
 - End with clear next steps for the recruiter/contact`;
+  }
+
+  // Generate response from KB results when LLM is not available (fallback mode)
+  private generateFallbackResponse(query: string, searchResult: SearchResult): string {
+    const intent = searchResult.intent?.type || 'general';
+    const records = searchResult.records || [];
+    
+    // Intent-specific responses using KB data
+    if (intent === 'contact' || query.toLowerCase().includes('contact') || query.toLowerCase().includes('email')) {
+      return `📬 **Contact Duc Nguyen:**\n\n• **Email:** duc.tri.nguyen0186@gmail.com\n• **Phone:** (206) 791-8173\n• **Location:** Seattle, WA\n• **LinkedIn:** linkedin.com/in/duc-nguyen-33716b1b6\n• **GitHub:** github.com/ductringuyen0186\n\nFeel free to reach out for opportunities or collaborations!`;
+    }
+    
+    if (intent === 'linkedin' || query.toLowerCase().includes('linkedin')) {
+      return `🔗 **Duc's LinkedIn Profile:**\n\nhttps://www.linkedin.com/in/duc-nguyen-33716b1b6/\n\nDuc is a Software Engineer at Triton Digital in Seattle, WA, with expertise in backend systems, Kotlin/Java, and cloud-native architectures.`;
+    }
+    
+    if (intent === 'github' || intent === 'projects' || query.toLowerCase().includes('github') || query.toLowerCase().includes('project')) {
+      return `💻 **Duc's GitHub & Projects:**\n\n• **GitHub:** github.com/ductringuyen0186\n\n**Key Projects:**\n• **Salon Hub** - Full-stack management system with real-time booking\n• **AI Tech News Assistant** - RAG-based news aggregation\n• **Portfolio Website** - This site with AI-powered assistant\n\nCheck out the code and contributions!`;
+    }
+    
+    if (intent === 'experience' || query.toLowerCase().includes('experience') || query.toLowerCase().includes('work')) {
+      return `💼 **Duc's Professional Experience:**\n\n**Software Engineer @ Triton Digital** (Jul 2022 - Present)\n• Seattle, WA | Backend & Full-stack Development\n• Processing ~50k daily ad transactions\n• Achieved ~20% performance improvement\n• Tech: Kotlin, Spring Boot, Kubernetes, AWS Bedrock\n\n**Previous:** Game Developer @ Bobaface, Seattle University (VR/AR research)`;
+    }
+    
+    if (intent === 'skills' || query.toLowerCase().includes('skill') || query.toLowerCase().includes('tech')) {
+      return `🛠️ **Duc's Technical Skills:**\n\n• **Languages:** Kotlin, Java, Python, TypeScript, JavaScript\n• **Backend:** Spring Boot, Ktor, Node.js, REST APIs\n• **Cloud/DevOps:** Kubernetes, AWS, Docker, CI/CD\n• **Frontend:** React, TypeScript\n• **Databases:** MySQL, Kafka\n• **AI/ML:** AWS Bedrock, RAG, WebLLM`;
+    }
+    
+    // Default: Use KB records to build response
+    if (records.length > 0) {
+      const summary = records.slice(0, 2).map((r: { title: string; text: string }) => 
+        `**${r.title}:** ${r.text.substring(0, 200)}${r.text.length > 200 ? '...' : ''}`
+      ).join('\n\n');
+      return `Here's what I found:\n\n${summary}\n\n💡 *Note: Running in fallback mode. For full AI responses, try Chrome/Edge with WebGPU support.*`;
+    }
+    
+    return `👋 Hi! I'm Duc Nguyen's portfolio assistant.\n\nI can help you learn about:\n• **Experience** - Software Engineer at Triton Digital\n• **Skills** - Kotlin, Java, Python, React, Kubernetes\n• **Projects** - Salon Hub, AI assistants, portfolio\n• **Contact** - Email, LinkedIn, GitHub\n\nWhat would you like to know?`;
   }
 
   private showTypingIndicator() {

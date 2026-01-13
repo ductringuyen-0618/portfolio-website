@@ -11,8 +11,8 @@
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #fafafa;
-    color: #0f172a;
+    background-color: #f5f2ed;
+    color: #4e483c;
     line-height: 1.6;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
@@ -23,23 +23,23 @@
 @layer components {
 
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-earth-500 to-earth-600 rounded-xl shadow-lg hover:shadow-xl hover:from-earth-600 hover:to-earth-700 transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-earth-700 bg-white border border-earth-200 rounded-xl shadow-sm hover:bg-earth-50 hover:border-earth-300 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-2;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-200;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-earth-600 hover:text-earth-800 hover:bg-earth-100 rounded-lg transition-all duration-200;
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1;
+    @apply bg-white rounded-2xl shadow-sm border border-earth-100 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1;
   }
 
   .card-elevated {
-    @apply bg-white rounded-2xl shadow-lg border border-slate-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2;
+    @apply bg-white rounded-2xl shadow-lg border border-earth-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2;
   }
 
   .section-padding {
@@ -51,7 +51,7 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-earth-500 via-earth-600 to-earth-700 bg-clip-text text-transparent;
   }
 
   .glass-effect {
@@ -59,7 +59,7 @@
   }
 
   .input-field {
-    @apply w-full px-4 py-3 text-sm border border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-slate-400;
+    @apply w-full px-4 py-3 text-sm border border-earth-200 rounded-xl bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-earth-500 focus:border-transparent transition-all duration-200 placeholder:text-earth-400;
   }
 
   .tag {
@@ -67,11 +67,11 @@
   }
 
   .tag-blue {
-    @apply bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100;
+    @apply bg-earth-100 text-earth-700 border border-earth-200 hover:bg-earth-200;
   }
 
   .tag-purple {
-    @apply bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100;
+    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100;
   }
 
   .tag-green {
@@ -79,7 +79,7 @@
   }
 
   .tag-gray {
-    @apply bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100;
+    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100;
   }
 }
 
@@ -170,16 +170,16 @@
 }
 
 .chat-button-glow {
-  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #887d69 0%, #6b6252 50%, #4e483c 100%);
   box-shadow: 
-    0 20px 40px -12px rgba(59, 130, 246, 0.4),
-    0 10px 20px -5px rgba(147, 51, 234, 0.3),
+    0 20px 40px -12px rgba(136, 125, 105, 0.4),
+    0 10px 20px -5px rgba(78, 72, 60, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .chat-button-glow:hover {
   box-shadow: 
-    0 25px 50px -12px rgba(59, 130, 246, 0.5),
-    0 15px 30px -5px rgba(147, 51, 234, 0.4),
+    0 25px 50px -12px rgba(136, 125, 105, 0.5),
+    0 15px 30px -5px rgba(78, 72, 60, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }

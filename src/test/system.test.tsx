@@ -78,7 +78,8 @@ describe('System Integration Tests', () => {
       expect(projectsLinks.length).toBeGreaterThan(0);
     });
 
-    it('should have agent interface elements', () => {
+    // Skip: Agent feature is disabled (AI_AGENT_ENABLED = false in Layout.tsx)
+    it.skip('should have agent interface elements', () => {
       renderApp();
 
       // Verify Chat tab exists
@@ -150,7 +151,8 @@ describe('System Integration Tests', () => {
     });
   });
 
-  describe('Agent Widget Presence', () => {
+  // Skip: Agent feature is disabled (AI_AGENT_ENABLED = false in Layout.tsx)
+  describe.skip('Agent Widget Presence', () => {
     it('should have agent interface elements in DOM', () => {
       renderApp();
 

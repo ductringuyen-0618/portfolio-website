@@ -1,6 +1,13 @@
 ﻿import { useEffect, useRef, useState } from 'react';
 import { AgentWidget } from './AgentWidget';
-import { MessageCircle, Cpu, Minimize2, Maximize2, Maximize, X } from 'lucide-react';
+import { MessageCircle, Cpu, Minimize2, Maximize2, Maximize, X, Download, Loader2 } from 'lucide-react';
+
+// Progress info type (matches AgentWidget.ProgressCallback)
+interface ProgressInfo {
+  progress: number;
+  text: string;
+  stage: 'checking' | 'downloading' | 'loading' | 'ready' | 'error';
+}
 
 // Session storage keys
 const SESSION_KEYS = {
@@ -43,6 +50,13 @@ function AgentSidebar() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [sessionState, setSessionState] = useState<ChatSessionState | null>(null);
+  
+  // Loading progress state for WebLLM model download
+  const [loadingProgress, setLoadingProgress] = useState<{
+    progress: number;
+    text: string;
+    stage: 'checking' | 'downloading' | 'loading' | 'ready' | 'error';
+  }>({ progress: 0, text: 'Initializing...', stage: 'checking' });
 
 
 
@@ -667,6 +681,12 @@ function AgentSidebar() {
         const widget = new AgentWidget();
         widgetRef.current = widget;
         
+        // Set up progress callback for UI updates
+        const handleProgress = (info: ProgressInfo) => {
+          setLoadingProgress(info);
+        };
+        widget.setProgressCallback(handleProgress);
+        
         await widget.initialize();
         widget.setupEventListeners();
         
@@ -1069,11 +1089,53 @@ function AgentSidebar() {
                     scrollBehavior: 'smooth'
                   }}
                 >
-                  <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
-                    <MessageCircle size={32} className="mb-3 text-gray-400" />
-                    <p className="font-medium">AI Agent Loading...</p>
-                    <p className="text-sm">Semantic search initializing</p>
-                  </div>
+                  {/* Dynamic loading progress display */}
+                  {loadingProgress.stage !== 'ready' && (
+                    <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center p-4">
+                      {loadingProgress.stage === 'error' ? (
+                        <>
+                          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-3">
+                            <X size={24} className="text-red-500" />
+                          </div>
+                          <p className="font-medium text-red-600">AI Agent Error</p>
+                          <p className="text-sm text-red-500 mt-1">{loadingProgress.text}</p>
+                          <p className="text-xs text-gray-400 mt-2">Try using Chrome 113+ or Edge 113+</p>
+                        </>
+                      ) : loadingProgress.stage === 'downloading' ? (
+                        <>
+                          <Download size={32} className="mb-3 text-blue-500 animate-bounce" />
+                          <p className="font-medium text-blue-600">Downloading AI Model...</p>
+                          <p className="text-sm text-gray-500 mt-1">{loadingProgress.text}</p>
+                          {/* Progress bar */}
+                          <div className="w-full max-w-xs mt-3 bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                              style={{ width: `${Math.min(loadingProgress.progress, 100)}%` }}
+                            />
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2">
+                            {loadingProgress.progress > 0 ? `${Math.round(loadingProgress.progress)}%` : 'Starting download...'}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <Loader2 size={32} className="mb-3 text-blue-500 animate-spin" />
+                          <p className="font-medium">
+                            {loadingProgress.stage === 'checking' ? 'Checking WebGPU...' : 'Loading AI Model...'}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">{loadingProgress.text || 'Please wait...'}</p>
+                          {loadingProgress.progress > 0 && (
+                            <div className="w-full max-w-xs mt-3 bg-gray-200 rounded-full h-2.5">
+                              <div 
+                                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(loadingProgress.progress, 100)}%` }}
+                              />
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
                 
                 {/* Input Section */}
