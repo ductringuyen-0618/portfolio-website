@@ -14,10 +14,15 @@ interface ActionButton {
 }
 
 interface SearchResult {
-  results: unknown[];
+  records: Array<{ id: string; title: string; text: string; url?: string }>;
   intent?: {
+    type: string;
+    confidence: number;
+    actionable: boolean;
     suggestedActions?: ActionButton[];
   };
+  searchStrategy?: string;
+  confidence?: number;
 }
 
 interface ToolTrace {
@@ -50,8 +55,6 @@ export class AgentWidget {
   private conversationHistory: Array<{role: 'user' | 'assistant', content: string, timestamp: number, id: string}> = [];
   private toolTraces: ToolTrace[] = [];
   // Handler storage for proper cleanup
-  private _sendHandler?: () => void;
-  private _keyHandler?: (e: KeyboardEvent) => void;
   private _previousSendHandler?: () => void;
   private _previousKeyHandler?: (e: KeyboardEvent) => void;
   // Progress callback for external UI updates
@@ -277,7 +280,7 @@ export class AgentWidget {
       const maxRetries = 3;
       
       // Check WebGPU availability first
-      if (!navigator.gpu) {
+      if (!(navigator as Navigator & { gpu?: unknown }).gpu) {
         console.warn('⚠️ WebGPU not available - running in fallback mode (KB search only)');
         this.fallbackMode = true;
         this.isInitialized = true;
@@ -469,7 +472,7 @@ export class AgentWidget {
         let actionButtons: ActionButton[] | undefined;
         
         try {
-          searchResult = await knowledgeBase.smartSearchWithJson(message) as SearchResult;
+          searchResult = await knowledgeBase.smartSearchWithJson(message) as unknown as SearchResult;
           actionButtons = searchResult.intent?.suggestedActions;
         } catch {
           const fallbackResults = knowledgeBase.search(message);
@@ -529,14 +532,14 @@ export class AgentWidget {
       
       try {
         // Use JSON-enhanced smart search for better results
-        searchResult = await knowledgeBase.smartSearchWithJson(message) as SearchResult;
+        searchResult = await knowledgeBase.smartSearchWithJson(message) as unknown as SearchResult;
         actionButtons = searchResult.intent?.suggestedActions;
         
         console.log(`🎯 JSON-Enhanced Search Results:`, {
-          intent: searchResult.intent.type,
+          intent: searchResult.intent?.type,
           confidence: searchResult.confidence,
           resultsCount: searchResult.records.length,
-          actionable: searchResult.intent.actionable,
+          actionable: searchResult.intent?.actionable,
           strategy: searchResult.searchStrategy,
           hasActionButtons: !!actionButtons
         });
@@ -566,7 +569,7 @@ export class AgentWidget {
         searchResult.records.length, 
         searchTime, 
         false, // No cache hit detection for now
-        searchResult.searchStrategy,
+        searchResult.searchStrategy as 'keyword-only' | 'hybrid' | 'semantic-only' | 'fallback' | undefined,
         knowledgeBase.isSemanticReady()
       );
       
@@ -578,17 +581,20 @@ export class AgentWidget {
       
       this.updateToolTrace('smart_kb_search', { 
         query: message, 
-        intent: searchResult.intent.type,
-        strategy: searchResult.searchStrategy,
-        confidence: searchResult.confidence,
-        actionable: searchResult.intent.actionable,
+        intent: searchResult.intent?.type || 'general',
+        strategy: searchResult.searchStrategy || 'default',
+        confidence: searchResult.confidence || 0.5,
+        actionable: searchResult.intent?.actionable || false,
         semanticReady: knowledgeBase.isSemanticReady() 
       }, searchResult.records);
       
       const context = searchResult.records.map((r: { title: string; text: string }) => `${r.title}: ${r.text}`).join('\n\n');
       
       // Generate intent-specific system prompt for better, consistent responses
-      const systemPrompt = this.generateSystemPrompt(searchResult.intent, context);
+      const systemPrompt = this.generateSystemPrompt(
+        { type: searchResult.intent?.type || 'general', confidence: searchResult.intent?.confidence },
+        context
+      );
       
       // Create chat completion with enhanced error handling
       try {
@@ -1011,7 +1017,7 @@ RESPONSE STYLE:
         </div>
         
         <div class="text-xs text-gray-700 mb-2 font-medium">
-          "${this.escapeHtml(typeof args === 'object' ? args.query || JSON.stringify(args) : args)}"
+          "${this.escapeHtml(typeof args === 'object' ? (args as { query?: string }).query || JSON.stringify(args) : String(args))}"
         </div>
         
         <div class="flex items-center justify-between">
@@ -1112,10 +1118,6 @@ RESPONSE STYLE:
         input.value = '';
       }
     };
-
-    // Store handlers for proper cleanup
-    this._sendHandler = sendHandler;
-    this._keyHandler = keyHandler;
 
     // Remove any existing listeners
     if (this._previousSendHandler) {

@@ -268,8 +268,16 @@ class OptimizedKnowledgeBase {
       if (jsonResult.records.length > 0) {
         const intent = this.analyzeQuery(query);
         
+        // Convert JSON records to KnowledgeRecord format
+        const convertedRecords: KnowledgeRecord[] = jsonResult.records.map(r => ({
+          id: r.id,
+          title: r.title,
+          url: r.url || '',
+          text: r.text
+        }));
+        
         return {
-          records: jsonResult.records,
+          records: convertedRecords,
           intent: {
             ...intent,
             suggestedActions: jsonResult.actionButtons
@@ -439,11 +447,14 @@ interface TransformerProgressData {
   total?: number;
 }
 
+// Embedding pipeline type - a function that takes text and returns embeddings
+type EmbeddingPipeline = (text: string) => Promise<{ data: ArrayLike<number> } | number[]>;
+
 // Enhanced Hybrid Knowledge Base with Semantic Search
 class HybridKnowledgeBase extends OptimizedKnowledgeBase {
   private embeddings: Map<string, number[]> = new Map();
   private isSemanticReady = false;
-  private embeddingWorker?: Worker;
+  private embeddingWorker?: EmbeddingPipeline;
   private useSimpleSemantics = false;
   
   constructor() {
@@ -503,17 +514,17 @@ class HybridKnowledgeBase extends OptimizedKnowledgeBase {
       );
       
       // Add timeout to prevent hanging
-      const timeout = new Promise((_, reject) => 
+      const timeout = new Promise<never>((_, reject) => 
         setTimeout(() => reject(new Error('Model loading timeout')), 30000)
       );
       
-      this.embeddingWorker = await Promise.race([initPromise, timeout]);
+      this.embeddingWorker = await Promise.race([initPromise, timeout]) as EmbeddingPipeline;
       
     } catch (error) {
       console.log('Semantic search initialization failed, using keyword search instead. This is normal for browser environments.');
       console.log('Error details:', error);
       this.isSemanticReady = false;
-      this.embeddingWorker = null;
+      this.embeddingWorker = undefined;
     }
   }
   

@@ -34,6 +34,15 @@ export interface JsonKnowledgeBase {
   documents: JsonKnowledgeRecord[];
 }
 
+// Converted record type for search results (different from JsonKnowledgeRecord)
+interface ConvertedKnowledgeRecord {
+  id: string;
+  title: string;
+  url: string;
+  text: string;
+  _metadata?: JsonKnowledgeRecord['metadata'];
+}
+
 export class JsonKnowledgeLoader {
   private jsonData: JsonKnowledgeBase | null = null;
   private cache: Map<string, JsonKnowledgeRecord[]> = new Map();
@@ -77,7 +86,7 @@ export class JsonKnowledgeLoader {
 
   // Smart search with JSON metadata integration
   smartSearchJson(query: string, limit: number = 5): {
-    records: JsonKnowledgeRecord[];
+    records: ConvertedKnowledgeRecord[];
     metadata: Record<string, unknown>;
     actionButtons?: Array<{type: 'link' | 'email', url: string, label: string}>;
   } {
@@ -133,7 +142,11 @@ export class JsonKnowledgeLoader {
     return this.processSearchResults(uniqueDocs, query);
   }
 
-  private processSearchResults(docs: JsonKnowledgeRecord[], query: string) {
+  private processSearchResults(docs: JsonKnowledgeRecord[], query: string): {
+    records: ConvertedKnowledgeRecord[];
+    metadata: Record<string, unknown>;
+    actionButtons?: Array<{type: 'link' | 'email', url: string, label: string}>;
+  } {
     // Extract action buttons from high-priority matches
     const actionButtons: Array<{type: 'link' | 'email', url: string, label: string}> = [];
     
