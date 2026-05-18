@@ -32,19 +32,19 @@ const records: KnowledgeRecord[] = [
   {
     id: 'profile_summary',
     title: 'Professional Summary',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Duc Nguyen - Software Engineer at Triton Digital (Jul 2022-Present) | Seattle, WA. Backend specialist with proven impact: built APIs handling 50,000+ daily transactions, achieved 20% performance improvements, maintained 99.9% uptime. Expert in Spring Boot, Kubernetes, AWS Bedrock AI integration. Strong track record in microservices, production support, and cutting-edge AI solutions. Available for senior backend or full-stack opportunities.'
   },
   {
     id: 'contact',
     title: 'Contact & Links',
     url: 'mailto:duc.tri.nguyen0186@gmail.com',
-    text: 'CONTACT DUC NGUYEN: Email: duc.tri.nguyen0186@gmail.com | Phone: (206) 791-8173 | Location: Seattle, WA. PROFESSIONAL LINKS: LinkedIn: https://www.linkedin.com/in/duc-nguyen-33716b1b6/ | GitHub: https://github.com/ductringuyen0186 | Portfolio: https://ductringuyen0186.github.io/portfolio-website/. Available for immediate opportunities - responds within 24 hours.'
+    text: 'CONTACT DUC NGUYEN: Email: duc.tri.nguyen0186@gmail.com | Phone: (206) 791-8173 | Location: Seattle, WA. PROFESSIONAL LINKS: LinkedIn: https://www.linkedin.com/in/duc-nguyen-33716b1b6/ | GitHub: https://github.com/ductringuyen-0618 | Portfolio: https://ductringuyen-0618.github.io/portfolio-website/. Available for immediate opportunities - responds within 24 hours.'
   },
   {
     id: 'skills_core',
     title: 'Technical Skills & Expertise',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'BACKEND EXPERTISE: Kotlin, Java, Spring Boot/Ktor - 3+ years production experience. CLOUD & DEVOPS: Kubernetes, OpenShift, AWS, Docker, CI/CD - enterprise scale. DATABASE & MESSAGING: MySQL, Kafka - high-volume transaction systems. FULL-STACK: Python, JavaScript/TypeScript, React, Node.js. AI/ML: AWS Bedrock, AgentCore, RAG systems. MONITORING: Grafana, system observability, performance optimization. PROVEN: API design, microservices architecture, 99.9% uptime delivery.'
   },
   {
@@ -56,55 +56,55 @@ const records: KnowledgeRecord[] = [
   {
     id: 'experience_bedrock_ai',
     title: 'Applied AI — AWS Bedrock & AgentCore',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Deployed agents on AWS Bedrock AgentCore Runtime; exposed secure invoke endpoints for FE integration. Implemented session memory patterns (session_id propagation, context stores) for multi-turn continuity. Connected Knowledge Bases (S3-backed) to agents; chunked/embedded PDFs and docs for RAG retrieval. Integrated MCP/OpenAPI tools to let the agent perform actions (e.g., KB queries, URL routing, email handoff). Investigated CloudWatch logging issues, environment configuration, and bearer-token auth flows. Compared orchestration approaches (Agent Strands vs. LangGraph) and explored Converse API usage. Built KB-ready artifacts (JSON chunks) from resume/profile to enable recruiter-facing Q&A.'
   },
   {
     id: 'projects_highlights',
     title: 'Project Highlights',
-    url: 'https://github.com/ductringuyen0186',
+    url: 'https://github.com/ductringuyen-0618',
     text: 'AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings. Salon Hub (API + UI) — Booking/management system (Spring Boot + React/Next.js) with CI/CD. MapleStory Smart Bot — Vision-driven game automation for rune detection and movement. Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.'
   },
   {
     id: 'salon_hub_api',
     title: 'Salon Hub API',
-    url: 'https://github.com/ductringuyen0186/salon-hub-api',
+    url: 'https://github.com/ductringuyen-0618/salon-hub-api',
     text: 'Modern salon management backend built with Spring Boot 3.x and PostgreSQL. Features include customers, employees, appointments, queue, check-in, and guest support. Provides Swagger UI and OpenAPI docs; uses Gradle, JUnit 5, Testcontainers; Docker + Render deployment; includes quick-start scripts and detailed docs.'
   },
   {
     id: 'salon_hub_ui_v2',
     title: 'Salon Hub UI v2',
-    url: 'https://github.com/ductringuyen0186/salon-hub-ui-v2',
+    url: 'https://github.com/ductringuyen-0618/salon-hub-ui-v2',
     text: 'React + TypeScript frontend scaffolded with Vite and Tailwind CSS. Repo includes environment templates (.env.*), integration docs (FRONTEND-BACKEND-INTEGRATION.md), authentication notes, testing readme, and config files (components.json, vite/postcss/tailwind configs). Language breakdown indicates ~99% TypeScript.'
   },
   {
     id: 'ai_tech_news_assistant',
     title: 'AI Tech News Assistant',
-    url: 'https://github.com/ductringuyen0186/ai-tech-news-assistant',
+    url: 'https://github.com/ductringuyen-0618/ai-tech-news-assistant',
     text: 'Aggregates tech news and provides AI-powered summaries. Backend in FastAPI with LangChain and Chroma; planned/ongoing work includes RSS ingestion, parsing, semantic search, React+TS dashboard, Prefect orchestration, and Dockerized deployment. Includes health endpoints and environment-driven config.'
   },
   {
     id: 'portfolio_website',
     title: 'Portfolio Website',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Personal portfolio site built with React 19, TypeScript, Tailwind, and Vite. Deployed to GitHub Pages with GitHub Actions CI/CD. Includes live demo link, project showcases, and scripts for dev/build/lint/type-check.'
   },
   {
     id: 'experience_prior',
     title: 'Prior Experience — Bobaface & Boise State University',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Bobaface (Game Developer, Apr 2021 – May 2022): Implemented game mechanics and physics; collaborated with artists/UI; shipped to iOS/Android; increased average session length by ~10%. Boise State University (Software Developer, Jan 2020 – May 2022): Designed multi-platform architectures (iOS/Android/VR/AR); hosted data/services on AWS; presented demos to clients and PMs.'
   },
   {
     id: 'education',
     title: 'Education',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Boise State University — B.S., Games, Interactive Media, and Mobile; Minor in Computer Science (2018–2022)'
   },
   {
     id: 'qa_intents',
     title: 'Q&A Guidance',
-    url: 'https://ductringuyen0186.github.io/portfolio-website/',
+    url: 'https://ductringuyen-0618.github.io/portfolio-website/',
     text: 'Backend experience: Summarize Triton Digital impacts (API throughput, latency reduction, uptime, testing), skills (Spring, Kubernetes, MySQL, Kafka), and Bedrock agent work for AI augmentation. AI/Bedrock work: Explain AgentCore runtime deployments, session memory patterns, KB (S3) ingestion, MCP tool use, Converse API exploration. Languages and tools: Provide the Skills block verbatim; call out Kotlin/Java/Python; Spring Boot/Ktor; Kubernetes/OpenShift/ArgoCD; MySQL/Kafka/Grafana; CI/CD. Resume or portfolio: Provide contact block, LinkedIn, and Portfolio.'
   }
 ];
@@ -152,7 +152,7 @@ class OptimizedKnowledgeBase {
         actionable: true,
         suggestedActions: [{
           type: 'link',
-          url: 'https://github.com/ductringuyen0186',
+          url: 'https://github.com/ductringuyen-0618',
           label: 'View GitHub Profile'
         }]
       };

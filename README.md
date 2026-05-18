@@ -4,7 +4,7 @@ A cutting-edge portfolio website featuring an **AI-powered assistant** built wit
 
 ## 🚀 Live Demo
 
-Visit the live portfolio: [https://ductringuyen0186.github.io/portfolio-website/](https://ductringuyen0186.github.io/portfolio-website/)
+Visit the live portfolio: [https://ductringuyen-0618.github.io/portfolio-website/](https://ductringuyen-0618.github.io/portfolio-website/)
 
 **🤖 Try the AI Assistant**: Interactive chat with persistent conversations, smart action buttons, and professional Q&A.
 
@@ -52,7 +52,7 @@ Visit the live portfolio: [https://ductringuyen0186.github.io/portfolio-website/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/ductringuyen0186/portfolio-website.git
+git clone https://github.com/ductringuyen-0618/portfolio-website.git
 cd portfolio-website
 ```
 
@@ -297,9 +297,9 @@ interface KnowledgeItem {
 
 ## 📧 Contact & Links
 
-- **Email**: [ductringuyen0186@gmail.com](mailto:ductringuyen0186@gmail.com)
+- **Email**: [ductringuyen-0618@gmail.com](mailto:ductringuyen-0618@gmail.com)
 - **LinkedIn**: [linkedin.com/in/ductringuyen](https://linkedin.com/in/ductringuyen)  
-- **GitHub**: [github.com/ductringuyen0186](https://github.com/ductringuyen0186)
+- **GitHub**: [github.com/ductringuyen-0618](https://github.com/ductringuyen-0618)
 - **Location**: Seattle, WA
 
 *Try the AI assistant on the live site for instant answers about my experience and projects!*

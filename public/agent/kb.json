@@ -3,7 +3,7 @@
     {
       "id": "linkedin",
       "title": "LinkedIn",
-      "url": "https://www.linkedin.com/in/ductringuyen0186",
+      "url": "https://www.linkedin.com/in/ductringuyen-0618",
       "text": "Duc Nguyen — Software Engineer (Backend). LinkedIn profile and contact."
     },
     {
@@ -15,7 +15,7 @@
     {
       "id": "experience",
       "title": "Experience Summary",
-      "url": "https://ductringuyen0186.github.io/portfolio-website/",
+      "url": "https://ductringuyen-0618.github.io/portfolio-website/",
       "text": "Backend SWE at Triton Digital (Kotlin, Java, Python). Booking API, Kafka/Avro, Ktor, MySQL, Flyway, Kubernetes/OpenShift, perf improvements, cross-team collaboration."
     }
   ]

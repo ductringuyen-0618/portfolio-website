@@ -40,7 +40,7 @@
       "id": "contact",
       "type": "contact",
       "title": "Contact & Professional Links",
-      "text": "CONTACT DUC NGUYEN: Email: duc.tri.nguyen0186@gmail.com | Phone: (206) 791-8173 | Location: Seattle, WA. PROFESSIONAL LINKS: LinkedIn: https://www.linkedin.com/in/duc-nguyen-33716b1b6/ | GitHub: https://github.com/ductringuyen0186 | Portfolio: https://ductringuyen0186.github.io/portfolio-website/. Available for immediate opportunities - responds within 24 hours.",
+      "text": "CONTACT DUC NGUYEN: Email: duc.tri.nguyen0186@gmail.com | Phone: (206) 791-8173 | Location: Seattle, WA. PROFESSIONAL LINKS: LinkedIn: https://www.linkedin.com/in/duc-nguyen-33716b1b6/ | GitHub: https://github.com/ductringuyen-0618 | Portfolio: https://ductringuyen-0618.github.io/portfolio-website/. Available for immediate opportunities - responds within 24 hours.",
       "metadata": {
         "tags": [
           "contact",
@@ -63,7 +63,7 @@
           },
           {
             "type": "link",
-            "url": "https://github.com/ductringuyen0186",
+            "url": "https://github.com/ductringuyen-0618",
             "label": "GitHub Profile"
           }
         ],
@@ -186,7 +186,7 @@
       "id": "github_projects",
       "type": "projects_github",
       "title": "GitHub Portfolio & Open Source Projects",
-      "text": "GITHUB PROFILE: https://github.com/ductringuyen0186 - Active developer with multiple production-ready projects. KEY REPOSITORIES: AI Tech News Assistant (Python/RAG), Salon Hub API (Spring Boot), Salon Hub UI (React/TypeScript), Portfolio Website (React 19/Vite). TECHNOLOGIES DEMONSTRATED: Full-stack development, AI/ML integration, microservices, modern frontend frameworks, CI/CD pipelines.",
+      "text": "GITHUB PROFILE: https://github.com/ductringuyen-0618 - Active developer with multiple production-ready projects. KEY REPOSITORIES: AI Tech News Assistant (Python/RAG), Salon Hub API (Spring Boot), Salon Hub UI (React/TypeScript), Portfolio Website (React 19/Vite). TECHNOLOGIES DEMONSTRATED: Full-stack development, AI/ML integration, microservices, modern frontend frameworks, CI/CD pipelines.",
       "metadata": {
         "tags": [
           "github",
@@ -200,7 +200,7 @@
         "action_buttons": [
           {
             "type": "link",
-            "url": "https://github.com/ductringuyen0186",
+            "url": "https://github.com/ductringuyen-0618",
             "label": "View GitHub Profile"
           }
         ],

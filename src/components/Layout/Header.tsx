@@ -18,7 +18,7 @@ export default function Header() {
             <Link to="/" className="text-earth-600 hover:text-earth-800">Home</Link>
             <Link to="/projects" className="text-earth-500 hover:text-earth-700">Projects</Link>
             <Link to="/about" className="text-earth-500 hover:text-earth-700">About</Link>
-            <a href="https://github.com/ductringuyen0186" target="_blank" rel="noopener noreferrer" className="text-earth-500 hover:text-earth-700">
+            <a href="https://github.com/ductringuyen-0618" target="_blank" rel="noopener noreferrer" className="text-earth-500 hover:text-earth-700">
               GitHub
             </a>
           </nav>

@@ -198,11 +198,11 @@ export class JsonKnowledgeLoader {
       case 'contact':
         return 'mailto:duc.tri.nguyen0186@gmail.com';
       case 'projects_github':
-        return 'https://github.com/ductringuyen0186';
+        return 'https://github.com/ductringuyen-0618';
       case 'project':
-        return `https://github.com/ductringuyen0186/${doc.id.replace('_', '-')}`;
+        return `https://github.com/ductringuyen-0618/${doc.id.replace('_', '-')}`;
       default:
-        return 'https://ductringuyen0186.github.io/portfolio-website/';
+        return 'https://ductringuyen-0618.github.io/portfolio-website/';
     }
   }
 

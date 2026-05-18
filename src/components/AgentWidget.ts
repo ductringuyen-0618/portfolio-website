@@ -819,7 +819,7 @@ LINKEDIN RESPONSE FOCUS:
 
       'github': `
 GITHUB/PROJECTS RESPONSE FOCUS:
-- Provide GitHub profile: https://github.com/ductringuyen0186
+- Provide GitHub profile: https://github.com/ductringuyen-0618
 - Highlight key repositories: Salon Hub, AI Tech News Assistant, Portfolio Website
 - Emphasize technical skills demonstrated in projects
 - Mention deployment and CI/CD experience`,
@@ -876,7 +876,7 @@ RESPONSE STYLE:
     
     // Intent-specific responses using KB data
     if (intent === 'contact' || query.toLowerCase().includes('contact') || query.toLowerCase().includes('email')) {
-      return `📬 **Contact Duc Nguyen:**\n\n• **Email:** duc.tri.nguyen0186@gmail.com\n• **Phone:** (206) 791-8173\n• **Location:** Seattle, WA\n• **LinkedIn:** linkedin.com/in/duc-nguyen-33716b1b6\n• **GitHub:** github.com/ductringuyen0186\n\nFeel free to reach out for opportunities or collaborations!`;
+      return `📬 **Contact Duc Nguyen:**\n\n• **Email:** duc.tri.nguyen0186@gmail.com\n• **Phone:** (206) 791-8173\n• **Location:** Seattle, WA\n• **LinkedIn:** linkedin.com/in/duc-nguyen-33716b1b6\n• **GitHub:** github.com/ductringuyen-0618\n\nFeel free to reach out for opportunities or collaborations!`;
     }
     
     if (intent === 'linkedin' || query.toLowerCase().includes('linkedin')) {
@@ -884,7 +884,7 @@ RESPONSE STYLE:
     }
     
     if (intent === 'github' || intent === 'projects' || query.toLowerCase().includes('github') || query.toLowerCase().includes('project')) {
-      return `💻 **Duc's GitHub & Projects:**\n\n• **GitHub:** github.com/ductringuyen0186\n\n**Key Projects:**\n• **Salon Hub** - Full-stack management system with real-time booking\n• **AI Tech News Assistant** - RAG-based news aggregation\n• **Portfolio Website** - This site with AI-powered assistant\n\nCheck out the code and contributions!`;
+      return `💻 **Duc's GitHub & Projects:**\n\n• **GitHub:** github.com/ductringuyen-0618\n\n**Key Projects:**\n• **Salon Hub** - Full-stack management system with real-time booking\n• **AI Tech News Assistant** - RAG-based news aggregation\n• **Portfolio Website** - This site with AI-powered assistant\n\nCheck out the code and contributions!`;
     }
     
     if (intent === 'experience' || query.toLowerCase().includes('experience') || query.toLowerCase().includes('work')) {
