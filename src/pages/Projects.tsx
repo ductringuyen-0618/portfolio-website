@@ -1,15 +1,26 @@
 import { useState, useMemo } from 'react';
 import { projects } from '../data/projects';
+import type { Project } from '../data/projects';
 
 import VideoPreview from '../components/VideoPreview';
+import ImageLightbox from '../components/ImageLightbox';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [lightbox, setLightbox] = useState<{ project: Project; index: number } | null>(null);
   const openVideoPlayer = (videoUrl: string, title: string) => {
-    // For now, just log the demo URL - could open in new tab or show modal later
     console.log('Demo URL:', videoUrl, 'Title:', title);
-    // window.open(videoUrl, '_blank');
+  };
+
+  const projectImages = (p: Project): string[] => {
+    if (p.images && p.images.length > 0) return p.images;
+    if (p.image) return [p.image];
+    return [];
+  };
+
+  const openLightbox = (project: Project, index = 0) => {
+    setLightbox({ project, index });
   };
 
   // Filter projects based on search and filters
@@ -125,8 +136,37 @@ const Projects = () => {
                       </span>
                     </div>
 
-                    {/* Project Image Placeholder */}
-                    {project.demo ? (
+                    {/* Project Image / Preview */}
+                    {projectImages(project).length > 0 ? (
+                      (() => {
+                        const imgs = projectImages(project);
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => openLightbox(project, 0)}
+                            aria-label={`Open ${project.title} screenshots${imgs.length > 1 ? ` (${imgs.length} images)` : ''}`}
+                            className="relative block w-full h-40 rounded-xl overflow-hidden border border-earth-100 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
+                          >
+                            <img
+                              src={`${import.meta.env.BASE_URL}${imgs[0]}`}
+                              alt={`${project.title} preview`}
+                              loading="lazy"
+                              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                              <span className="opacity-0 group-hover/img:opacity-100 transition-opacity text-white text-xs font-semibold bg-black/60 px-3 py-1 rounded-full">
+                                {imgs.length > 1 ? `View ${imgs.length} screenshots` : 'View screenshot'}
+                              </span>
+                            </div>
+                            {imgs.length > 1 && (
+                              <span className="absolute top-2 right-2 text-xs font-semibold bg-black/70 text-white px-2 py-1 rounded-full">
+                                {imgs.length}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })()
+                    ) : project.demo ? (
                       <VideoPreview
                         title={`${project.title} Demo`}
                         onClick={() => openVideoPlayer(project.demo!, project.title)}
@@ -165,26 +205,16 @@ const Projects = () => {
                     </div>
 
                     {/* Action Links */}
-                    <div className="flex space-x-3 pt-4 border-t border-earth-100">
-                      {project.github && (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-ghost text-sm group/link"
-                        >
-                          <span>View Code</span>
-                        </a>
-                      )}
-                      {project.demo && (
+                    {project.demo && (
+                      <div className="flex space-x-3 pt-4 border-t border-earth-100">
                         <button
                           onClick={() => openVideoPlayer(project.demo!, project.title)}
                           className="btn-ghost text-sm group/link"
                         >
                           <span>Video Demo</span>
                         </button>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -214,8 +244,15 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* Video Player Modal */}
-
+      {/* Image Lightbox */}
+      {lightbox && (
+        <ImageLightbox
+          images={projectImages(lightbox.project)}
+          initialIndex={lightbox.index}
+          title={lightbox.project.title}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </div>
   );
 };

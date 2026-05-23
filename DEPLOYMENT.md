@@ -16,7 +16,7 @@ git commit -m "Initial commit: Portfolio website with GitHub Pages deployment"
 
 3. **Add remote and push**:
 ```bash
-git remote add origin https://github.com/ductringuyen0186/portfolio-website.git
+git remote add origin https://github.com/ductringuyen-0618/portfolio-website.git
 git branch -M main
 git push -u origin main
 ```
@@ -34,7 +34,7 @@ git push -u origin main
 1. Go to the **Actions** tab in your repository
 2. You should see the "Deploy to GitHub Pages" workflow running
 3. Once completed, your site will be available at:
-   `https://ductringuyen0186.github.io/portfolio-website/`
+   `https://ductringuyen-0618.github.io/portfolio-website/`
 
 ## 🔧 Configuration Details
 
