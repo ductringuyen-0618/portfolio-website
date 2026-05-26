@@ -205,16 +205,40 @@ const Projects = () => {
                     </div>
 
                     {/* Action Links */}
-                    {project.demo && (
+                    {(project.github && project.github !== '#') || project.liveUrl || project.demo ? (
                       <div className="flex space-x-3 pt-4 border-t border-earth-100">
-                        <button
-                          onClick={() => openVideoPlayer(project.demo!, project.title)}
-                          className="btn-ghost text-sm group/link"
-                        >
-                          <span>Video Demo</span>
-                        </button>
+                        {project.github && project.github !== '#' && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-ghost text-sm group/link"
+                            aria-label={`${project.title} source code on GitHub`}
+                          >
+                            <span>Code</span>
+                          </a>
+                        )}
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-ghost text-sm group/link"
+                            aria-label={`Open ${project.title} live site in a new tab`}
+                          >
+                            <span>Live Site →</span>
+                          </a>
+                        )}
+                        {project.demo && (
+                          <button
+                            onClick={() => openVideoPlayer(project.demo!, project.title)}
+                            className="btn-ghost text-sm group/link"
+                          >
+                            <span>Video Demo</span>
+                          </button>
+                        )}
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               ))}
