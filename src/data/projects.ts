@@ -50,11 +50,12 @@ export const projects: Project[] = [
     liveUrl: 'https://salon-hub-black.vercel.app',
     images: [
       'screenshots/salon-hub/home.png',
+      'screenshots/salon-hub/signup.png',
       'screenshots/salon-hub/booking.png',
-      'screenshots/salon-hub/register.png',
-      'screenshots/salon-hub/login.png',
       'screenshots/salon-hub/check-in.png',
-      'screenshots/salon-hub/colors.png',
+      'screenshots/salon-hub/admin-dashboard.png',
+      'screenshots/salon-hub/admin-settings.png',
+      'screenshots/salon-hub/admin-services.png',
     ],
     featured: true,
     category: 'Full-Stack'
