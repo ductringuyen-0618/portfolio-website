@@ -63,19 +63,13 @@ const records: KnowledgeRecord[] = [
     id: 'projects_highlights',
     title: 'Project Highlights',
     url: 'https://github.com/ductringuyen-0618',
-    text: 'AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings. Salon Hub (API + UI) — Booking/management system (Spring Boot + React/Next.js) with CI/CD. MapleStory Smart Bot — Vision-driven game automation for rune detection and movement. Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.'
+    text: 'AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings. Salon Hub — Multi-tenant salon SaaS platform (Spring Boot + React) with Hibernate row-level tenant scoping, Supabase Auth, smart wait-time queue, deployed on Fly.io + Vercel. MapleStory Smart Bot — Vision-driven game automation for rune detection and movement. Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.'
   },
   {
-    id: 'salon_hub_api',
-    title: 'Salon Hub API',
-    url: 'https://github.com/ductringuyen-0618/salon-hub-api',
-    text: 'Modern salon management backend built with Spring Boot 3.x and PostgreSQL. Features include customers, employees, appointments, queue, check-in, and guest support. Provides Swagger UI and OpenAPI docs; uses Gradle, JUnit 5, Testcontainers; Docker + Render deployment; includes quick-start scripts and detailed docs.'
-  },
-  {
-    id: 'salon_hub_ui_v2',
-    title: 'Salon Hub UI v2',
-    url: 'https://github.com/ductringuyen-0618/salon-hub-ui-v2',
-    text: 'React + TypeScript frontend scaffolded with Vite and Tailwind CSS. Repo includes environment templates (.env.*), integration docs (FRONTEND-BACKEND-INTEGRATION.md), authentication notes, testing readme, and config files (components.json, vite/postcss/tailwind configs). Language breakdown indicates ~99% TypeScript.'
+    id: 'salon_hub',
+    title: 'Salon Hub — Multi-Tenant Salon SaaS',
+    url: 'https://github.com/ductringuyen-0618/salon-hub',
+    text: 'Configurable salon storefront-as-a-service. Anyone can sign up at /signup and spin up their own fully isolated salon — branding, hours, services, staff, online booking, walk-in check-in, and a live wait-time queue. Spring Boot 3 monorepo (apps/api + apps/web) with Hibernate row-level multi-tenancy (one Postgres DB, tenant_id stamped on every row, JWT-bound tenant scoping with header fallback for anonymous), Supabase Auth (ES256 JWT verification via JWKS), React 18 + Vite + Tailwind + shadcn/ui frontend. Smart wait-time estimator accounts for parallel technicians, per-service durations, preferred-tech routing, business hours, and turnover buffer. Deployed on Fly.io (API) and Vercel (web). Live at https://salon-hub-black.vercel.app.'
   },
   {
     id: 'ai_tech_news_assistant',

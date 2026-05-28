@@ -132,7 +132,7 @@
       "id": "projects_highlights",
       "type": "projects",
       "title": "Project Highlights",
-      "text": "• AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings.\n• Salon Hub (API + UI) — Booking/management system (Spring Boot + React/Next.js) with CI/CD.\n• MapleStory Smart Bot — Vision-driven game automation for rune detection and movement.\n• Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.",
+      "text": "• AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings.\n• Salon Hub — Multi-tenant salon SaaS platform (Spring Boot + React) with Hibernate row-level tenant scoping, Supabase Auth, smart wait-time queue. Deployed on Fly.io + Vercel.\n• MapleStory Smart Bot — Vision-driven game automation for rune detection and movement.\n• Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.",
       "metadata": {
         "tags": [
           "projects",
@@ -186,7 +186,7 @@
       "id": "github_projects",
       "type": "projects_github",
       "title": "GitHub Portfolio & Open Source Projects",
-      "text": "GITHUB PROFILE: https://github.com/ductringuyen-0618 - Active developer with multiple production-ready projects. KEY REPOSITORIES: AI Tech News Assistant (Python/RAG), Salon Hub API (Spring Boot), Salon Hub UI (React/TypeScript), Portfolio Website (React 19/Vite). TECHNOLOGIES DEMONSTRATED: Full-stack development, AI/ML integration, microservices, modern frontend frameworks, CI/CD pipelines.",
+      "text": "GITHUB PROFILE: https://github.com/ductringuyen-0618 - Active developer with multiple production-ready projects. KEY REPOSITORIES: AI Tech News Assistant (Python/RAG), Salon Hub (multi-tenant SaaS — Spring Boot + React, deployed on Fly.io + Vercel), Portfolio Website (React 19/Vite). TECHNOLOGIES DEMONSTRATED: Full-stack development, multi-tenant SaaS, AI/ML integration, microservices, modern frontend frameworks, CI/CD pipelines.",
       "metadata": {
         "tags": [
           "github",
@@ -228,33 +228,29 @@
       }
     },
     {
-      "id": "salon_hub_api",
+      "id": "salon_hub",
       "type": "project",
-      "title": "Salon Hub API",
-      "text": "Modern salon management backend built with Spring Boot 3.x and PostgreSQL. Features include customers, employees, appointments, queue, check-in, and guest support. Provides Swagger UI and OpenAPI docs; uses Gradle, JUnit 5, Testcontainers; Docker + Render deployment; includes quick-start scripts and detailed docs.",
+      "title": "Salon Hub — Multi-Tenant Salon SaaS",
+      "url": "https://github.com/ductringuyen-0618/salon-hub",
+      "liveUrl": "https://salon-hub-black.vercel.app",
+      "text": "Configurable salon storefront-as-a-service. Anyone can sign up at /signup and spin up their own fully isolated salon — branding, hours, services, staff, online booking, walk-in check-in, and a live wait-time queue. Spring Boot 3 monorepo (apps/api + apps/web) with Hibernate row-level multi-tenancy (one Postgres DB, tenant_id stamped on every row, JWT-bound tenant scoping with header fallback for anonymous), Supabase Auth (ES256 JWT verification via JWKS), React 18 + Vite + Tailwind + shadcn/ui frontend. Smart wait-time estimator accounts for parallel technicians, per-service durations, preferred-tech routing, business hours, and turnover buffer. Deployed on Fly.io (API) and Vercel (web). Live at https://salon-hub-black.vercel.app.",
       "metadata": {
         "tags": [
           "java",
           "spring-boot",
+          "hibernate",
           "postgresql",
-          "docker",
-          "gradle",
-          "testing"
-        ]
-      }
-    },
-    {
-      "id": "salon_hub_ui_v2",
-      "type": "project",
-      "title": "Salon Hub UI v2",
-      "text": "React + TypeScript frontend scaffolded with Vite and Tailwind CSS. Repo includes environment templates (.env.*), integration docs (FRONTEND-BACKEND-INTEGRATION.md), authentication notes, testing readme, and config files (components.json, vite/postcss/tailwind configs). Language breakdown indicates ~99% TypeScript.",
-      "metadata": {
-        "tags": [
+          "supabase",
+          "multi-tenant",
+          "saas",
           "react",
           "typescript",
           "vite",
           "tailwind",
-          "frontend"
+          "fly.io",
+          "vercel",
+          "docker",
+          "gradle"
         ]
       }
     },

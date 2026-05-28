@@ -43,10 +43,11 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    title: 'Salon Hub Management System',
-    description: 'Complete salon management solution with Spring Boot 3.x backend, PostgreSQL database, and React frontend. Features booking system, employee management, and queue optimization.',
-    technologies: ['Spring Boot', 'PostgreSQL', 'React', 'TypeScript', 'Docker', 'Gradle', 'Testcontainers'],
-    github: 'https://github.com/ductringuyen-0618/salon-hub-api',
+    title: 'Salon Hub — Multi-Tenant SaaS Platform',
+    description: 'Configurable salon storefront-as-a-service: anyone can sign up at /signup and spin up their own fully isolated salon with branding, hours, services, staff, online booking, walk-in check-in, and a live wait-time queue. Spring Boot 3 monorepo with Hibernate row-level multi-tenancy (one DB, tenant_id on every row, JWT-bound tenant scoping), Supabase Auth (ES256 JWT verification), and React 18 + Vite + Tailwind frontend. Deployed on Fly.io (API) and Vercel (web).',
+    technologies: ['Spring Boot 3', 'PostgreSQL', 'Hibernate Filters', 'Flyway', 'Supabase Auth', 'React 18', 'TypeScript', 'Vite', 'Tailwind', 'shadcn/ui', 'Fly.io', 'Vercel', 'Docker', 'Gradle', 'Testcontainers'],
+    github: 'https://github.com/ductringuyen-0618/salon-hub',
+    liveUrl: 'https://salon-hub-black.vercel.app',
     images: [
       'screenshots/salon-hub/home.png',
       'screenshots/salon-hub/booking.png',
