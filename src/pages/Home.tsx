@@ -215,6 +215,16 @@ const Home = () => {
                       <Github size={18} className="group-hover/link:scale-110 transition-transform duration-300" />
                       <span>Code</span>
                     </a>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-ghost group/link"
+                      >
+                        <span>Live Site →</span>
+                      </a>
+                    )}
                     {project.demo && (
                       <button
                         onClick={() => openVideoPlayer(project.demo!, project.title)}
