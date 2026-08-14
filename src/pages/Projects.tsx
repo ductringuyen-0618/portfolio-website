@@ -223,7 +223,7 @@ const Projects = () => {
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn-ghost text-sm group/link"
+                            className="btn-ghost text-sm group/link text-spark-600 hover:text-spark-600 hover:bg-spark-500/10"
                             aria-label={`Open ${project.title} live site in a new tab`}
                           >
                             <span>Live Site →</span>

@@ -34,7 +34,7 @@ const Home = () => {
                 <div className="text-center space-y-12 animate-fade-in-up">
                   <div className="space-y-8">
                     <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-earth-200 rounded-full shadow-sm">
-                      <div className="w-2 h-2 bg-earth-500 rounded-full mr-3 animate-pulse"></div>
+                      <div className="w-2 h-2 bg-spark-500 rounded-full mr-3 animate-pulse"></div>
                       <span className="text-sm font-medium text-earth-700">Software Engineer at Triton Digital</span>
                     </div>
 
@@ -220,7 +220,7 @@ const Home = () => {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-ghost group/link"
+                        className="btn-ghost group/link text-spark-600 hover:text-spark-600 hover:bg-spark-500/10"
                       >
                         <span>Live Site →</span>
                       </a>

@@ -8,16 +8,21 @@ export default {
     extend: {
       colors: {
         earth: {
-          50: '#f5f2ed',   // Lightest - backgrounds
-          100: '#dbd2c3',  // Light
-          200: '#c4b69e',  // Medium-light
-          300: '#b4a68f',  // Medium
-          400: '#aa9b82',  // Medium-dark
-          500: '#887d69',  // Primary (darkest from palette)
-          600: '#6b6252',  // Dark (derived)
-          700: '#4e483c',  // Darkest (derived for footer/text)
-          800: '#3a362d',  // Extra dark
-          900: '#262420',  // Near black
+          50: '#faf9fc',   // Lightest - backgrounds
+          100: '#eeecfa',  // Light - tag/surface tint
+          200: '#e0dbf3',  // Medium-light - borders
+          300: '#c3b8e8',  // Medium
+          400: '#9b8ad9',  // Medium-dark
+          500: '#4f46e5',  // Primary indigo
+          600: '#4338ca',  // Primary dark (hover)
+          700: '#362f8f',  // Darkest (footer/muted text)
+          800: '#241f52',  // Extra dark (headings)
+          900: '#17142f',  // Near black
+        },
+        spark: {
+          400: '#fbbf24',
+          500: '#f59e0b',  // Amber accent
+          600: '#d97706',
         },
       },
       fontFamily: {

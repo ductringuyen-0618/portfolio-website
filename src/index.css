@@ -11,8 +11,8 @@
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #f5f2ed;
-    color: #4e483c;
+    background-color: #faf9fc;
+    color: #362f8f;
     line-height: 1.6;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
@@ -51,7 +51,7 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-earth-500 via-earth-600 to-earth-700 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-earth-500 via-earth-600 to-spark-500 bg-clip-text text-transparent;
   }
 
   .glass-effect {
@@ -170,16 +170,16 @@
 }
 
 .chat-button-glow {
-  background: linear-gradient(135deg, #887d69 0%, #6b6252 50%, #4e483c 100%);
-  box-shadow: 
-    0 20px 40px -12px rgba(136, 125, 105, 0.4),
-    0 10px 20px -5px rgba(78, 72, 60, 0.3),
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 50%, #362f8f 100%);
+  box-shadow:
+    0 20px 40px -12px rgba(79, 70, 229, 0.4),
+    0 10px 20px -5px rgba(67, 56, 202, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .chat-button-glow:hover {
-  box-shadow: 
-    0 25px 50px -12px rgba(136, 125, 105, 0.5),
-    0 15px 30px -5px rgba(78, 72, 60, 0.4),
+  box-shadow:
+    0 25px 50px -12px rgba(79, 70, 229, 0.5),
+    0 15px 30px -5px rgba(67, 56, 202, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
