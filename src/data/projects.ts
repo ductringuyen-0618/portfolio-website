@@ -53,10 +53,9 @@ export const projects: Project[] = [
   {
     id: 3,
     title: 'AI-Powered Portfolio Assistant',
-    description: 'Advanced AI agent with WebLLM, session memory, and smart RAG. Features persistent conversations, action buttons for LinkedIn/GitHub, and MCP tool integration. Built with React 19 and TypeScript.',
+    description: 'In-browser AI chat agent built for this portfolio: runs an LLM client-side via WebLLM, retrieves answers from a RAG pipeline over my resume/project data, persists conversations with session memory, and exposes LinkedIn/GitHub action buttons via MCP tool calls. Built with React 19 and TypeScript; currently disabled on the live site pending a performance pass, but fully implemented in the repo.',
     technologies: ['WebLLM', 'React 19', 'TypeScript', 'RAG', 'Session Memory', 'MCP', 'Tailwind CSS'],
     github: 'https://github.com/ductringuyen-0618/portfolio-website',
-    liveUrl: 'https://ductringuyen-0618.github.io/portfolio-website/',
     featured: true,
     category: 'AI/ML'
   },
