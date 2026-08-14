@@ -10,7 +10,7 @@
           <a href="https://www.linkedin.com/in/duc-nguyen-33716b1b6/" target="_blank" rel="noopener noreferrer" className="hover:text-earth-200">LinkedIn</a>
           <a href="https://github.com/ductringuyen-0618" target="_blank" rel="noopener noreferrer" className="hover:text-earth-200">GitHub</a>
         </div>
-        <p className="text-earth-300"> 2024 Duc Nguyen. All rights reserved.</p>
+        <p className="text-earth-300">© {new Date().getFullYear()} Duc Nguyen. All rights reserved.</p>
       </div>
     </footer>
   );
