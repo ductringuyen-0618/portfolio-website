@@ -1,15 +1,25 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Database, Cloud, Github } from 'lucide-react';
 import { getFeaturedProjects } from '../data/projects';
+import type { Project } from '../data/projects';
 
 import VideoPreview from '../components/VideoPreview';
+import ImageLightbox from '../components/ImageLightbox';
 
 const Home = () => {
   const featuredProjects = getFeaturedProjects();
+  const [lightbox, setLightbox] = useState<{ project: Project; index: number } | null>(null);
   const openVideoPlayer = (videoUrl: string, title: string) => {
     // For now, just log the demo URL - could open in new tab or show modal later
     console.log('Demo URL:', videoUrl, 'Title:', title);
     // window.open(videoUrl, '_blank');
+  };
+
+  const projectImages = (p: Project): string[] => {
+    if (p.images && p.images.length > 0) return p.images;
+    if (p.image) return [p.image];
+    return [];
   };
 
   const skills = [
@@ -165,8 +175,37 @@ const Home = () => {
                     </span>
                   </div>
 
-                  {/* Project Image Placeholder */}
-                  {project.demo ? (
+                  {/* Project Image / Preview */}
+                  {projectImages(project).length > 0 ? (
+                    (() => {
+                      const imgs = projectImages(project);
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => setLightbox({ project, index: 0 })}
+                          aria-label={`Open ${project.title} screenshots${imgs.length > 1 ? ` (${imgs.length} images)` : ''}`}
+                          className="relative block w-full h-48 rounded-xl overflow-hidden border border-earth-100 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
+                        >
+                          <img
+                            src={`${import.meta.env.BASE_URL}${imgs[0]}`}
+                            alt={`${project.title} preview`}
+                            loading="lazy"
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                            <span className="opacity-0 group-hover/img:opacity-100 transition-opacity text-white text-xs font-semibold bg-black/60 px-3 py-1 rounded-full">
+                              {imgs.length > 1 ? `View ${imgs.length} screenshots` : 'View screenshot'}
+                            </span>
+                          </div>
+                          {imgs.length > 1 && (
+                            <span className="absolute top-2 right-2 text-xs font-semibold bg-black/70 text-white px-2 py-1 rounded-full">
+                              {imgs.length}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })()
+                  ) : project.demo ? (
                     <VideoPreview
                       title={`${project.title} Demo`}
                       onClick={() => openVideoPlayer(project.demo!, project.title)}
@@ -250,9 +289,19 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+
         </div>
       </div>
+
+      {/* Image Lightbox */}
+      {lightbox && (
+        <ImageLightbox
+          images={projectImages(lightbox.project)}
+          initialIndex={lightbox.index}
+          title={lightbox.project.title}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </div>
   );
 };

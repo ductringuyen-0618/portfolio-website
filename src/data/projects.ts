@@ -15,16 +15,6 @@
 export const projects: Project[] = [
   {
     id: 1,
-    title: 'AI-Powered Portfolio Assistant',
-    description: 'Advanced AI agent with WebLLM, session memory, and smart RAG. Features persistent conversations, action buttons for LinkedIn/GitHub, and MCP tool integration. Built with React 19 and TypeScript.',
-    technologies: ['WebLLM', 'React 19', 'TypeScript', 'RAG', 'Session Memory', 'MCP', 'Tailwind CSS'],
-    github: 'https://github.com/ductringuyen-0618/portfolio-website',
-    liveUrl: 'https://ductringuyen-0618.github.io/portfolio-website/',
-    featured: true,
-    category: 'AI/ML'
-  },
-  {
-    id: 2,
     title: 'TechPulse AI - Agentic Tech News Desk',
     description: 'An agentic research workspace for tech news. Decomposes any question into sub-questions, dispatches subagents in parallel via deepagents, and streams a cited report back over Server-Sent Events. Two-mode UI: Atelier (calm reading) and Mission Control (dense scan). Daily ingestion from 5 RSS sources, sentence-transformer embeddings + SQLite vector search, knowledge-graph entity extraction, and Groq-hosted Llama 3.3 70B inference. Live at techpulse-ai-phi.vercel.app.',
     technologies: ['Python', 'FastAPI', 'Groq', 'deepagents', 'sentence-transformers', 'SQLite', 'React 19', 'TypeScript', 'Vite', 'Tailwind', 'Framer Motion', 'Playwright', 'Fly.io', 'Vercel'],
@@ -42,7 +32,7 @@ export const projects: Project[] = [
     category: 'AI/ML'
   },
   {
-    id: 3,
+    id: 2,
     title: 'Salon Hub — Multi-Tenant SaaS Platform',
     description: 'Configurable salon storefront-as-a-service: anyone can sign up at /signup and spin up their own fully isolated salon with branding, hours, services, staff, online booking, walk-in check-in, and a live wait-time queue. Spring Boot 3 monorepo with Hibernate row-level multi-tenancy (one DB, tenant_id on every row, JWT-bound tenant scoping), Supabase Auth (ES256 JWT verification), and React 18 + Vite + Tailwind frontend. Deployed on Fly.io (API) and Vercel (web).',
     technologies: ['Spring Boot 3', 'PostgreSQL', 'Hibernate Filters', 'Flyway', 'Supabase Auth', 'React 18', 'TypeScript', 'Vite', 'Tailwind', 'shadcn/ui', 'Fly.io', 'Vercel', 'Docker', 'Gradle', 'Testcontainers'],
@@ -59,6 +49,16 @@ export const projects: Project[] = [
     ],
     featured: true,
     category: 'Full-Stack'
+  },
+  {
+    id: 3,
+    title: 'AI-Powered Portfolio Assistant',
+    description: 'Advanced AI agent with WebLLM, session memory, and smart RAG. Features persistent conversations, action buttons for LinkedIn/GitHub, and MCP tool integration. Built with React 19 and TypeScript.',
+    technologies: ['WebLLM', 'React 19', 'TypeScript', 'RAG', 'Session Memory', 'MCP', 'Tailwind CSS'],
+    github: 'https://github.com/ductringuyen-0618/portfolio-website',
+    liveUrl: 'https://ductringuyen-0618.github.io/portfolio-website/',
+    featured: true,
+    category: 'AI/ML'
   },
   {
     id: 4,
