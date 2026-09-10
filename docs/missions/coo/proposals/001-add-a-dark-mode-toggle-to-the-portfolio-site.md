@@ -1,6 +1,6 @@
 ---
 title: Add a dark mode toggle to the portfolio site
-status: building
+status: shipped
 attempts: 0
 branch: null
 ---
