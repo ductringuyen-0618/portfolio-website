@@ -1,6 +1,6 @@
 ﻿export default function Footer() {
   return (
-    <footer className="bg-earth-700 text-white py-6">
+    <footer className="bg-earth-700 dark:bg-earth-950 text-white py-6 transition-colors duration-300">
       <div className="container mx-auto px-6 text-center">
         <div className="flex justify-center space-x-6 mb-4">
           <h3 className="text-xl font-bold">Duc Nguyen</h3>

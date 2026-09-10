@@ -24,6 +24,15 @@
     <meta name="twitter:description" content="Backend & AI systems engineer in Seattle, WA. Spring Boot, AWS Bedrock, WebLLM/RAG, cloud-native architecture." />
     <meta name="twitter:image" content="https://ductringuyen-0618.github.io/portfolio-website/og-image.png" />
 
+    <!-- Set the theme before first paint to avoid a light/dark flash -->
+    <script type="text/javascript">
+      (function () {
+        var stored = localStorage.getItem('theme');
+        var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', isDark);
+      })();
+    </script>
+
     <!-- Start Single Page Apps for GitHub Pages -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages

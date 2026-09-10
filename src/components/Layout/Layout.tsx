@@ -9,7 +9,7 @@ const AI_AGENT_ENABLED = false;
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-earth-950 flex flex-col transition-colors duration-300">
       <Header />
       <main className="flex-1">
         <Outlet />

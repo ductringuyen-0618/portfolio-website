@@ -36,28 +36,28 @@ const Home = () => {
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
               {/* Background Elements */}
-              <div className="absolute inset-0 bg-gradient-to-br from-earth-50 via-earth-100/30 to-earth-200/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-earth-50 via-earth-100/30 to-earth-200/30 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-800/30"></div>
               <div className="absolute top-20 left-10 w-72 h-72 bg-earth-300/20 rounded-full blur-3xl animate-float"></div>
               <div className="absolute bottom-20 right-10 w-96 h-96 bg-earth-400/20 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
 
               <div className="container-custom relative z-10">
                 <div className="text-center space-y-12 animate-fade-in-up">
                   <div className="space-y-8">
-                    <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-earth-200 rounded-full shadow-sm">
+                    <div className="inline-flex items-center px-4 py-2 bg-white/80 dark:bg-earth-900/60 backdrop-blur-sm border border-earth-200 dark:border-earth-700 rounded-full shadow-sm">
                       <div className="w-2 h-2 bg-spark-500 rounded-full mr-3 animate-pulse"></div>
-                      <span className="text-sm font-medium text-earth-700">Software Engineer at Triton Digital</span>
+                      <span className="text-sm font-medium text-earth-700 dark:text-earth-200">Software Engineer at Triton Digital</span>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl xl:text-8xl font-bold text-earth-800 mb-8 text-shadow-sm">
+                    <h1 className="text-4xl md:text-6xl xl:text-8xl font-bold text-earth-800 dark:text-earth-50 mb-8 text-shadow-sm">
                       Hi, I'm{' '}
                       <span className="text-gradient">
                         Duc Nguyen
                       </span>
                     </h1>
 
-                    <p className="text-lg md:text-xl xl:text-2xl text-earth-600 max-w-3xl mx-auto leading-relaxed font-light">
-                      Software Engineer based in <span className="font-semibold text-earth-800">Seattle, WA</span>, specializing in <span className="font-semibold text-earth-800">backend systems</span>, <span className="font-semibold text-earth-800">AI integration</span>, and <span className="font-semibold text-earth-800">cloud-native architectures</span>.<br className="hidden md:block" />
-                      Currently contributing to production systems at <span className="font-semibold text-earth-600">Triton Digital</span> and exploring <span className="font-semibold text-earth-500">AI/ML solutions</span> with AWS Bedrock and WebLLM.
+                    <p className="text-lg md:text-xl xl:text-2xl text-earth-600 dark:text-earth-300 max-w-3xl mx-auto leading-relaxed font-light">
+                      Software Engineer based in <span className="font-semibold text-earth-800 dark:text-earth-50">Seattle, WA</span>, specializing in <span className="font-semibold text-earth-800 dark:text-earth-50">backend systems</span>, <span className="font-semibold text-earth-800 dark:text-earth-50">AI integration</span>, and <span className="font-semibold text-earth-800 dark:text-earth-50">cloud-native architectures</span>.<br className="hidden md:block" />
+                      Currently contributing to production systems at <span className="font-semibold text-earth-600 dark:text-earth-300">Triton Digital</span> and exploring <span className="font-semibold text-earth-500 dark:text-earth-400">AI/ML solutions</span> with AWS Bedrock and WebLLM.
                     </p>
                   </div>
 
@@ -113,14 +113,14 @@ const Home = () => {
             </section>
 
       {/* Skills Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-earth-900">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-earth-100 border border-earth-200 rounded-full mb-6">
-              <span className="text-sm font-semibold text-earth-700">Core Expertise</span>
+            <div className="inline-flex items-center px-4 py-2 bg-earth-100 dark:bg-earth-800 border border-earth-200 dark:border-earth-700 rounded-full mb-6">
+              <span className="text-sm font-semibold text-earth-700 dark:text-earth-200">Core Expertise</span>
             </div>
-            <h2 className="text-5xl font-bold text-earth-800 mb-6 text-shadow-sm">What I Do</h2>
-            <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-5xl font-bold text-earth-800 dark:text-earth-50 mb-6 text-shadow-sm">What I Do</h2>
+            <p className="text-xl text-earth-600 dark:text-earth-300 max-w-3xl mx-auto leading-relaxed">
               I specialize in building robust backend systems and distributed architectures
               that scale with your business needs
             </p>
@@ -137,8 +137,8 @@ const Home = () => {
                   <div className="w-20 h-20 bg-gradient-to-br from-earth-400 to-earth-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-earth-500/25 group-hover:shadow-xl group-hover:shadow-earth-500/30 transition-all duration-500">
                     <Icon size={36} className="text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-earth-800 mb-4 group-hover:text-earth-600 transition-colors duration-300">{skill.name}</h3>
-                  <p className="text-earth-600 leading-relaxed font-medium">{skill.description}</p>
+                  <h3 className="text-2xl font-bold text-earth-800 dark:text-earth-50 mb-4 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors duration-300">{skill.name}</h3>
+                  <p className="text-earth-600 dark:text-earth-300 leading-relaxed font-medium">{skill.description}</p>
                 </div>
               );
             })}
@@ -147,14 +147,14 @@ const Home = () => {
       </section>
 
       {/* Featured Projects Section */}
-      <section className="section-padding bg-gradient-to-br from-earth-50 to-earth-100/30">
+      <section className="section-padding bg-gradient-to-br from-earth-50 to-earth-100/30 dark:from-earth-950 dark:to-earth-900/40">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-earth-100 border border-earth-200 rounded-full mb-6">
-              <span className="text-sm font-semibold text-earth-700">Portfolio Highlights</span>
+            <div className="inline-flex items-center px-4 py-2 bg-earth-100 dark:bg-earth-800 border border-earth-200 dark:border-earth-700 rounded-full mb-6">
+              <span className="text-sm font-semibold text-earth-700 dark:text-earth-200">Portfolio Highlights</span>
             </div>
-            <h2 className="text-5xl font-bold text-earth-800 mb-6 text-shadow-sm">Featured Projects</h2>
-            <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-5xl font-bold text-earth-800 dark:text-earth-50 mb-6 text-shadow-sm">Featured Projects</h2>
+            <p className="text-xl text-earth-600 dark:text-earth-300 max-w-3xl mx-auto leading-relaxed">
               Here are some of my recent projects that showcase my skills and experience
               in building scalable, production-ready applications
             </p>
@@ -169,7 +169,7 @@ const Home = () => {
                 <div className="space-y-6">
                   {/* Project Header */}
                   <div className="flex items-start justify-between">
-                    <h3 className="text-2xl font-bold text-earth-800 group-hover:text-earth-600 transition-colors duration-300">{project.title}</h3>
+                    <h3 className="text-2xl font-bold text-earth-800 dark:text-earth-50 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors duration-300">{project.title}</h3>
                     <span className="tag tag-blue">
                       {project.category}
                     </span>
@@ -184,7 +184,7 @@ const Home = () => {
                           type="button"
                           onClick={() => setLightbox({ project, index: 0 })}
                           aria-label={`Open ${project.title} screenshots${imgs.length > 1 ? ` (${imgs.length} images)` : ''}`}
-                          className="relative block w-full h-48 rounded-xl overflow-hidden border border-earth-100 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
+                          className="relative block w-full h-48 rounded-xl overflow-hidden border border-earth-100 dark:border-earth-800 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
                         >
                           <img
                             src={`${import.meta.env.BASE_URL}${imgs[0]}`}
@@ -212,10 +212,10 @@ const Home = () => {
                       className="w-full h-48"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gradient-to-br from-earth-100 to-earth-200 rounded-xl flex items-center justify-center group-hover:from-earth-200 group-hover:to-earth-300 transition-all duration-500">
-                      <div className="text-earth-500 text-center">
-                        <div className="w-16 h-16 bg-earth-300 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-earth-400 transition-colors duration-500">
-                          <span className="text-2xl font-bold text-earth-600 group-hover:text-earth-700">
+                    <div className="w-full h-48 bg-gradient-to-br from-earth-100 to-earth-200 dark:from-earth-800 dark:to-earth-700 rounded-xl flex items-center justify-center group-hover:from-earth-200 group-hover:to-earth-300 transition-all duration-500">
+                      <div className="text-earth-500 dark:text-earth-400 text-center">
+                        <div className="w-16 h-16 bg-earth-300 dark:bg-earth-600 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-earth-400 transition-colors duration-500">
+                          <span className="text-2xl font-bold text-earth-600 dark:text-earth-300 group-hover:text-earth-700 dark:group-hover:text-earth-200">
                             {project.title.charAt(0)}
                           </span>
                         </div>
@@ -224,7 +224,7 @@ const Home = () => {
                     </div>
                   )}
 
-                  <p className="text-earth-600 leading-relaxed">{project.description}</p>
+                  <p className="text-earth-600 dark:text-earth-300 leading-relaxed">{project.description}</p>
 
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-2">
@@ -244,7 +244,7 @@ const Home = () => {
                   </div>
 
                   {/* Action Links */}
-                  <div className="flex space-x-4 pt-4 border-t border-earth-100">
+                  <div className="flex space-x-4 pt-4 border-t border-earth-100 dark:border-earth-800">
                     <a
                       href={project.github}
                       target="_blank"

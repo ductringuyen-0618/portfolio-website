@@ -44,23 +44,23 @@ const Projects = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-earth-50">
+    <div className="min-h-screen bg-earth-50 dark:bg-earth-950">
       {/* Hero Section */}
-      <section className="relative section-padding bg-gradient-to-br from-earth-50 via-earth-100/30 to-earth-200/30 overflow-hidden">
+      <section className="relative section-padding bg-gradient-to-br from-earth-50 via-earth-100/30 to-earth-200/30 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-800/30 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-earth-300/20 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-earth-400/20 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
 
         <div className="container-custom text-center relative z-10">
           <div className="space-y-8 animate-fade-in-up">
-            <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm border border-earth-200 rounded-full shadow-sm mb-6">
-              <span className="text-sm font-semibold text-earth-700">Portfolio Collection</span>
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 dark:bg-earth-900/60 backdrop-blur-sm border border-earth-200 dark:border-earth-700 rounded-full shadow-sm mb-6">
+              <span className="text-sm font-semibold text-earth-700 dark:text-earth-200">Portfolio Collection</span>
             </div>
-            <h1 className="text-6xl font-bold text-earth-800 text-shadow-sm">My Projects</h1>
-            <p className="text-xl text-earth-600 max-w-4xl mx-auto leading-relaxed">
+            <h1 className="text-6xl font-bold text-earth-800 dark:text-earth-50 text-shadow-sm">My Projects</h1>
+            <p className="text-xl text-earth-600 dark:text-earth-300 max-w-4xl mx-auto leading-relaxed">
               A collection of projects showcasing my expertise in{' '}
-              <span className="font-semibold text-earth-600">AI/ML systems</span>,{' '}
-              <span className="font-semibold text-earth-700">enterprise backend development</span>, and{' '}
+              <span className="font-semibold text-earth-600 dark:text-earth-300">AI/ML systems</span>,{' '}
+              <span className="font-semibold text-earth-700 dark:text-earth-200">enterprise backend development</span>, and{' '}
               <span className="font-semibold text-green-600">production-grade applications</span>. 
               Featuring advanced <span className="font-semibold text-orange-600">WebLLM integration</span> and <span className="font-semibold text-red-600">RAG systems</span>.
             </p>
@@ -69,17 +69,17 @@ const Projects = () => {
       </section>
 
       {/* Projects Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white dark:bg-earth-900">
         <div className="container-custom space-y-12">
           {/* Filters */}
           <div className="card-elevated p-8">
             <div className="mb-6">
-              <h3 className="text-xl font-bold text-earth-800 mb-2">Filter Projects</h3>
-              <p className="text-earth-600">Find projects by technology, category, or search terms</p>
+              <h3 className="text-xl font-bold text-earth-800 dark:text-earth-50 mb-2">Filter Projects</h3>
+              <p className="text-earth-600 dark:text-earth-300">Find projects by technology, category, or search terms</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-earth-700 mb-3">Search</label>
+                <label className="block text-sm font-semibold text-earth-700 dark:text-earth-200 mb-3">Search</label>
                 <input
                   type="text"
                   placeholder="Search projects..."
@@ -89,7 +89,7 @@ const Projects = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-earth-700 mb-3">Category</label>
+                <label className="block text-sm font-semibold text-earth-700 dark:text-earth-200 mb-3">Category</label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
@@ -108,8 +108,8 @@ const Projects = () => {
           {/* Results */}
           <div>
             <div className="flex items-center justify-between mb-8">
-              <p className="text-earth-600 font-medium">
-                Showing <span className="font-bold text-earth-800">{filteredProjects.length}</span> of <span className="font-bold text-earth-800">{projects.length}</span> projects
+              <p className="text-earth-600 dark:text-earth-300 font-medium">
+                Showing <span className="font-bold text-earth-800 dark:text-earth-50">{filteredProjects.length}</span> of <span className="font-bold text-earth-800 dark:text-earth-50">{projects.length}</span> projects
               </p>
               {(searchTerm || selectedCategory) && (
                 <button
@@ -130,7 +130,7 @@ const Projects = () => {
                   <div className="space-y-6">
                     {/* Project Header */}
                     <div className="flex items-start justify-between">
-                      <h3 className="text-xl font-bold text-earth-800 group-hover:text-earth-600 transition-colors duration-300">{project.title}</h3>
+                      <h3 className="text-xl font-bold text-earth-800 dark:text-earth-50 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors duration-300">{project.title}</h3>
                       <span className="tag tag-blue">
                         {project.category}
                       </span>
@@ -145,7 +145,7 @@ const Projects = () => {
                             type="button"
                             onClick={() => openLightbox(project, 0)}
                             aria-label={`Open ${project.title} screenshots${imgs.length > 1 ? ` (${imgs.length} images)` : ''}`}
-                            className="relative block w-full h-40 rounded-xl overflow-hidden border border-earth-100 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
+                            className="relative block w-full h-40 rounded-xl overflow-hidden border border-earth-100 dark:border-earth-800 group/img cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-earth-400"
                           >
                             <img
                               src={`${import.meta.env.BASE_URL}${imgs[0]}`}
@@ -173,10 +173,10 @@ const Projects = () => {
                         className="w-full h-40"
                       />
                     ) : (
-                      <div className="w-full h-40 bg-gradient-to-br from-earth-100 to-earth-200 rounded-xl flex items-center justify-center group-hover:from-earth-200 group-hover:to-earth-300 transition-all duration-500">
-                        <div className="text-earth-500 text-center">
-                          <div className="w-12 h-12 bg-earth-300 rounded-lg mx-auto mb-2 flex items-center justify-center group-hover:bg-earth-400 transition-colors duration-500">
-                            <span className="text-lg font-bold text-earth-600 group-hover:text-earth-700">
+                      <div className="w-full h-40 bg-gradient-to-br from-earth-100 to-earth-200 dark:from-earth-800 dark:to-earth-700 rounded-xl flex items-center justify-center group-hover:from-earth-200 group-hover:to-earth-300 transition-all duration-500">
+                        <div className="text-earth-500 dark:text-earth-400 text-center">
+                          <div className="w-12 h-12 bg-earth-300 dark:bg-earth-600 rounded-lg mx-auto mb-2 flex items-center justify-center group-hover:bg-earth-400 transition-colors duration-500">
+                            <span className="text-lg font-bold text-earth-600 dark:text-earth-300 group-hover:text-earth-700 dark:group-hover:text-earth-200">
                               {project.title.charAt(0)}
                             </span>
                           </div>
@@ -185,7 +185,7 @@ const Projects = () => {
                       </div>
                     )}
 
-                    <p className="text-earth-600 text-sm leading-relaxed line-clamp-3">{project.description}</p>
+                    <p className="text-earth-600 dark:text-earth-300 text-sm leading-relaxed line-clamp-3">{project.description}</p>
 
                     {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
@@ -206,7 +206,7 @@ const Projects = () => {
 
                     {/* Action Links */}
                     {(project.github && project.github !== '#') || project.liveUrl || project.demo ? (
-                      <div className="flex space-x-3 pt-4 border-t border-earth-100">
+                      <div className="flex space-x-3 pt-4 border-t border-earth-100 dark:border-earth-800">
                         {project.github && project.github !== '#' && (
                           <a
                             href={project.github}
@@ -246,11 +246,11 @@ const Projects = () => {
 
             {filteredProjects.length === 0 && (
               <div className="col-span-full text-center py-20">
-                <div className="w-24 h-24 bg-earth-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                <div className="w-24 h-24 bg-earth-100 dark:bg-earth-800 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                   <span className="text-4xl">🔍</span>
                 </div>
-                <h3 className="text-2xl font-bold text-earth-800 mb-4">No Projects Found</h3>
-                <p className="text-earth-600 mb-8 max-w-md mx-auto">
+                <h3 className="text-2xl font-bold text-earth-800 dark:text-earth-50 mb-4">No Projects Found</h3>
+                <p className="text-earth-600 dark:text-earth-300 mb-8 max-w-md mx-auto">
                   Try adjusting your search terms or filters to find what you're looking for.
                 </p>
                 <button

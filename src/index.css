@@ -10,9 +10,8 @@
   }
 
   body {
+    @apply bg-earth-50 text-earth-700 dark:bg-earth-950 dark:text-earth-100 transition-colors duration-300;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #faf9fc;
-    color: #362f8f;
     line-height: 1.6;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
@@ -27,19 +26,19 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-earth-700 bg-white border border-earth-200 rounded-xl shadow-sm hover:bg-earth-50 hover:border-earth-300 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-earth-700 bg-white border border-earth-200 rounded-xl shadow-sm hover:bg-earth-50 hover:border-earth-300 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-2 dark:text-earth-100 dark:bg-earth-800 dark:border-earth-700 dark:hover:bg-earth-700 dark:hover:border-earth-600;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-earth-600 hover:text-earth-800 hover:bg-earth-100 rounded-lg transition-all duration-200;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-earth-600 hover:text-earth-800 hover:bg-earth-100 rounded-lg transition-all duration-200 dark:text-earth-300 dark:hover:text-earth-50 dark:hover:bg-earth-800;
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-earth-100 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1;
+    @apply bg-white rounded-2xl shadow-sm border border-earth-100 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 dark:bg-earth-800 dark:border-earth-700;
   }
 
   .card-elevated {
-    @apply bg-white rounded-2xl shadow-lg border border-earth-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2;
+    @apply bg-white rounded-2xl shadow-lg border border-earth-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 dark:bg-earth-800 dark:border-earth-700;
   }
 
   .section-padding {
@@ -55,11 +54,11 @@
   }
 
   .glass-effect {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 dark:bg-earth-900/60 dark:border-white/10;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 text-sm border border-earth-200 rounded-xl bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-earth-500 focus:border-transparent transition-all duration-200 placeholder:text-earth-400;
+    @apply w-full px-4 py-3 text-sm border border-earth-200 rounded-xl bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-earth-500 focus:border-transparent transition-all duration-200 placeholder:text-earth-400 dark:bg-earth-800/50 dark:border-earth-700 dark:text-earth-100 dark:placeholder:text-earth-500;
   }
 
   .tag {
@@ -67,19 +66,19 @@
   }
 
   .tag-blue {
-    @apply bg-earth-100 text-earth-700 border border-earth-200 hover:bg-earth-200;
+    @apply bg-earth-100 text-earth-700 border border-earth-200 hover:bg-earth-200 dark:bg-earth-800 dark:text-earth-200 dark:border-earth-700 dark:hover:bg-earth-700;
   }
 
   .tag-purple {
-    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100;
+    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100 dark:bg-earth-800 dark:text-earth-300 dark:border-earth-700 dark:hover:bg-earth-700;
   }
 
   .tag-green {
-    @apply bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100;
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800 dark:hover:bg-emerald-900/50;
   }
 
   .tag-gray {
-    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100;
+    @apply bg-earth-50 text-earth-600 border border-earth-200 hover:bg-earth-100 dark:bg-earth-800 dark:text-earth-300 dark:border-earth-700 dark:hover:bg-earth-700;
   }
 }
 
