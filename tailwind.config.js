@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -18,6 +19,7 @@ export default {
           700: '#362f8f',  // Darkest (footer/muted text)
           800: '#241f52',  // Extra dark (headings)
           900: '#17142f',  // Near black
+          950: '#0c0a1f',  // Dark mode page background
         },
         spark: {
           400: '#fbbf24',
