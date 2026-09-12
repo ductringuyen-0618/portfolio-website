@@ -1,7 +1,7 @@
 ---
-status: approved
+status: in_progress
 attempts: 0
-branch: null
+branch: coo/add-per-project-case-study-pages
 ---
 # Add per-project case study pages
 
