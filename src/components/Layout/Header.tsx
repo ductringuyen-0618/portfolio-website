@@ -51,6 +51,7 @@ export default function Header() {
             <Link to="/" className="text-earth-600 hover:text-earth-800 dark:text-earth-300 dark:hover:text-earth-50 whitespace-nowrap">Home</Link>
             <Link to="/projects" className="text-earth-500 hover:text-earth-700 dark:text-earth-400 dark:hover:text-earth-200 whitespace-nowrap">Projects</Link>
             <Link to="/about" className="text-earth-500 hover:text-earth-700 dark:text-earth-400 dark:hover:text-earth-200 whitespace-nowrap">About</Link>
+            <Link to="/contact" className="text-earth-500 hover:text-earth-700 dark:text-earth-400 dark:hover:text-earth-200 whitespace-nowrap">Contact</Link>
             <a
               href="https://github.com/ductringuyen-0618"
               target="_blank"
