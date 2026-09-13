@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { projects } from '../data/projects';
 import type { Project } from '../data/projects';
 
@@ -130,7 +131,12 @@ const Projects = () => {
                   <div className="space-y-6">
                     {/* Project Header */}
                     <div className="flex items-start justify-between">
-                      <h3 className="text-xl font-bold text-earth-800 dark:text-earth-50 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors duration-300">{project.title}</h3>
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="text-xl font-bold text-earth-800 dark:text-earth-50 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors duration-300"
+                      >
+                        {project.title}
+                      </Link>
                       <span className="tag tag-blue">
                         {project.category}
                       </span>
@@ -205,40 +211,44 @@ const Projects = () => {
                     </div>
 
                     {/* Action Links */}
-                    {(project.github && project.github !== '#') || project.liveUrl || project.demo ? (
-                      <div className="flex space-x-3 pt-4 border-t border-earth-100 dark:border-earth-800">
-                        {project.github && project.github !== '#' && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-ghost text-sm group/link"
-                            aria-label={`${project.title} source code on GitHub`}
-                          >
-                            <span>Code</span>
-                          </a>
-                        )}
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-ghost text-sm group/link text-spark-600 hover:text-spark-600 hover:bg-spark-500/10"
-                            aria-label={`Open ${project.title} live site in a new tab`}
-                          >
-                            <span>Live Site →</span>
-                          </a>
-                        )}
-                        {project.demo && (
-                          <button
-                            onClick={() => openVideoPlayer(project.demo!, project.title)}
-                            className="btn-ghost text-sm group/link"
-                          >
-                            <span>Video Demo</span>
-                          </button>
-                        )}
-                      </div>
-                    ) : null}
+                    <div className="flex flex-wrap gap-3 pt-4 border-t border-earth-100 dark:border-earth-800">
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="btn-ghost text-sm group/link"
+                      >
+                        <span>View case study</span>
+                      </Link>
+                      {project.github && project.github !== '#' && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-ghost text-sm group/link"
+                          aria-label={`${project.title} source code on GitHub`}
+                        >
+                          <span>Code</span>
+                        </a>
+                      )}
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-ghost text-sm group/link text-spark-600 hover:text-spark-600 hover:bg-spark-500/10"
+                          aria-label={`Open ${project.title} live site in a new tab`}
+                        >
+                          <span>Live Site →</span>
+                        </a>
+                      )}
+                      {project.demo && (
+                        <button
+                          onClick={() => openVideoPlayer(project.demo!, project.title)}
+                          className="btn-ghost text-sm group/link"
+                        >
+                          <span>Video Demo</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
