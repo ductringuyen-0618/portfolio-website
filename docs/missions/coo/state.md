@@ -9,3 +9,4 @@ Shipped: 3/3
 - 2026-09-10: proposed 003-add-per-project-case-study-pages.md (waiting for human decision).
 - 2026-09-12: approved 003-add-per-project-case-study-pages.md via issue #6 (owner comment "Approve").
 - 2026-09-12: shipped 003-add-per-project-case-study-pages.md via PR #7 (https://github.com/ductringuyen-0618/portfolio-website/pull/7).
+- 2026-09-13: proposed 004-add-per-page-seo-and-social-preview-metadata.md (waiting for human decision).
