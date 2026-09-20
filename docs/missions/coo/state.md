@@ -11,3 +11,4 @@ Shipped: 3/3
 - 2026-09-12: shipped 003-add-per-project-case-study-pages.md via PR #7 (https://github.com/ductringuyen-0618/portfolio-website/pull/7).
 - 2026-09-13: proposed 004-add-per-page-seo-and-social-preview-metadata.md (waiting for human decision).
 - 2026-09-20: expired 004-add-per-page-seo-and-social-preview-metadata.md (no decision in 7 days) via issue #8.
+- 2026-09-20: proposed 005-add-live-github-repo-stats-to-project-cards.md (waiting for human decision).
