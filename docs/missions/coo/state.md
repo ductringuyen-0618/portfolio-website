@@ -13,3 +13,5 @@ Shipped: 3/3
 - 2026-09-20: expired 004-add-per-page-seo-and-social-preview-metadata.md (no decision in 7 days) via issue #8.
 - 2026-09-20: proposed 005-add-live-github-repo-stats-to-project-cards.md (waiting for human decision).
 - 2026-09-27: found no open decision issue for 005-add-live-github-repo-stats-to-project-cards.md (proposal existed but its issue was never created); opened issue #10 to put the decision in front of the human.
+- 2026-09-28: expired 005-add-live-github-repo-stats-to-project-cards.md (no decision in 7 days) via issue #10.
+- 2026-09-28: proposed 006-add-a-command-palette-quick-navigator.md (waiting for human decision).
