@@ -17,3 +17,4 @@ Shipped: 3/3
 - 2026-09-28: proposed 006-add-a-command-palette-quick-navigator.md (waiting for human decision).
 - 2026-10-05: expired 006-add-a-command-palette-quick-navigator.md (no decision in 7 days) via issue #11.
 - 2026-10-05: proposed 007-add-an-impact-stats-strip-to-the-home-hero.md (waiting for human decision).
+- 2026-10-09: nudged issue #12 for 007-add-an-impact-stats-strip-to-the-home-hero.md (n=1, expires in 4 days).
