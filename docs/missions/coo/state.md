@@ -19,3 +19,4 @@ Shipped: 3/3
 - 2026-10-05: proposed 007-add-an-impact-stats-strip-to-the-home-hero.md (waiting for human decision).
 - 2026-10-09: nudged issue #12 for 007-add-an-impact-stats-strip-to-the-home-hero.md (n=1, expires in 4 days).
 - 2026-10-12: nudged issue #12 for 007-add-an-impact-stats-strip-to-the-home-hero.md (n=2, expires tomorrow).
+- 2026-10-13: expired 007-add-an-impact-stats-strip-to-the-home-hero.md (no decision in 7 days) via issue #12.
