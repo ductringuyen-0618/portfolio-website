@@ -1,0 +1,288 @@
+{
+  "kb_schema_version": "2.0",
+  "owner": "Duc Nguyen",
+  "generated_on": "2025-09-27",
+  "optimization_features": {
+    "intent_matching": true,
+    "action_buttons": true,
+    "priority_scoring": true,
+    "recruiter_focused": true,
+    "quantified_metrics": true
+  },
+  "search_config": {
+    "default_limit": 5,
+    "cache_enabled": true,
+    "fallback_strategy": "text_similarity"
+  },
+  "documents": [
+    {
+      "id": "profile_summary",
+      "type": "profile",
+      "title": "Professional Summary",
+      "text": "Duc Nguyen - Software Engineer at Triton Digital (Jul 2022-Present) | Seattle, WA. Backend specialist with proven impact: built APIs handling 50,000+ daily transactions, achieved 20% performance improvements, maintained 99.9% uptime. Expert in Spring Boot, Kubernetes, AWS Bedrock AI integration. Strong track record in microservices, production support, and cutting-edge AI solutions. Available for senior backend or full-stack opportunities.",
+      "metadata": {
+        "tags": [
+          "summary",
+          "backend",
+          "cloud",
+          "ai",
+          "triton-digital",
+          "performance"
+        ],
+        "priority": "high",
+        "intent_match": ["experience", "summary", "general"],
+        "source": "curated_by_assistant",
+        "recruiter_keywords": ["software engineer", "backend", "APIs", "performance", "uptime", "microservices", "AWS"],
+        "quantified_impact": "50k+ transactions, 20% performance boost, 99.9% uptime"
+      }
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "title": "Contact & Professional Links",
+      "text": "CONTACT DUC NGUYEN: Email: duc.tri.nguyen0186@gmail.com | Phone: (206) 791-8173 | Location: Seattle, WA. PROFESSIONAL LINKS: LinkedIn: https://www.linkedin.com/in/duc-nguyen-33716b1b6/ | GitHub: https://github.com/ductringuyen-0618 | Portfolio: https://ductringuyen-0618.github.io/portfolio-website/. Available for immediate opportunities - responds within 24 hours.",
+      "metadata": {
+        "tags": [
+          "contact",
+          "linkedin",
+          "github",
+          "availability"
+        ],
+        "priority": "high",
+        "intent_match": ["contact", "linkedin", "github", "hire"],
+        "action_buttons": [
+          {
+            "type": "email",
+            "url": "mailto:duc.tri.nguyen0186@gmail.com",
+            "label": "Send Email"
+          },
+          {
+            "type": "link",
+            "url": "https://www.linkedin.com/in/duc-nguyen-33716b1b6/",
+            "label": "LinkedIn Profile"
+          },
+          {
+            "type": "link",
+            "url": "https://github.com/ductringuyen-0618",
+            "label": "GitHub Profile"
+          }
+        ],
+        "source": "resume",
+        "availability_status": "immediate",
+        "response_time": "24 hours"
+      }
+    },
+    {
+      "id": "skills_core",
+      "type": "skills",
+      "title": "Technical Skills & Expertise",
+      "text": "BACKEND EXPERTISE: Kotlin, Java, Spring Boot/Ktor - 3+ years production experience. CLOUD & DEVOPS: Kubernetes, OpenShift, AWS, Docker, CI/CD - enterprise scale. DATABASE & MESSAGING: MySQL, Kafka - high-volume transaction systems. FULL-STACK: Python, JavaScript/TypeScript, React, Node.js. AI/ML: AWS Bedrock, AgentCore, RAG systems. MONITORING: Grafana, system observability, performance optimization. PROVEN: API design, microservices architecture, 99.9% uptime delivery.",
+      "metadata": {
+        "tags": [
+          "skills",
+          "backend",
+          "cloud",
+          "devops",
+          "fullstack",
+          "ai"
+        ],
+        "priority": "high",
+        "intent_match": ["skills", "technical", "expertise", "stack"],
+        "experience_level": {
+          "backend": "3+ years",
+          "cloud": "enterprise",
+          "ai": "recent"
+        },
+        "core_technologies": ["Kotlin", "Java", "Spring Boot", "Kubernetes", "AWS", "MySQL"],
+        "source": "resume"
+      }
+    },
+    {
+      "id": "experience_triton_digital",
+      "type": "experience",
+      "title": "Software Engineer — Triton Digital (Jul 2022 – Present)",
+      "text": "• Built and maintained REST API services handling ~50,000 daily transactions; reduced response times by ~20%.\n• On-call production support: triaged incidents, collaborated with client teams, and implemented root-cause fixes.\n• Operated containerized workloads with Kubernetes/OpenShift/ArgoCD to sustain ~99.9% uptime.\n• Increased test coverage across unit/integration/system tests; reduced bug-related incidents by ~30%.\n• Authored architecture/requirements docs to align stakeholders.\n• Proactive monitoring with Grafana and health checks; reduced downtime by ~25%.\n• Migrated legacy jobs to Spring Batch; improved performance by ~25% and cut processing time by ~40%.\n• Implemented multi-currency support; helped expand customer base and international transaction volume.",
+      "metadata": {
+        "tags": [
+          "experience",
+          "backend",
+          "kubernetes",
+          "spring"
+        ],
+        "source": "resume"
+      }
+    },
+    {
+      "id": "experience_bedrock_ai",
+      "type": "experience",
+      "title": "Applied AI — AWS Bedrock & AgentCore",
+      "text": "• Deployed agents on AWS Bedrock AgentCore Runtime; exposed secure invoke endpoints for FE integration.\n• Implemented session memory patterns (session_id propagation, context stores) for multi-turn continuity.\n• Connected Knowledge Bases (S3-backed) to agents; chunked/embedded PDFs and docs for RAG retrieval.\n• Integrated MCP/OpenAPI tools to let the agent perform actions (e.g., KB queries, URL routing, email handoff).\n• Investigated CloudWatch logging issues, environment configuration, and bearer-token auth flows.\n• Compared orchestration approaches (Agent Strands vs. LangGraph) and explored Converse API usage.\n• Built KB-ready artifacts (JSON chunks) from resume/profile to enable recruiter-facing Q&A.",
+      "metadata": {
+        "tags": [
+          "ai",
+          "bedrock",
+          "agentcore",
+          "knowledge-base",
+          "mcp"
+        ],
+        "source": "curated_by_assistant"
+      }
+    },
+    {
+      "id": "projects_highlights",
+      "type": "projects",
+      "title": "Project Highlights",
+      "text": "• AI Tech News Assistant — Python/Next.js RAG summarizer using vector DBs; daily tech briefings.\n• Salon Hub — Multi-tenant salon SaaS platform (Spring Boot + React) with Hibernate row-level tenant scoping, Supabase Auth, smart wait-time queue. Deployed on Fly.io + Vercel.\n• MapleStory Smart Bot — Vision-driven game automation for rune detection and movement.\n• Portfolio Website — Central hub with GitHub Actions pipelines and deployment automation.",
+      "metadata": {
+        "tags": [
+          "projects",
+          "portfolio",
+          "rag",
+          "ci-cd"
+        ],
+        "source": "curated_by_assistant"
+      }
+    },
+    {
+      "id": "experience_prior",
+      "type": "experience",
+      "title": "Prior Experience — Bobaface (Apr 2021 – May 2022), Boise State University (Jan 2020 – May 2022)",
+      "text": "Bobaface (Game Developer): Implemented game mechanics and physics; collaborated with artists/UI; shipped to iOS/Android; increased average session length by ~10%.\nBoise State University (Software Developer): Designed multi-platform architectures (iOS/Android/VR/AR); hosted data/services on AWS; presented demos to clients and PMs.",
+      "metadata": {
+        "tags": [
+          "experience",
+          "games",
+          "education_projects"
+        ],
+        "source": "resume"
+      }
+    },
+    {
+      "id": "education",
+      "type": "education",
+      "title": "Education",
+      "text": "Boise State University — B.S., Games, Interactive Media, and Mobile; Minor in Computer Science (2018–2022)",
+      "metadata": {
+        "tags": [
+          "education"
+        ],
+        "source": "resume"
+      }
+    },
+    {
+      "id": "qa_intents",
+      "type": "guide",
+      "title": "Typical Q&A Intents & Structured Responses",
+      "text": "If asked: 'What is Duc's backend experience?'\n→ Summarize Triton Digital impacts (API throughput, latency reduction, uptime, testing), skills (Spring, Kubernetes, MySQL, Kafka), and Bedrock agent work for AI augmentation.\n\nIf asked: 'What AI/Bedrock work has he done?'\n→ Explain AgentCore runtime deployments, session memory patterns, KB (S3) ingestion, MCP tool use, Converse API exploration, and troubleshooting around CloudWatch/env configs.\n\nIf asked: 'What languages and tools does he know?'\n→ Provide the Skills block verbatim; call out Kotlin/Java/Python; Spring Boot/Ktor; Kubernetes/OpenShift/ArgoCD; MySQL/Kafka/Grafana; CI/CD.\n\nIf asked: 'Link to resume or portfolio?'\n→ Provide contact block, LinkedIn, and Portfolio.",
+      "metadata": {
+        "tags": [
+          "how-to-answer",
+          "intents"
+        ],
+        "source": "curated_by_assistant"
+      }
+    },
+    {
+      "id": "github_projects",
+      "type": "projects_github",
+      "title": "GitHub Portfolio & Open Source Projects",
+      "text": "GITHUB PROFILE: https://github.com/ductringuyen-0618 - Active developer with multiple production-ready projects. KEY REPOSITORIES: AI Tech News Assistant (Python/RAG), Salon Hub (multi-tenant SaaS — Spring Boot + React, deployed on Fly.io + Vercel), Portfolio Website (React 19/Vite). TECHNOLOGIES DEMONSTRATED: Full-stack development, multi-tenant SaaS, AI/ML integration, microservices, modern frontend frameworks, CI/CD pipelines.",
+      "metadata": {
+        "tags": [
+          "github",
+          "open-source",
+          "projects",
+          "portfolio",
+          "fullstack"
+        ],
+        "priority": "high",
+        "intent_match": ["github", "projects", "portfolio", "code"],
+        "action_buttons": [
+          {
+            "type": "link",
+            "url": "https://github.com/ductringuyen-0618",
+            "label": "View GitHub Profile"
+          }
+        ],
+        "repository_count": 5,
+        "tech_stack_diversity": ["Python", "Java", "TypeScript", "React", "Spring Boot"],
+        "source": "github_api"
+      }
+    },
+    {
+      "id": "ai_tech_news_assistant",
+      "type": "project",
+      "title": "AI Tech News Assistant",
+      "text": "Aggregates tech news and provides AI-powered summaries. Backend in FastAPI with LangChain and Chroma; planned/ongoing work includes RSS ingestion, parsing, semantic search, React+TS dashboard, Prefect orchestration, and Dockerized deployment. Includes health endpoints and environment-driven config.",
+      "metadata": {
+        "tags": [
+          "python",
+          "ai",
+          "rag",
+          "fastapi",
+          "chroma",
+          "prefect",
+          "react",
+          "typescript"
+        ]
+      }
+    },
+    {
+      "id": "salon_hub",
+      "type": "project",
+      "title": "Salon Hub — Multi-Tenant Salon SaaS",
+      "url": "https://github.com/ductringuyen-0618/salon-hub",
+      "liveUrl": "https://salon-hub-black.vercel.app",
+      "text": "Configurable salon storefront-as-a-service. Anyone can sign up at /signup and spin up their own fully isolated salon — branding, hours, services, staff, online booking, walk-in check-in, and a live wait-time queue. Spring Boot 3 monorepo (apps/api + apps/web) with Hibernate row-level multi-tenancy (one Postgres DB, tenant_id stamped on every row, JWT-bound tenant scoping with header fallback for anonymous), Supabase Auth (ES256 JWT verification via JWKS), React 18 + Vite + Tailwind + shadcn/ui frontend. Smart wait-time estimator accounts for parallel technicians, per-service durations, preferred-tech routing, business hours, and turnover buffer. Deployed on Fly.io (API) and Vercel (web). Live at https://salon-hub-black.vercel.app.",
+      "metadata": {
+        "tags": [
+          "java",
+          "spring-boot",
+          "hibernate",
+          "postgresql",
+          "supabase",
+          "multi-tenant",
+          "saas",
+          "react",
+          "typescript",
+          "vite",
+          "tailwind",
+          "fly.io",
+          "vercel",
+          "docker",
+          "gradle"
+        ]
+      }
+    },
+    {
+      "id": "portfolio_website",
+      "type": "project",
+      "title": "Portfolio Website",
+      "text": "Personal portfolio site built with React 19, TypeScript, Tailwind, and Vite. Deployed to GitHub Pages with GitHub Actions CI/CD. Includes live demo link, project showcases, and scripts for dev/build/lint/type-check.",
+      "metadata": {
+        "tags": [
+          "portfolio",
+          "react",
+          "typescript",
+          "tailwind",
+          "vite",
+          "github-actions"
+        ]
+      }
+    },
+    {
+      "id": "gcp_chat_app",
+      "type": "project",
+      "title": "GCP Chat App",
+      "text": "JavaScript-based chat application leveraging Google Cloud Platform services (e.g., real-time messaging, serverless, or managed data services). Demonstrates cloud integration and real-time app patterns.",
+      "metadata": {
+        "tags": [
+          "javascript",
+          "gcp",
+          "chat",
+          "cloud"
+        ]
+      }
+    }
+  ]
+}
