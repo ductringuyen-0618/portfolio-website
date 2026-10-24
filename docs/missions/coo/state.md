@@ -25,3 +25,4 @@ Shipped: 3/3
 - 2026-10-19: nudged issue #13 for 008-add-related-projects-navigation-to-case-study-pages.md (n=2, expires tomorrow).
 - 2026-10-20: expired 008-add-related-projects-navigation-to-case-study-pages.md (no decision in 7 days) via issue #13.
 - 2026-10-20: proposed 009-add-structured-challenge-approach-impact-sections-to-case-studies.md (waiting for human decision) via issue #14.
+- 2026-10-24: nudged issue #14 for 009-add-structured-challenge-approach-impact-sections-to-case-studies.md (n=1, expires in 4 days).
