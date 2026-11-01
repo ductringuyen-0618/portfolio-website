@@ -29,3 +29,4 @@ Shipped: 3/3
 - 2026-10-26: nudged issue #14 for 009-add-structured-challenge-approach-impact-sections-to-case-studies.md (n=2, expires tomorrow).
 - 2026-10-28: expired 009-add-structured-challenge-approach-impact-sections-to-case-studies.md (no decision in 7 days) via issue #14.
 - 2026-10-28: proposed 010-add-clickable-technology-tag-filtering-to-projects-page.md (waiting for human decision) via issue #15.
+- 2026-11-01: nudged issue #15 for 010-add-clickable-technology-tag-filtering-to-projects-page.md (n=1, expires in 3 days).
